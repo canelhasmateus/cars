@@ -1,0 +1,76 @@
+name: Build
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Cache Maven packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Build
+        run: mvn  -B -ntp package
+
+#
+      - run: sed -i 's/:stage/:${{ github.event.after}}/g' ./docker/stage/.env
+
+      - name: upload image to ECR
+        uses: appleboy/docker-ecr-action@master
+        with:
+          access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          registry: public.ecr.aws/c4l5q4m6
+          repo: cars
+          region: us-east-1
+          tags: "${{ github.event.after}}"
+          auto_tag: false
+          daemon_off: false
+          dockerfile: ./docker/build/fromJar.Dockerfile
+          context: .
+
+      - name: package
+        run: zip -r -j deploy.zip ./docker/stage
+
+      - name: deploy
+        uses: einaregilsson/beanstalk-deploy@v14
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: lity-api
+          environment_name: stage-api-1
+          version_label: ${{ github.event.after}}
+          region: us-east-1
+          deployment_package: deploy.zip
+          wait_for_deployment: false
+
+      - name: Sonar Analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B -ntp org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+
+
+
+
