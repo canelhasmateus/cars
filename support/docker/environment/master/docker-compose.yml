@@ -2,8 +2,9 @@ version: '3'
 
 services:
 
-  lity-api:
+  cars-api:
     image: ${API_IMAGE}
+
 
     container_name: ${API_CONTAINER_NAME}
     env_file:
@@ -12,7 +13,3 @@ services:
       - ${API_EXTERNAL_PORT}:5000
     command: sh -c "java -jar deployment.jar"
 
-    deploy:
-      resources:
-        limits:
-          memory: 1024m

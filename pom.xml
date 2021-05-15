@@ -16,7 +16,12 @@
     <properties>
         <java.version>11</java.version>
         <!--        <spring-native.version>0.9.2</spring-native.version>-->
+        <sonar.projectKey>canelhas-cars</sonar.projectKey>
+        <sonar.organization>canelhas</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
+
+
     <dependencies>
 
         <!--ADMIN-->
