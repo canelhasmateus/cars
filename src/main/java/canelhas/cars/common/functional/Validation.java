@@ -38,7 +38,7 @@ public class Validation {
         if ( errors != null && !errors.isEmpty() ) {
 
             var message = errors.stream()
-                                .map( Exception::getMessage )
+                                .map( Exception::getMessage  )
                                 .filter( Objects::nonNull )
                                 .collect( Collectors.joining( "\n" ) );
 

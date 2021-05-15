@@ -1,6 +1,11 @@
 package canelhas.cars.common.type;
 
-public interface ValueType< T > {
+import com.fasterxml.jackson.annotation.JsonValue;
 
-    T value( );
+
+public abstract class ValueType< T > {
+
+    @JsonValue
+    public abstract T value( );
+
 }

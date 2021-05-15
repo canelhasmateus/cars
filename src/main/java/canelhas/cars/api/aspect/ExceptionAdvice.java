@@ -3,6 +3,7 @@ package canelhas.cars.api.aspect;
 
 import canelhas.cars.common.exception.CarsException;
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -27,8 +28,21 @@ public class ExceptionAdvice {
 
         //region delegate when cars exception.
         // Would love to use instanceof pattern matching here, but java11
-        if ( exception.getCause() != null &&
-             exception.getCause() instanceof CarsException ) {
+        if ( exception.getCause() instanceof CarsException ) {
+            return handle( ( CarsException ) exception.getCause() );
+        }
+        //endregion
+
+        var body = Collections.singletonMap( MESSAGE, exception.getMessage() );
+        return new ResponseEntity<>( body, HttpStatus.UNPROCESSABLE_ENTITY );
+    }
+
+    @ExceptionHandler( ValueInstantiationException.class )
+    public ResponseEntity< ? > handle( ValueInstantiationException exception ) {
+
+        //region delegate when cars exception.
+        // Would love to use instanceof pattern matching here, but java11
+        if ( exception.getCause() instanceof CarsException ) {
             return handle( ( CarsException ) exception.getCause() );
         }
         //endregion

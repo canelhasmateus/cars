@@ -1,0 +1,1 @@
+Estarei usando Lombok. -> Deixar de usar não é um desafio, é masoquismo.
