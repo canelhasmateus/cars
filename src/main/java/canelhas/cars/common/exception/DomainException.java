@@ -1,6 +1,5 @@
 package canelhas.cars.common.exception;
 
-import canelhas.cars.common.exception.CarsException;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
