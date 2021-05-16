@@ -5,12 +5,12 @@ import canelhas.cars.common.functional.Flux;
 import canelhas.cars.common.namespace.Regexes;
 import lombok.Builder;
 
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import static canelhas.cars.common.exception.ExceptionMessages.*;
 
 @Builder( toBuilder = true )
-public class CPF extends ValueType< String > {
+public class CPF implements ValueType< String > {
 
     private final String value;
 
@@ -25,8 +25,9 @@ public class CPF extends ValueType< String > {
         }
 
         //region definitions
-        Function< String, String > keepNumericals = s -> Regexes.NOT_NUMERICAL.matcher( s ).replaceAll( " " );
-        Function< String, String > throwOnIncorrectLength = s -> {
+        UnaryOperator< String > keepNumericals = s -> Regexes.NOT_NUMERICAL.matcher( s ).replaceAll( " " );
+
+        UnaryOperator< String > throwOnIncorrectLength = s -> {
             if ( s.length() != 11 ) {
                 throw new DomainException( INVALID_CPF_LENGTH );
             }
@@ -44,10 +45,12 @@ public class CPF extends ValueType< String > {
 
     public static String validateDigits( String input ) {
 
-        char dig10, dig11;
-        int  i, num;
-        int  sm   = 0;
-        int  peso = 10;
+        char dig10;
+        char dig11;
+        int  i;
+        int  num;
+        var  sm   = 0;
+        var  peso = 10;
 
         if ( input.chars().distinct().count() == 1 ) {
             throw new DomainException( input + IS_A_INVALID_CPF );

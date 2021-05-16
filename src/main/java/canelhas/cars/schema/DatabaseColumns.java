@@ -2,6 +2,12 @@ package canelhas.cars.schema;
 
 public class DatabaseColumns {
 
+    //region monorepo
+
+    private DatabaseColumns( ) {}
+
+    //endregion
+
     //region user
     public static final String USER_BIRTHDAY = "birthday";
     public static final String USER_CPF      = "cpf";

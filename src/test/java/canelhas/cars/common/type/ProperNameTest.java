@@ -9,20 +9,20 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ProperNameTest {
 
     @Test
-    public void givenNullThenThrows( ) {
+    void givenNullThenThrows( ) {
         assertThrows( DomainException.class, ( ) -> ProperName.of( null ) );
     }
 
     @Test
-    public void givenInvalidCharactersThenThrows( ) {
+    void givenInvalidCharactersThenThrows( ) {
         assertThrows( DomainException.class, ( ) -> ProperName.of( "123123" ) );
     }
 
     @Test
-    public void givenValidThenParsesWithCapitalization( ) {
+    void givenValidThenParsesWithCapitalization( ) {
 
-        var name = "mateus canelhas";
-        assertEquals( "Mateus Canelhas", ProperName.of( name ).value() );
+        var name = "mateus canêlhas";
+        assertEquals( "Mateus Canêlhas", ProperName.of( name ).value() );
     }
 
 }

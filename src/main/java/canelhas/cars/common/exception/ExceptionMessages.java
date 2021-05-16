@@ -1,6 +1,11 @@
 package canelhas.cars.common.exception;
 
 public class ExceptionMessages {
+
+    //region monorepo
+    private ExceptionMessages( ) {}
+
+    //endregion
     public static final String EMAIL_REQUIRED    = "Informe algum valor de email.";
     public static final String NAME_REQUIRED     = "Informe algum valor de nome.";
     public static final String CPF_REQUIRED      = "Informe algum valor de cpf.";

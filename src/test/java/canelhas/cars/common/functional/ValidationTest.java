@@ -18,7 +18,7 @@ class ValidationTest {
     };
 
     @Test
-    public void givenErrorsThenRethrowsWhenCalled( ) {
+    void givenErrorsThenRethrowsWhenCalled( ) {
 
         var validation = new Validation( HttpStatus.UNPROCESSABLE_ENTITY );
         validation.map( message, error );
@@ -29,7 +29,7 @@ class ValidationTest {
     }
 
     @Test
-    public void givenErrorsThenMergeMessages( ) {
+    void givenErrorsThenMergeMessages( ) {
 
         var validation = new Validation( HttpStatus.UNPROCESSABLE_ENTITY );
         validation.map( message, error );
@@ -44,7 +44,7 @@ class ValidationTest {
 
 
     @Test
-    public void givenValidThenReturnsResult( ) {
+    void givenValidThenReturnsResult( ) {
 
         var validation = new Validation( HttpStatus.UNPROCESSABLE_ENTITY );
         var result     = validation.map( message, identity );

@@ -4,6 +4,10 @@ import java.util.function.Function;
 
 public class Flux {
 
+    //region monorepo
+    private Flux( ) {}
+    //endregion
+
     /**
      * enables use of .andThen method chaining over functions ::references, while maintaining syntatical style.
      **/

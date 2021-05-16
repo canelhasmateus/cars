@@ -8,13 +8,13 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Builder;
 
 import java.util.Date;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import static canelhas.cars.common.exception.ExceptionMessages.*;
 
 
 @Builder( toBuilder = true )
-public class AdultBirthday extends ValueType< Date > {
+public class AdultBirthday implements ValueType< Date > {
 
     private final Date value;
 
@@ -26,7 +26,7 @@ public class AdultBirthday extends ValueType< Date > {
         }
 
         //region definitions
-        Function< Date, Date > throwOnTooRecent = date -> {
+        UnaryOperator< Date > throwOnTooRecent = date -> {
             int diff = DateHelper.yearDifference( new Date(), date );
 
             if ( diff <= 0 ) {

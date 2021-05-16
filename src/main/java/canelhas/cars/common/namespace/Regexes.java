@@ -3,6 +3,12 @@ package canelhas.cars.common.namespace;
 import java.util.regex.Pattern;
 
 public class Regexes {
+
+    //region monorepo
+
+    private Regexes( ) {}
+
+    //endregion
     public static final Pattern EMAIL         = Pattern.compile( "" +
                                                                  "^([a-z0-9_]+\\.){0,}" +
                                                                  "([a-z0-9_]+){1}" +

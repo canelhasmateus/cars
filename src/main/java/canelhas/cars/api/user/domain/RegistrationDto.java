@@ -47,7 +47,7 @@ public class RegistrationDto {
                                     pattern = "yyyy-MM-dd",
                                     timezone = "Brazil/East" ) Date birthday ) {
 
-        Validation validation = new Validation( HttpStatus.UNPROCESSABLE_ENTITY );
+        var validation = new Validation( HttpStatus.UNPROCESSABLE_ENTITY );
 
         this.id = null;
         this.email = validation.map( email, EmailAddress::of );
@@ -61,13 +61,16 @@ public class RegistrationDto {
 
     public static User toEntity( RegistrationDto request ) {
 
-        var cpf      = request.getCpf().value();
-        var birthday = request.getBirthday().value();
-        var email    = request.getEmail().value();
-        var name     = request.getName().value();
+        //region definitions
+        final var id       = request.getId();
+        final var cpf      = request.getCpf().value();
+        final var birthday = request.getBirthday().value();
+        final var email    = request.getEmail().value();
+        final var name     = request.getName().value();
         //endregion
 
         return User.builder()
+                   .id( id )
                    .name( name ).birthday( birthday )
                    .email( email ).cpf( cpf )
                    .build();
@@ -79,11 +82,11 @@ public class RegistrationDto {
     public static RegistrationDto fromEntity( User entity ) {
 
         //region definitions
-        final Integer       id       = entity.getId();
-        final ProperName    name     = ProperName.of( entity.getName() );
-        final AdultBirthday birthday = AdultBirthday.of( entity.getBirthday() );
-        final EmailAddress  email    = EmailAddress.of( entity.getEmail() );
-        final CPF           cpf      = CPF.of( entity.getCpf() );
+        final var id       = entity.getId();
+        final var name     = ProperName.of( entity.getName() );
+        final var birthday = AdultBirthday.of( entity.getBirthday() );
+        final var email    = EmailAddress.of( entity.getEmail() );
+        final var cpf      = CPF.of( entity.getCpf() );
         //endregion
 
         return RegistrationDto.builder()

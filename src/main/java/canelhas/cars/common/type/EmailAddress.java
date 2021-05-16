@@ -4,7 +4,6 @@ import canelhas.cars.common.exception.DomainException;
 import canelhas.cars.common.namespace.Regexes;
 import lombok.Builder;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static canelhas.cars.common.exception.ExceptionMessages.EMAIL_REQUIRED;
@@ -12,7 +11,7 @@ import static canelhas.cars.common.exception.ExceptionMessages.IS_A_INVALID_EMAI
 
 
 @Builder( toBuilder = true )
-public class EmailAddress extends ValueType< String > {
+public class EmailAddress implements ValueType< String > {
     public static final Pattern emailPattern = Regexes.EMAIL;
     private final       String  value;
 
@@ -24,7 +23,7 @@ public class EmailAddress extends ValueType< String > {
 
         value = value.trim().toLowerCase();
 
-        Matcher matcher = emailPattern.matcher( value );
+        var matcher = emailPattern.matcher( value );
 
         if ( !matcher.matches() ) {
             throw new DomainException( value + IS_A_INVALID_EMAIL );

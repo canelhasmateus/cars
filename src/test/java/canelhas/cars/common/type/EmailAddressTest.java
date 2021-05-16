@@ -9,19 +9,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class EmailAddressTest {
 
     @Test
-    public void givenNullThenThrows( ) {
+    void givenNullThenThrows( ) {
 
         assertThrows( DomainException.class, ( ) -> EmailAddress.of( null ) );
     }
 
     @Test
-    public void givenInvalidThenThrows( ) {
+    void givenInvalidThenThrows( ) {
 
         assertThrows( DomainException.class, ( ) -> EmailAddress.of( "mateus.canelhas@@" ) );
     }
 
     @Test
-    public void givenValidThenParses( ) {
+    void givenValidThenParses( ) {
         String email = "mateus.canelhas@gmail.com";
 
         String value = EmailAddress.of( email ).value();

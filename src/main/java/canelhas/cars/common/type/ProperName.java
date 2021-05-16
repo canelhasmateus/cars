@@ -6,13 +6,13 @@ import canelhas.cars.common.namespace.Regexes;
 import canelhas.cars.common.utils.StringHelper;
 import lombok.Builder;
 
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import static canelhas.cars.common.exception.ExceptionMessages.CONTAINS_INVALID_CHARACTERS;
 import static canelhas.cars.common.exception.ExceptionMessages.NAME_REQUIRED;
 
 @Builder( toBuilder = true )
-public class ProperName extends ValueType< String > {
+public class ProperName implements ValueType< String > {
 
 
     private final String value;
@@ -24,14 +24,15 @@ public class ProperName extends ValueType< String > {
             throw new DomainException( NAME_REQUIRED );
         }
 
-
-        Function< String, String > throwOnSpecialCharacters = s -> {
+        //region definition
+        UnaryOperator< String > throwOnSpecialCharacters = s -> {
             if ( !Regexes.NOT_SPECIAL.matcher( s ).matches() ) {
                 throw new DomainException( input + CONTAINS_INVALID_CHARACTERS );
             }
 
             return s;
         };
+        //endregion
 
         var name = Flux.of( String::trim )
                        .andThen( throwOnSpecialCharacters )

@@ -23,7 +23,7 @@ public class Transform< T > implements Supplier< T > {
 
     public static < T > Transform< T > of( Supplier< T > supplier ) {
 
-        return new Transform< T >( supplier.get() );
+        return new Transform<>( supplier.get() );
     }
     //endregion
 

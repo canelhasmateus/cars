@@ -13,14 +13,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class AdultBirthdayTest {
 
     @Test
-    public void givenNullThenThrows( ) {
+    void givenNullThenThrows( ) {
 
         assertThrows( DomainException.class, ( ) -> AdultBirthday.of( null ) );
 
     }
 
     @Test
-    public void givenFutureDateThenThrows( ) {
+    void givenFutureDateThenThrows( ) {
 
         var calendar = Calendar.getInstance();
         calendar.setTime( new Date() );
@@ -32,7 +32,7 @@ class AdultBirthdayTest {
 
 
     @Test
-    public void givenRecentPastDateThenThrows( ) {
+    void givenRecentPastDateThenThrows( ) {
 
         var calendar = Calendar.getInstance();
         calendar.setTime( new Date() );
@@ -42,7 +42,7 @@ class AdultBirthdayTest {
     }
 
     @Test
-    public void givenValidDateThenParses( ) {
+    void givenValidDateThenParses( ) {
 
         var birthday = new GregorianCalendar( 1997, Calendar.MARCH, 4 ).getTime();
         assertEquals( birthday, AdultBirthday.of( birthday ).value() );
