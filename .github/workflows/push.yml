@@ -30,7 +30,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       - name: Build
-        run: mvn  -B -ntp package -DskipTests
+        run: mvn  -B -ntp package
 
 #
       - run: sed -i 's/:master/:${{ github.event.after}}/g' ./support/docker/environment/master/.env
