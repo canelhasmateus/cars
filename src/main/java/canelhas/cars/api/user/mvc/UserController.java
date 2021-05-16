@@ -13,7 +13,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping( "/users" )
+    @PostMapping( "api/users" )
     public RegistrationDto register( @RequestBody RegistrationDto request ) {
 
         return Flux.of( userService::register )
