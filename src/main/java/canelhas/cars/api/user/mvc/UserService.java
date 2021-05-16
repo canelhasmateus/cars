@@ -20,7 +20,7 @@ public class UserService {
 
     @Transactional
     public User register( RegistrationDto request ) {
-
+        // TODO: 16/05/2021 friendly exception messages
         return Flux.of( RegistrationDto::toEntity )
                    .andThen( userRepository::save )
                    .apply( request );

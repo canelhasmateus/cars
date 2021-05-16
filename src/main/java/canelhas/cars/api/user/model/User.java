@@ -16,7 +16,7 @@ import static canelhas.cars.schema.DatabaseColumns.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table( name = DatabaseTables.USERS )
+@Table( name = DatabaseTables.USERS)
 public class User {
 
     @Id
@@ -27,10 +27,11 @@ public class User {
     @Column( name = USER_NAME )
     private String name;
 
-    @Column( name = USER_CPF )
+    @Column( name = USER_CPF, unique = true )
+
     private String cpf;
 
-    @Column( name = USER_EMAIL )
+    @Column( name = USER_EMAIL, unique = true )
     private String email;
 
     @Column( name = USER_BIRTHDAY )

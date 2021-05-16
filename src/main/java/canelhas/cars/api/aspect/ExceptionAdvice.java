@@ -4,6 +4,7 @@ package canelhas.cars.api.aspect;
 import canelhas.cars.common.exception.CarsException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -50,6 +51,7 @@ public class ExceptionAdvice {
         var body = Collections.singletonMap( MESSAGE, exception.getMessage() );
         return new ResponseEntity<>( body, HttpStatus.UNPROCESSABLE_ENTITY );
     }
+
 
 
 }
