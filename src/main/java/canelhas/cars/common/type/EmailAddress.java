@@ -11,7 +11,7 @@ import static canelhas.cars.common.exception.ExceptionMessages.IS_A_INVALID_EMAI
 
 
 @Builder( toBuilder = true )
-public class EmailAddress implements ValueType< String > {
+public class EmailAddress extends ValueType< String > {
     public static final Pattern emailPattern = Regexes.EMAIL;
     private final       String  value;
 

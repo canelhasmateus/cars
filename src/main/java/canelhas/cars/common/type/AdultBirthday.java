@@ -14,7 +14,7 @@ import static canelhas.cars.common.exception.ExceptionMessages.*;
 
 
 @Builder( toBuilder = true )
-public class AdultBirthday implements ValueType< Date > {
+public class AdultBirthday extends ValueType< Date > {
 
     private final Date value;
 

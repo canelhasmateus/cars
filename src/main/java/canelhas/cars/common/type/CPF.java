@@ -10,7 +10,7 @@ import java.util.function.UnaryOperator;
 import static canelhas.cars.common.exception.ExceptionMessages.*;
 
 @Builder( toBuilder = true )
-public class CPF implements ValueType< String > {
+public class CPF extends ValueType< String > {
 
     private final String value;
 

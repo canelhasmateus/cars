@@ -29,6 +29,13 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <!---->
+        <!--AUTH-->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
+        <!--        -->
         <!-- REST -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

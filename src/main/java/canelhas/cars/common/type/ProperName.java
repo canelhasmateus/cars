@@ -12,7 +12,7 @@ import static canelhas.cars.common.exception.ExceptionMessages.CONTAINS_INVALID_
 import static canelhas.cars.common.exception.ExceptionMessages.NAME_REQUIRED;
 
 @Builder( toBuilder = true )
-public class ProperName implements ValueType< String > {
+public class ProperName extends ValueType< String > {
 
 
     private final String value;
