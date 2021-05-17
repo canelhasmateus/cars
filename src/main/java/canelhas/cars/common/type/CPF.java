@@ -5,6 +5,7 @@ import canelhas.cars.common.functional.Flux;
 import canelhas.cars.common.namespace.Regexes;
 import lombok.Builder;
 
+import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 import static canelhas.cars.common.exception.ExceptionMessages.*;
@@ -21,15 +22,14 @@ public class CPF extends ValueType< String > {
     public static CPF of( String input ) {
 
         if ( input == null ) {
-            throw new DomainException( CPF_REQUIRED );
+            throw CPF.required().get();
         }
 
         //region definitions
         UnaryOperator< String > keepNumericals = s -> Regexes.NOT_NUMERICAL.matcher( s ).replaceAll( " " );
-
         UnaryOperator< String > throwOnIncorrectLength = s -> {
             if ( s.length() != 11 ) {
-                throw new DomainException( INVALID_CPF_LENGTH );
+                throw CPF.invalidLength( s ).get();
             }
             return s;
         };
@@ -43,7 +43,9 @@ public class CPF extends ValueType< String > {
         return new CPF( cpf );
     }
 
-    public static String validateDigits( String input ) {
+
+    //region help
+    private static String validateDigits( String input ) {
 
         char dig10;
         char dig11;
@@ -53,7 +55,7 @@ public class CPF extends ValueType< String > {
         var  peso = 10;
 
         if ( input.chars().distinct().count() == 1 ) {
-            throw new DomainException( input + IS_A_INVALID_CPF );
+            throw CPF.invalidValue( input ).get();
         }
 
         for ( i = 0; i < 9; i++ ) {
@@ -79,10 +81,27 @@ public class CPF extends ValueType< String > {
         else { dig11 = ( char ) ( r + 48 ); }
         if ( !( dig10 == input.charAt( 9 ) &&
                 dig11 == input.charAt( 10 ) ) ) {
-            throw new DomainException( input + IS_A_INVALID_CPF );
+            throw CPF.invalidValue( input ).get();
         }
 
         return input;
 
     }
+    //endregion
+
+    //region exception
+    public static Supplier< DomainException > invalidValue( String input ) {
+        return ( ) -> new DomainException( input + IS_A_INVALID_CPF );
+    }
+
+    public static Supplier< DomainException > required( ) {
+        return ( ) -> new DomainException( CPF_REQUIRED );
+    }
+
+    public static Supplier< DomainException > invalidLength( String input ) {
+        return ( ) -> new DomainException( input + INVALID_CPF_LENGTH );
+    }
+
+    //endregion
+
 }

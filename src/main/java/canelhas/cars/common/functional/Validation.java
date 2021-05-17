@@ -1,8 +1,5 @@
 package canelhas.cars.common.functional;
 
-import canelhas.cars.common.exception.CarsException;
-import org.springframework.http.HttpStatus;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -11,11 +8,12 @@ import java.util.stream.Collectors;
 
 public class Validation {
 
-    private final HttpStatus        httpStatus;
-    private       List< Exception > errors;
 
-    public Validation( HttpStatus responseStatus ) {
-        httpStatus = responseStatus;
+    private final Function< String, ? extends RuntimeException > thrower;
+    private       List< Exception >                              errors;
+
+    public Validation( Function< String, ? extends RuntimeException > thrower ) {
+        this.thrower = thrower;
     }
 
     public < K, V > V map( K element, Function< K, V > action ) {
@@ -42,7 +40,7 @@ public class Validation {
                                 .filter( Objects::nonNull )
                                 .collect( Collectors.joining( "\n" ) );
 
-            throw new CarsException( message, httpStatus );
+            throw thrower.apply( message );
         }
 
 

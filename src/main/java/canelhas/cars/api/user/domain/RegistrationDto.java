@@ -2,6 +2,7 @@ package canelhas.cars.api.user.domain;
 
 
 import canelhas.cars.api.user.model.User;
+import canelhas.cars.common.exception.DomainException;
 import canelhas.cars.common.functional.Validation;
 import canelhas.cars.common.type.AdultBirthday;
 import canelhas.cars.common.type.CPF;
@@ -47,7 +48,7 @@ public class RegistrationDto {
                                     pattern = "yyyy-MM-dd",
                                     timezone = "Brazil/East" ) Date birthday ) {
 
-        var validation = new Validation( HttpStatus.UNPROCESSABLE_ENTITY );
+        var validation = new Validation( DomainException::new );
 
         this.id = null;
         this.email = validation.map( email, EmailAddress::of );

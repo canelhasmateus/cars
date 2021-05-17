@@ -16,4 +16,11 @@ public class DatabaseColumns {
     public static final String USER_NAME     = "name";
     //endregion
 
+    //region vehicle
+    public static final String VEHICLE_ID    = "vehicle_id";
+    public static final String VEHICLE_MODEL = "model";
+    public static final String VEHICLE_YEAR  = "year";
+    public static final String VEHICLE_BRAND = "brand";
+    //endregion
+
 }

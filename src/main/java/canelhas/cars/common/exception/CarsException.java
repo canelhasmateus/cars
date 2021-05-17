@@ -1,10 +1,9 @@
 package canelhas.cars.common.exception;
 
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-@Getter
-public class CarsException extends RuntimeException {
+
+public abstract class CarsException extends RuntimeException {
 
     private final HttpStatus status;
 
@@ -18,4 +17,6 @@ public class CarsException extends RuntimeException {
         super( message );
         this.status = httpStatus;
     }
+
+    public abstract HttpStatus getStatus( );
 }

@@ -3,6 +3,10 @@ package canelhas.cars.common.namespace;
 import java.util.regex.Pattern;
 
 public class Regexes {
+    public static final Pattern BEARER       = Pattern.compile( "(?:bearer +)?(\\S+)",
+                                                                Pattern.CASE_INSENSITIVE );
+    public static final Pattern VEHICLE_YEAR = Pattern.compile( "(\\d{4})" +
+                                                                "(?:-\\d)?" );
 
     //region monorepo
 

@@ -7,6 +7,7 @@ import canelhas.cars.common.utils.TypingHelper;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class CarsClaims extends HashMap< String, Object > {
@@ -17,6 +18,8 @@ public class CarsClaims extends HashMap< String, Object > {
     private static final String VERSION = "version";
     private static final String ROLES   = "roles";
     private static final String ID      = "id";
+
+
     //endregion
 
     //region getters
@@ -27,8 +30,8 @@ public class CarsClaims extends HashMap< String, Object > {
 
     }
 
-    public Optional< Integer > getId( ) {
-        return Optional.ofNullable( ( Integer ) this.get( ID ) );
+    public Integer getId( ) {
+        return ( Integer ) this.get( ID );
     }
 
     public Optional< EmailAddress > getEmail( ) {
@@ -115,4 +118,9 @@ public class CarsClaims extends HashMap< String, Object > {
     }
     //endregion
 
+    //region exceptions
+    public static Supplier< AccessException > notFound( ) {
+        return ( ) -> new AccessException( "Não existe sessão válida dentro do contexto atual" );
+    }
+    //endregion
 }

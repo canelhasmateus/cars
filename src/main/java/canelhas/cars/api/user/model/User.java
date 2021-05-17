@@ -1,5 +1,8 @@
 package canelhas.cars.api.user.model;
 
+import canelhas.cars.common.exception.NotFoundException;
+import canelhas.cars.common.type.CPF;
+import canelhas.cars.common.type.EmailAddress;
 import canelhas.cars.schema.DatabaseTables;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.function.Supplier;
 
 import static canelhas.cars.schema.DatabaseColumns.*;
 
@@ -16,9 +20,10 @@ import static canelhas.cars.schema.DatabaseColumns.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table( name = DatabaseTables.USERS)
+@Table( name = DatabaseTables.USERS )
 public class User {
 
+    //region fields
     @Id
     @GeneratedValue( strategy = GenerationType.AUTO )
     @Column( name = USER_ID )
@@ -36,5 +41,11 @@ public class User {
 
     @Column( name = USER_BIRTHDAY )
     private Date birthday;
+    //endregion
 
+    //region exceptions
+    public static Supplier< NotFoundException > notFound( CPF cpf, EmailAddress email ) {
+        return ( ) -> new NotFoundException( "Não foi encontrado usuário com email " + email + " e cpf " + cpf + "." );
+    }
+    //endregion
 }

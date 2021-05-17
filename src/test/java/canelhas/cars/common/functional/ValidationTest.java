@@ -1,8 +1,8 @@
 package canelhas.cars.common.functional;
 
 import canelhas.cars.common.exception.CarsException;
+import canelhas.cars.common.exception.DomainException;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
 
 import java.util.function.Function;
 
@@ -20,7 +20,7 @@ class ValidationTest {
     @Test
     void givenErrorsThenRethrowsWhenCalled( ) {
 
-        var validation = new Validation( HttpStatus.UNPROCESSABLE_ENTITY );
+        var validation = new Validation( DomainException::new );
         validation.map( message, error );
         validation.map( message, error );
 
@@ -31,7 +31,7 @@ class ValidationTest {
     @Test
     void givenErrorsThenMergeMessages( ) {
 
-        var validation = new Validation( HttpStatus.UNPROCESSABLE_ENTITY );
+        var validation = new Validation( DomainException::new );
         validation.map( message, error );
         validation.map( message, error );
 
@@ -46,7 +46,7 @@ class ValidationTest {
     @Test
     void givenValidThenReturnsResult( ) {
 
-        var validation = new Validation( HttpStatus.UNPROCESSABLE_ENTITY );
+        var validation = new Validation( DomainException::new );
         var result     = validation.map( message, identity );
 
         assertEquals( message, result );
