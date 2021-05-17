@@ -12,9 +12,8 @@ import org.springframework.http.HttpStatus;
 
 import javax.validation.constraints.NotNull;
 
-@Builder( toBuilder = true )
+
 @Getter
-@AllArgsConstructor
 public class CarsCredentials {
 
     private final EmailAddress email;
