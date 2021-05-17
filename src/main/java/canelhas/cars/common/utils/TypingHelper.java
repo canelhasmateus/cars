@@ -2,10 +2,10 @@ package canelhas.cars.common.utils;
 
 import java.util.Optional;
 
-public class EnumHelper {
+public class TypingHelper {
 
 
-    public static < T extends Enum< T > > Optional< T > fromName( Class< T > enumeration, String name ) {
+    public static < T extends Enum< T > > Optional< T > maybe( Class< T > enumeration, String name ) {
 
         try {
 

@@ -3,7 +3,7 @@ package canelhas.cars.api.auth.domain;
 import canelhas.cars.api.auth.Authorization;
 import canelhas.cars.common.type.EmailAddress;
 import canelhas.cars.common.type.ProperName;
-import canelhas.cars.common.utils.EnumHelper;
+import canelhas.cars.common.utils.TypingHelper;
 
 import java.util.*;
 import java.util.function.Function;
@@ -46,8 +46,10 @@ public class CarsClaims extends HashMap< String, Object > {
         //region definitions
         @SuppressWarnings( "unchecked" )
         Collection< String > roles = ( Collection< String > ) this.getOrDefault( ROLES, Collections.emptyList() );
-        Function< String, Authorization.Roles > toRoles = s -> EnumHelper.fromName( Authorization.Roles.class, s )
-                                                                         .orElse( null );
+        Function< String, Authorization.Roles > toRoles =
+                name -> TypingHelper.maybe( Authorization.Roles.class,
+                                            name )
+                                    .orElse( null );
         //endregion
 
         return roles.stream()
