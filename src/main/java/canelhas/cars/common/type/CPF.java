@@ -1,7 +1,7 @@
 package canelhas.cars.common.type;
 
 import canelhas.cars.common.exception.DomainException;
-import canelhas.cars.common.functional.Flux;
+import canelhas.cars.common.functional.Chain;
 import canelhas.cars.common.namespace.Regexes;
 import lombok.Builder;
 
@@ -35,10 +35,10 @@ public class CPF extends ValueType< String > {
         };
         //endregion
 
-        var cpf = Flux.of( keepNumericals )
-                      .andThen( throwOnIncorrectLength )
-                      .andThen( CPF::validateDigits )
-                      .apply( input );
+        var cpf = Chain.of( keepNumericals )
+                       .andThen( throwOnIncorrectLength )
+                       .andThen( CPF::validateDigits )
+                       .apply( input );
 
         return new CPF( cpf );
     }

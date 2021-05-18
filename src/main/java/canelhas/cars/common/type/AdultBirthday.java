@@ -1,7 +1,7 @@
 package canelhas.cars.common.type;
 
 import canelhas.cars.common.exception.DomainException;
-import canelhas.cars.common.functional.Flux;
+import canelhas.cars.common.functional.Chain;
 import canelhas.cars.common.utils.DateHelper;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -39,8 +39,8 @@ public class AdultBirthday extends ValueType< Date > {
         };
         //endregion
 
-        var birthday = Flux.of( throwOnTooRecent )
-                           .apply( input );
+        var birthday = Chain.of( throwOnTooRecent )
+                            .apply( input );
 
         return new AdultBirthday( birthday );
     }

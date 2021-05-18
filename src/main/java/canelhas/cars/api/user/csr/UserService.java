@@ -3,7 +3,7 @@ package canelhas.cars.api.user.csr;
 import canelhas.cars.api.model.csr.VehicleRepository;
 import canelhas.cars.api.user.domain.RegistrationDto;
 import canelhas.cars.api.user.model.User;
-import canelhas.cars.common.functional.Flux;
+import canelhas.cars.common.functional.Chain;
 import canelhas.cars.common.type.CPF;
 import canelhas.cars.common.type.EmailAddress;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +24,9 @@ public class UserService {
     @Transactional
     public User register( RegistrationDto request ) {
         // TODO: 16/05/2021 friendly exception messages
-        return Flux.of( RegistrationDto::toEntity )
-                   .andThen( userRepository::save )
-                   .apply( request );
+        return Chain.of( RegistrationDto::toEntity )
+                    .andThen( userRepository::save )
+                    .apply( request );
     }
 
     //region read

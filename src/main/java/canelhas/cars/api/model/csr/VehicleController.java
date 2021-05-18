@@ -4,7 +4,7 @@ import canelhas.cars.api.auth.Authorization;
 import canelhas.cars.api.auth.SessionService;
 import canelhas.cars.api.model.domain.VehicleDto;
 import canelhas.cars.api.user.model.User;
-import canelhas.cars.common.functional.Flux;
+import canelhas.cars.common.functional.Chain;
 import canelhas.cars.common.type.TypedId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -38,10 +38,10 @@ public class VehicleController {
         };
         //endregion
 
-        return Flux.of( addUserId )
-                   .andThen( vehicleService::register )
-                   .andThen( VehicleDto::fromEntity )
-                   .apply( request );
+        return Chain.of( addUserId )
+                    .andThen( vehicleService::register )
+                    .andThen( VehicleDto::fromEntity )
+                    .apply( request );
 
     }
 
@@ -53,10 +53,10 @@ public class VehicleController {
         Integer                              currentUserId = SessionService.getCurrentSession().getId();
         //endregion
 
-        return Flux.of( toUserId )
-                   .andThen( vehicleService::read )
-                   .andThen( collectively( VehicleDto::fromEntity ) )
-                   .apply( currentUserId );
+        return Chain.of( toUserId )
+                    .andThen( vehicleService::read )
+                    .andThen( collectively( VehicleDto::fromEntity ) )
+                    .apply( currentUserId );
 
     }
 

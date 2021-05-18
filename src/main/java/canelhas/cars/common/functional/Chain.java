@@ -2,10 +2,10 @@ package canelhas.cars.common.functional;
 
 import java.util.function.Function;
 
-public class Flux {
+public class Chain {
 
     //region monorepo
-    private Flux( ) {}
+    private Chain( ) {}
     //endregion
 
     /**

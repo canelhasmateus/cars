@@ -3,7 +3,7 @@ package canelhas.cars.api.context;
 import canelhas.cars.api.auth.Authorization;
 import canelhas.cars.api.auth.domain.CarsClaims;
 import canelhas.cars.api.user.model.User;
-import canelhas.cars.common.functional.Flux;
+import canelhas.cars.common.functional.Chain;
 import canelhas.cars.common.namespace.Regexes;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import static canelhas.cars.common.utils.StringHelper.findWith;
 import static canelhas.cars.common.utils.TypingHelper.possibly;
@@ -78,10 +77,10 @@ public class SecurityHelper {
 
         try {
 
-            return Flux.of( findWith( Regexes.BEARER ) )
-                       .andThen( possibly( createJws ) )
-                       .andThen( possibly( createCarsClaims ) )
-                       .apply( input );
+            return Chain.of( findWith( Regexes.BEARER ) )
+                        .andThen( possibly( createJws ) )
+                        .andThen( possibly( createCarsClaims ) )
+                        .apply( input );
 
         }
         catch ( Exception e ) {

@@ -1,7 +1,7 @@
 package canelhas.cars.common.type;
 
 import canelhas.cars.common.exception.DomainException;
-import canelhas.cars.common.functional.Flux;
+import canelhas.cars.common.functional.Chain;
 import canelhas.cars.common.namespace.Regexes;
 import canelhas.cars.common.utils.StringHelper;
 import lombok.Builder;
@@ -34,10 +34,10 @@ public class ProperName extends ValueType< String > {
         };
         //endregion
 
-        var name = Flux.of( String::trim )
-                       .andThen( throwOnSpecialCharacters )
-                       .andThen( StringHelper::toTitleCase )
-                       .apply( input );
+        var name = Chain.of( String::trim )
+                        .andThen( throwOnSpecialCharacters )
+                        .andThen( StringHelper::toTitleCase )
+                        .apply( input );
 
         return new ProperName( name );
     }

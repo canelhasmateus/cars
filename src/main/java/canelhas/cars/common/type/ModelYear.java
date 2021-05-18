@@ -1,7 +1,7 @@
 package canelhas.cars.common.type;
 
 import canelhas.cars.common.exception.DomainException;
-import canelhas.cars.common.functional.Flux;
+import canelhas.cars.common.functional.Chain;
 import canelhas.cars.common.namespace.Regexes;
 import lombok.Builder;
 
@@ -27,10 +27,10 @@ public class ModelYear extends ValueType< String > {
                                                                               .orElseThrow( ModelYear.invalidValue( input ) );
         //endregion
 
-        return Flux.of( String::trim )
-                   .andThen( findWith( Regexes.VEHICLE_YEAR ) )
-                   .andThen( createOrThrow )
-                   .apply( input );
+        return Chain.of( String::trim )
+                    .andThen( findWith( Regexes.VEHICLE_YEAR ) )
+                    .andThen( createOrThrow )
+                    .apply( input );
 
 
     }
