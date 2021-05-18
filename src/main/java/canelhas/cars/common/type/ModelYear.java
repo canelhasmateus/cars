@@ -8,7 +8,8 @@ import lombok.Builder;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.regex.Matcher;
+
+import static canelhas.cars.common.utils.StringHelper.findWith;
 
 
 @Builder( toBuilder = true )
@@ -21,21 +22,13 @@ public class ModelYear extends ValueType< String > {
             throw ModelYear.required().get();
         }
 
-        //region definition
-        final Function< Matcher, Optional< String > > findMatch = m -> {
-            if ( m.find() ) {
-                return Optional.of( m.group() );
-            }
-            return Optional.empty();
-        };
-
+        //definitions
         final Function< Optional< String >, ModelYear > createOrThrow = s -> s.map( ModelYear::new )
                                                                               .orElseThrow( ModelYear.invalidValue( input ) );
         //endregion
 
         return Flux.of( String::trim )
-                   .andThen( Regexes.VEHICLE_YEAR::matcher )
-                   .andThen( findMatch )
+                   .andThen( findWith( Regexes.VEHICLE_YEAR ) )
                    .andThen( createOrThrow )
                    .apply( input );
 
@@ -66,5 +59,5 @@ public class ModelYear extends ValueType< String > {
     }
 
 
-    //endregion
+    //endregionr
 }

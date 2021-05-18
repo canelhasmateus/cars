@@ -1,6 +1,7 @@
 package canelhas.cars.common.utils;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 public class TypingHelper {
 
@@ -23,4 +24,8 @@ public class TypingHelper {
         }
     }
 
+    public static < K, V > Function< Optional< K >, Optional< V > > possibly( Function< K, V > action ) {
+
+        return ( Optional< K > k ) -> k.map( action );
+    }
 }

@@ -16,6 +16,7 @@ import lombok.Setter;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
@@ -27,6 +28,7 @@ import static canelhas.cars.common.exception.ExceptionMessages.MODEL_REQUIRED;
 @AllArgsConstructor
 public class VehicleDto {
 
+    //region fields
     private final String    brand;
     private final String    model;
     private final ModelYear year;
@@ -34,7 +36,9 @@ public class VehicleDto {
     @Setter
     @JsonIgnore
     private TypedId< User > userId;
+    //endregion
 
+    //region constructor
     @JsonCreator( mode = JsonCreator.Mode.PROPERTIES )
     public VehicleDto( @JsonProperty( "brand" ) @NotNull String brand,
                        @JsonProperty( "model" ) @NotNull String model,
@@ -42,9 +46,9 @@ public class VehicleDto {
 
         //region definitions
         UnaryOperator< String > checkBrand = in -> Optional.ofNullable( in )
-                                                           .orElseThrow( ( ) -> new DomainException( BRAND_REQUIRED ) );
+                                                           .orElseThrow( brandIsRequired() );
         UnaryOperator< String > checkModel = in -> Optional.ofNullable( in )
-                                                           .orElseThrow( ( ) -> new DomainException( MODEL_REQUIRED ) );
+                                                           .orElseThrow( modelIsRequired() );
         // TODO: 16/05/2021 surely its possible to get these parameters from the annotations;
         //endregion
 
@@ -56,7 +60,9 @@ public class VehicleDto {
 
         validation.verify();
     }
+    //endregion
 
+    //region mappings
     public static Vehicle toEntity( VehicleDto dto ) {
         //region definitions
         final var model = dto.getModel();
@@ -88,5 +94,16 @@ public class VehicleDto {
                          .year( year )
                          .build();
     }
+    //endregion
+
+    //region exception
+    public static Supplier< DomainException > modelIsRequired( ) {
+        return ( ) -> new DomainException( MODEL_REQUIRED );
+    }
+
+    public static Supplier< DomainException > brandIsRequired( ) {
+        return ( ) -> new DomainException( BRAND_REQUIRED );
+    }
+    //endregion
 
 }

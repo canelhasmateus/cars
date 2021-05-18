@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
+import static canelhas.cars.api.auth.Authorization.Roles.ADMIN;
 import static canelhas.cars.api.auth.Authorization.Roles.USER;
 
 @RestController
@@ -56,7 +57,7 @@ public class UserController {
     }
 
     @GetMapping( "api/users/current/vehicles" )
-    @Authorization( USER )
+    @Authorization( ADMIN )
     public List< VehicleDto > getVehicles( ) {
 
         //region definitions

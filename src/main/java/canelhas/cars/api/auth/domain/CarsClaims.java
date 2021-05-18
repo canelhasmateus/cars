@@ -20,6 +20,7 @@ public class CarsClaims extends HashMap< String, Object > {
     private static final String ID      = "id";
 
 
+
     //endregion
 
     //region getters
@@ -122,5 +123,9 @@ public class CarsClaims extends HashMap< String, Object > {
     public static Supplier< AccessException > notFound( ) {
         return ( ) -> new AccessException( "Não existe sessão válida dentro do contexto atual" );
     }
+    public static Supplier< AccessException > accessDenied( ) {
+        return () -> new AccessException( "Você não possui os privilégios necessários de acesso." );
+    }
+
     //endregion
 }
