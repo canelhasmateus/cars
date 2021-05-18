@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static canelhas.cars.common.functional.Adjective.hopefully;
 import static canelhas.cars.common.utils.StringHelper.findWith;
 
 
@@ -18,13 +19,13 @@ public class ModelYear extends ValueType< String > {
 
     public static ModelYear of( String input ) {
 
-        if ( input == null ) {
-            throw ModelYear.required().get();
-        }
+        Optional.ofNullable( input )
+                .orElseThrow( ModelYear.required() );
 
         //definitions
-        final Function< Optional< String >, ModelYear > createOrThrow = s -> s.map( ModelYear::new )
-                                                                              .orElseThrow( ModelYear.invalidValue( input ) );
+        final Function< String, ModelYear > createOrThrow = s -> hopefully( ModelYear::new )
+                                                                         .apply( s )
+                                                                         .orElseThrow( ModelYear.invalidValue( input ) );
         //endregion
 
         return Chain.of( String::trim )

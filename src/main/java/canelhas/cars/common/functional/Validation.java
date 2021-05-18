@@ -39,7 +39,6 @@ public class Validation {
                                 .map( Exception::getMessage )
                                 .filter( Objects::nonNull )
                                 .collect( Collectors.joining( "\n" ) );
-
             throw thrower.apply( message );
         }
 

@@ -1,4 +1,4 @@
-package canelhas.cars.api.model.csr;
+package canelhas.cars.api.model.crs;
 
 import canelhas.cars.api.auth.Authorization;
 import canelhas.cars.api.auth.SessionService;
@@ -15,7 +15,7 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 import static canelhas.cars.api.auth.Authorization.Roles.USER;
-import static canelhas.cars.common.utils.TypingHelper.collectively;
+import static canelhas.cars.common.functional.Adjective.collectively;
 
 @RestController( "api/users/current/vehicles" )
 @Authorization( USER )

@@ -2,7 +2,6 @@ package canelhas.cars.common.utils;
 
 import org.springframework.util.StringUtils;
 
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -23,13 +22,12 @@ public class StringHelper {
     }
 
 
-    public static Function< String, Optional< String > > findWith( Pattern pattern ) {
+    public static Function< String, String > findWith( Pattern pattern ) {
         return s -> {
             final var matcher = pattern.matcher( s );
-            if ( matcher.find() ) {
-                return Optional.of( matcher.group() );
-            }
-            return Optional.empty();
+            matcher.find();
+            return matcher.group();
+
         };
 
     }

@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+import static canelhas.cars.common.functional.Adjective.hopefully;
 import static canelhas.cars.common.utils.StringHelper.findWith;
-import static canelhas.cars.common.utils.TypingHelper.possibly;
 import static io.jsonwebtoken.SignatureAlgorithm.HS512;
 
 public class SecurityHelper {
@@ -41,33 +41,28 @@ public class SecurityHelper {
     public static Optional< CarsClaims > getCurrentClaims( ) {
 
         //region definitions
-        Function< HttpServletRequest, Optional< String > > getBearer =
-                request -> Optional.ofNullable( request.getHeader( AUTHORIZATION ) );
+        Function< HttpServletRequest, String > getBearer = request -> request.getHeader( AUTHORIZATION );
 
+        final var parseRequest = Chain.of( ServletRequestAttributes.class::cast )
+                                      .andThen( ServletRequestAttributes::getRequest )
+                                      .andThen( HttpServletRequest.class::cast )
+                                      .andThen( getBearer )
+                                      .andThen( SecurityHelper::decode );
         //endregion
 
-        try {
-            var attributes = RequestContextHolder.currentRequestAttributes();
-            return Optional.of( attributes )
-                           .map( ServletRequestAttributes.class::cast )
-                           .map( ServletRequestAttributes::getRequest )
-                           .map( HttpServletRequest.class::cast )
-                           .flatMap( getBearer )
-                           .flatMap( SecurityHelper::decode );
-        }
-        catch ( Exception e ) {
-            return Optional.empty();
-        }
+        return hopefully( parseRequest )
+                       .apply( RequestContextHolder.currentRequestAttributes() );
+
     }
 
-    private static Optional< CarsClaims > decode( String input ) {
+    private static CarsClaims decode( String input ) {
 
         //region definitions
-        Function< String, Jws< Claims > > createJws = token -> Jwts.parser()
-                                                                   .setSigningKey( getJWTKey() )
-                                                                   .parseClaimsJws( token );
+        final Function< String, Jws< Claims > > createJws = token -> Jwts.parser()
+                                                                         .setSigningKey( getJWTKey() )
+                                                                         .parseClaimsJws( token );
 
-        Function< Jws< Claims >, CarsClaims > createCarsClaims = signature -> {
+        final Function< Jws< Claims >, CarsClaims > createCarsClaims = signature -> {
             final var carsClaims = new CarsClaims();
             carsClaims.putAll( signature.getBody() );
             return carsClaims;
@@ -75,17 +70,10 @@ public class SecurityHelper {
 
         //endregion
 
-        try {
-
-            return Chain.of( findWith( Regexes.BEARER ) )
-                        .andThen( possibly( createJws ) )
-                        .andThen( possibly( createCarsClaims ) )
-                        .apply( input );
-
-        }
-        catch ( Exception e ) {
-            return Optional.empty();
-        }
+        return Chain.of( findWith( Regexes.BEARER ) )
+                    .andThen( createJws )
+                    .andThen( createCarsClaims )
+                    .apply( input );
 
     }
 
@@ -100,6 +88,7 @@ public class SecurityHelper {
         roles.add( Authorization.Roles.USER );
         if ( email != null && email.contains( "@admin" ) ) {
 //            fake a lot né kkkkkkkkkkkkkkkkkkkk
+            // TODO: 18/05/2021 remove control flow
             roles.add( Authorization.Roles.ADMIN );
         }
         //endregion

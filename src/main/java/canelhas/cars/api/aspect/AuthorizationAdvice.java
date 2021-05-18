@@ -48,6 +48,7 @@ public class AuthorizationAdvice {
         //endregion
 
         if ( intersection.isEmpty() ) {
+            // TODO: 18/05/2021 remove control flow
             throw CarsClaims.accessDenied().get();
         }
 

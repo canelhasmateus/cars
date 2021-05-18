@@ -1,6 +1,6 @@
-package canelhas.cars.api.user.csr;
+package canelhas.cars.api.user.crs;
 
-import canelhas.cars.api.model.csr.VehicleRepository;
+import canelhas.cars.api.model.crs.VehicleRepository;
 import canelhas.cars.api.user.domain.RegistrationDto;
 import canelhas.cars.api.user.model.User;
 import canelhas.cars.common.functional.Chain;
