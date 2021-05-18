@@ -1,16 +1,16 @@
 package canelhas.cars.common.type;
 
-public class Id< T > {
+public class TypedId< T > {
 
     //    WHY IS THERE A ERROR WHEN EXTENDING VALUETYPE?
     private final Integer value;
 
-    public Id( Class< T > clazz, Integer id ) {
+    public TypedId( Class< T > clazz, Integer id ) {
         this.value = id;
     }
 
-    public static < T > Id< T > of( Class< T > clazz, Integer id ) {
-        return new Id<>( clazz, id );
+    public static < T > TypedId< T > of( Class< T > clazz, Integer id ) {
+        return new TypedId<>( clazz, id );
     }
 
 

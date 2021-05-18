@@ -5,7 +5,7 @@ import canelhas.cars.api.auth.SessionService;
 import canelhas.cars.api.user.domain.RegistrationDto;
 import canelhas.cars.api.user.model.User;
 import canelhas.cars.common.functional.Flux;
-import canelhas.cars.common.type.Id;
+import canelhas.cars.common.type.TypedId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -41,8 +41,8 @@ public class UserController {
 
         //region definitions
         UnaryOperator< VehicleDto > addUserId = dto -> {
-            Id< User > id = Id.of( User.class,
-                                   SessionService.getCurrentSession().getId() );
+            TypedId< User > id = TypedId.of( User.class,
+                                             SessionService.getCurrentSession().getId() );
             dto.setUserId( id );
             return dto;
         };
@@ -60,8 +60,8 @@ public class UserController {
     public List< VehicleDto > getVehicles( ) {
 
         //region definitions
-        Function< Integer, Id< User > > toUserId      = id -> Id.of( User.class, id );
-        Integer                         currentUserId = SessionService.getCurrentSession().getId();
+        Function< Integer, TypedId< User > > toUserId      = id -> TypedId.of( User.class, id );
+        Integer                              currentUserId = SessionService.getCurrentSession().getId();
         //endregion
 
         return Flux.of( toUserId )

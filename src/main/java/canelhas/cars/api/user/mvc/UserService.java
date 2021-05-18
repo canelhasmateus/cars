@@ -5,7 +5,7 @@ import canelhas.cars.api.user.model.User;
 import canelhas.cars.common.functional.Flux;
 import canelhas.cars.common.type.CPF;
 import canelhas.cars.common.type.EmailAddress;
-import canelhas.cars.common.type.Id;
+import canelhas.cars.common.type.TypedId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +44,7 @@ public class UserService {
 
     }
 
-    public List< Vehicle > getVehicles( Id< User > id ) {
+    public List< Vehicle > getVehicles( TypedId< User > id ) {
         return Collections.emptyList();
     }
 

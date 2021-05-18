@@ -3,7 +3,7 @@ package canelhas.cars.api.user.mvc;
 import canelhas.cars.api.user.model.User;
 import canelhas.cars.common.exception.DomainException;
 import canelhas.cars.common.functional.Validation;
-import canelhas.cars.common.type.Id;
+import canelhas.cars.common.type.TypedId;
 import canelhas.cars.common.type.ModelYear;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -33,7 +33,7 @@ public class VehicleDto {
 
     @Setter
     @JsonIgnore
-    private Id< User > userId;
+    private TypedId< User > userId;
 
     @JsonCreator( mode = JsonCreator.Mode.PROPERTIES )
     public VehicleDto( @JsonProperty( "brand" ) @NotNull String brand,
