@@ -92,7 +92,7 @@ public class SecurityHelper {
 
         final var addAdminRole = lazily( roles::add, Roles.ADMIN );
         conditionally( addAdminRole )
-                .apply( isAdmin.test( email ) );
+                .on( isAdmin.test( email ) );
 
         var claims = CarsClaims.builder()
                                .version( getVersion() )

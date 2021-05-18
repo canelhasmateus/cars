@@ -9,6 +9,7 @@ import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 import static canelhas.cars.common.exception.ExceptionMessages.*;
+import static canelhas.cars.common.functional.Adjectives.lazily;
 
 @Builder( toBuilder = true )
 public class CPF extends ValueType< String > {
@@ -91,15 +92,15 @@ public class CPF extends ValueType< String > {
 
     //region exception
     public static Supplier< DomainException > invalidValue( String input ) {
-        return ( ) -> new DomainException( input + IS_A_INVALID_CPF );
+        return lazily( DomainException::new, input + IS_A_INVALID_CPF );
     }
 
     public static Supplier< DomainException > required( ) {
-        return ( ) -> new DomainException( CPF_REQUIRED );
+        return lazily( DomainException::new, CPF_REQUIRED );
     }
 
     public static Supplier< DomainException > invalidLength( String input ) {
-        return ( ) -> new DomainException( input + INVALID_CPF_LENGTH );
+        return lazily( DomainException::new, input + INVALID_CPF_LENGTH );
     }
 
     //endregion

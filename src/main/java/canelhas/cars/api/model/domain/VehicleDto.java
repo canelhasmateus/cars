@@ -21,6 +21,7 @@ import java.util.function.UnaryOperator;
 
 import static canelhas.cars.common.exception.ExceptionMessages.BRAND_REQUIRED;
 import static canelhas.cars.common.exception.ExceptionMessages.MODEL_REQUIRED;
+import static canelhas.cars.common.functional.Adjectives.lazily;
 
 @Builder( toBuilder = true )
 @Getter
@@ -92,11 +93,11 @@ public class VehicleDto {
 
     //region exception
     public static Supplier< DomainException > modelIsRequired( ) {
-        return ( ) -> new DomainException( MODEL_REQUIRED );
+        return lazily( DomainException::new, MODEL_REQUIRED );
     }
 
     public static Supplier< DomainException > brandIsRequired( ) {
-        return ( ) -> new DomainException( BRAND_REQUIRED );
+        return lazily( DomainException::new, BRAND_REQUIRED );
     }
     //endregion
 

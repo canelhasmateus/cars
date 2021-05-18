@@ -3,6 +3,7 @@ package canelhas.cars.common.functional;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -11,10 +12,10 @@ import java.util.stream.Collectors;
 public class Adjectives {
 
     //region monorepo
-
     private Adjectives( ) {}
+    //endregion
 
-
+    //region maybe
     public static < K, V > Function< K, Optional< V > > hopefully( Function< K, V > action ) {
         return ( K k ) -> {
             try {
@@ -32,13 +33,13 @@ public class Adjectives {
         return ( Optional< K > k ) -> k.map( action );
     }
 
-    public static < K, V > Supplier< V > lazily( Function< K, V > action, K element ) {
+    public static < K, V > Function< Optional< K >, V > certainly( Function< K, V > action ) {
 
-        return ( ) -> action.apply( element );
-
+        return ( Optional< K > k ) -> k.map( action ).orElse( null );
     }
+    //endregion
 
-
+    //region collection
     public static < K, V > Function< Collection< K >, List< V > > collectively( Function< K, V > action ) {
         // TODO: 18/05/2021 let parameter choose destination collection.
         return ( Collection< K > collection ) -> collection.stream()
@@ -55,6 +56,46 @@ public class Adjectives {
             }
         };
     }
+    //endregion
+
+    //region conditionally
+    public static < K > Conditional< Boolean, K > conditionally( Supplier< K > trueAction, Supplier< K > falseAction ) {
+
+        // TODO: 18/05/2021 create dedicated functional interface
+        return ( Boolean b ) -> {
+            if ( b ) {
+                return trueAction.get();
+            }
+            return falseAction.get();
+        };
+    }
+
+    public static < K > Conditional< Boolean, K > conditionally( Supplier< K > trueAction ) {
+
+        return conditionally( trueAction,
+                              lazily( null ) );
+    }
+
+
+    //endregion
+
+    //region partially
+    public static < K, U, V > Function< K, V > partially( BiFunction< K, U, V > action, U element ) {
+        return ( K k ) -> action.apply( k, element );
+    }
+
+    public static < K, V > Supplier< V > partially( Function< K, V > action, K element ) {
+        return ( ) -> action.apply( element );
+    }
+
+    public static < K, V > Supplier< V > lazily( Function< K, V > action, K element ) {
+        return partially( action, element );
+    }
+
+    private static < K > Supplier< K > lazily( K k ) {
+        return ( ) -> k;
+    }
+    //endregion
 
     @SafeVarargs public static < K, V > Function< K, V > fluently( Function< K, V > action, Consumer< V >... sideEffects ) {
 
@@ -67,20 +108,5 @@ public class Adjectives {
 
     }
 
-    public static < K > Function< Boolean, K > conditionally( Supplier< K > trueAction, Supplier< K > falseAction ) {
-
-        // TODO: 18/05/2021 create dedicated functional interface
-        return ( Boolean b ) -> {
-            if ( b ) {
-                return trueAction.get();
-            }
-            return falseAction.get();
-        };
-    }
-
-    public static < K > Function< Boolean, K > conditionally( Supplier< K > trueAction ) {
-
-        return conditionally( trueAction, ( ) -> null );
-    }
 
 }

@@ -13,6 +13,7 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.function.Supplier;
 
+import static canelhas.cars.common.functional.Adjectives.lazily;
 import static canelhas.cars.schema.DatabaseColumns.*;
 
 @Builder( toBuilder = true )
@@ -45,7 +46,8 @@ public class User {
 
     //region exceptions
     public static Supplier< NotFoundException > notFound( CPF cpf, EmailAddress email ) {
-        return ( ) -> new NotFoundException( "Não foi encontrado usuário com email " + email + " e cpf " + cpf + "." );
+        return lazily( NotFoundException::new,
+                       "Não foi encontrado usuário com email " + email + " e cpf " + cpf + "." );
     }
     //endregion
 }

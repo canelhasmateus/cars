@@ -6,10 +6,10 @@ import canelhas.cars.common.namespace.Regexes;
 import lombok.Builder;
 
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static canelhas.cars.common.functional.Adjectives.hopefully;
+import static canelhas.cars.common.functional.Adjectives.lazily;
 import static canelhas.cars.common.utils.StringHelper.findWith;
 
 
@@ -23,15 +23,14 @@ public class ModelYear extends ValueType< String > {
                 .orElseThrow( ModelYear.required() );
 
         //definitions
-        final Function< String, ModelYear > createOrThrow = s -> hopefully( ModelYear::new )
-                                                                         .apply( s )
-                                                                         .orElseThrow( ModelYear.invalidValue( input ) );
+        final var toModelYear = Chain.of( String::trim )
+                                     .andThen( findWith( Regexes.VEHICLE_YEAR ) )
+                                     .andThen( ModelYear::new );
         //endregion
 
-        return Chain.of( String::trim )
-                    .andThen( findWith( Regexes.VEHICLE_YEAR ) )
-                    .andThen( createOrThrow )
-                    .apply( input );
+        return hopefully( toModelYear )
+                       .apply( input )
+                       .orElseThrow( ModelYear.invalidValue( input ) );
 
 
     }
@@ -42,7 +41,7 @@ public class ModelYear extends ValueType< String > {
     }
 
     public static int asInteger( ModelYear input ) {
-        // TODO: 17/05/2021 fazer direito 
+        // TODO: 17/05/2021 fazer direito
         final var value = input.value();
         final var year  = value.split( "-" )[ 0 ];
         return Integer.parseInt( year );
@@ -50,15 +49,14 @@ public class ModelYear extends ValueType< String > {
 
     //region exceptions
     public static Supplier< DomainException > invalidValue( String input ) {
-
-        return ( ) -> new DomainException( input + "não é um valor válido de ano do veiculo." );
+        return lazily( DomainException::new,
+                       input + "não é um valor válido de ano do veiculo." );
 
     }
 
     public static Supplier< DomainException > required( ) {
-        return ( ) -> new DomainException( "Informe algum valor de ano do veículo." );
+        return lazily( DomainException::new,
+                       "Informe algum valor de ano do veículo." );
     }
-
-
-    //endregionr
+    //endregion
 }

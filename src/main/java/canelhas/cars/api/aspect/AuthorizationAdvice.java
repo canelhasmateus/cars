@@ -50,7 +50,7 @@ public class AuthorizationAdvice {
         //endregion
 
         conditionally( raise( CarsClaims.accessDenied() ) )
-                .apply( intersection.isEmpty() );
+                .on( intersection.isEmpty() );
 
     }
 

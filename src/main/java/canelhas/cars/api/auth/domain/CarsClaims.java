@@ -10,6 +10,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import static canelhas.cars.common.functional.Adjectives.lazily;
+
 public class CarsClaims extends HashMap< String, Object > {
 
     //region keys
@@ -18,7 +20,6 @@ public class CarsClaims extends HashMap< String, Object > {
     private static final String VERSION = "version";
     private static final String ROLES   = "roles";
     private static final String ID      = "id";
-
 
 
     //endregion
@@ -121,10 +122,13 @@ public class CarsClaims extends HashMap< String, Object > {
 
     //region exceptions
     public static Supplier< AccessException > notFound( ) {
-        return ( ) -> new AccessException( "Não existe sessão válida dentro do contexto atual" );
+        return lazily( AccessException::new,
+                       "Não existe sessão válida dentro do contexto atual" );
     }
+
     public static Supplier< AccessException > accessDenied( ) {
-        return () -> new AccessException( "Você não possui os privilégios necessários de acesso." );
+        return lazily( AccessException::new,
+                       "Você não possui os privilégios necessários de acesso." );
     }
 
     //endregion
