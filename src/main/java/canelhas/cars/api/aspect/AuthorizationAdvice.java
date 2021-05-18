@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 @Component
 public class AuthorizationAdvice {
 
-
     @Pointcut( "@annotation( canelhas.cars.api.auth.Authorization )" )
     public void authRequired( ) { }
 

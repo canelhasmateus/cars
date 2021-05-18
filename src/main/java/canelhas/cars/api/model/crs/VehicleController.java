@@ -15,7 +15,7 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 import static canelhas.cars.api.auth.Authorization.Roles.USER;
-import static canelhas.cars.common.functional.Adjective.collectively;
+import static canelhas.cars.common.functional.Adjectives.collectively;
 
 @RestController( "api/users/current/vehicles" )
 @Authorization( USER )

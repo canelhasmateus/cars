@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static canelhas.cars.common.functional.Adjective.hopefully;
+import static canelhas.cars.common.functional.Adjectives.hopefully;
 import static canelhas.cars.common.utils.StringHelper.findWith;
 
 

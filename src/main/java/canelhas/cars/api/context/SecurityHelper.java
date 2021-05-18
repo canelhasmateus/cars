@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static canelhas.cars.common.functional.Adjective.hopefully;
+import static canelhas.cars.common.functional.Adjectives.hopefully;
 import static canelhas.cars.common.utils.StringHelper.findWith;
 import static io.jsonwebtoken.SignatureAlgorithm.HS512;
 

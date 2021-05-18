@@ -8,11 +8,11 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public class Adjective {
+public class Adjectives {
 
     //region monorepo
 
-    private Adjective( ) {}
+    private Adjectives( ) {}
 
 
     public static < K, V > Function< K, Optional< V > > hopefully( Function< K, V > action ) {
@@ -32,6 +32,13 @@ public class Adjective {
         return ( Optional< K > k ) -> k.map( action );
     }
 
+    public static < K, V > Supplier< V > lazily( Function< K, V > action, K element ) {
+
+        return ( ) -> action.apply( element );
+
+    }
+
+
     public static < K, V > Function< Collection< K >, List< V > > collectively( Function< K, V > action ) {
         // TODO: 18/05/2021 let parameter choose destination collection.
         return ( Collection< K > collection ) -> collection.stream()
@@ -40,17 +47,21 @@ public class Adjective {
 
     }
 
-    public static < K, V > Supplier< V > lazily( Function< K, V > action, K element ) {
-
-        return ( ) -> action.apply( element );
-
+    @SafeVarargs
+    public static < K > Consumer< K > applicativelly( Consumer< K >... actions ) {
+        return ( K k ) -> {
+            for ( Consumer< K > consumer : actions ) {
+                consumer.accept( k );
+            }
+        };
     }
 
-    public static < K, V > Function< K, V > effectfully( Function< K, V > action, Consumer< V > sideEffect ) {
+    @SafeVarargs public static < K, V > Function< K, V > fluently( Function< K, V > action, Consumer< V >... sideEffects ) {
 
         return ( K k ) -> {
             V result = action.apply( k );
-            sideEffect.accept( result );
+            applicativelly( sideEffects )
+                    .accept( result );
             return result;
         };
 
