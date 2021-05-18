@@ -67,5 +67,20 @@ public class Adjectives {
 
     }
 
+    public static < K > Function< Boolean, K > conditionally( Supplier< K > trueAction, Supplier< K > falseAction ) {
+
+        // TODO: 18/05/2021 create dedicated functional interface
+        return ( Boolean b ) -> {
+            if ( b ) {
+                return trueAction.get();
+            }
+            return falseAction.get();
+        };
+    }
+
+    public static < K > Function< Boolean, K > conditionally( Supplier< K > trueAction ) {
+
+        return conditionally( trueAction, ( ) -> null );
+    }
 
 }

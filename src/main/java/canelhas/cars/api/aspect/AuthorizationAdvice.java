@@ -14,6 +14,9 @@ import org.springframework.stereotype.Component;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static canelhas.cars.common.functional.Adjectives.conditionally;
+import static canelhas.cars.common.functional.Verbs.raise;
+
 @Aspect
 @Component
 public class AuthorizationAdvice {
@@ -46,10 +49,8 @@ public class AuthorizationAdvice {
                                          .collect( Collectors.toList() );
         //endregion
 
-        if ( intersection.isEmpty() ) {
-            // TODO: 18/05/2021 remove control flow
-            throw CarsClaims.accessDenied().get();
-        }
+        conditionally( raise( CarsClaims.accessDenied() ) )
+                .apply( intersection.isEmpty() );
 
     }
 

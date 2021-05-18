@@ -1,6 +1,6 @@
 package canelhas.cars.api.context;
 
-import canelhas.cars.api.auth.Authorization;
+import canelhas.cars.api.auth.Authorization.Roles;
 import canelhas.cars.api.auth.domain.CarsClaims;
 import canelhas.cars.api.user.model.User;
 import canelhas.cars.common.functional.Chain;
@@ -16,8 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
-import static canelhas.cars.common.functional.Adjectives.hopefully;
+import static canelhas.cars.common.functional.Adjectives.*;
 import static canelhas.cars.common.utils.StringHelper.findWith;
 import static io.jsonwebtoken.SignatureAlgorithm.HS512;
 
@@ -80,18 +81,18 @@ public class SecurityHelper {
     public static String encode( User user ) {
 
         //region definitions
-        final var id    = user.getId();
-        final var name  = user.getName();
-        final var email = user.getEmail();
+        final var           id      = user.getId();
+        final var           name    = user.getName();
+        final var           email   = user.getEmail();
+        Predicate< String > isAdmin = s -> s != null && s.contains( "@admin" );
 
-        List< Authorization.Roles > roles = new ArrayList<>();
-        roles.add( Authorization.Roles.USER );
-        if ( email != null && email.contains( "@admin" ) ) {
-//            fake a lot né kkkkkkkkkkkkkkkkkkkk
-            // TODO: 18/05/2021 remove control flow
-            roles.add( Authorization.Roles.ADMIN );
-        }
+        List< Roles > roles = new ArrayList<>();
+        roles.add( Roles.USER );
         //endregion
+
+        final var addAdminRole = lazily( roles::add, Roles.ADMIN );
+        conditionally( addAdminRole )
+                .apply( isAdmin.test( email ) );
 
         var claims = CarsClaims.builder()
                                .version( getVersion() )

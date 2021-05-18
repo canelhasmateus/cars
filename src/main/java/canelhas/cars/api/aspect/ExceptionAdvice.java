@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.Collections;
+import java.util.function.Supplier;
+
+import static canelhas.cars.common.functional.Adjectives.conditionally;
 
 @ControllerAdvice
 public class ExceptionAdvice {
@@ -26,29 +29,37 @@ public class ExceptionAdvice {
     @ExceptionHandler( JsonParseException.class )
     public ResponseEntity< ? > handle( JsonParseException exception ) {
 
-        //region delegate when cars exception.
-        // Would love to use instanceof pattern matching here, but java11
-        if ( exception.getCause() instanceof CarsException ) {
-            return handle( ( CarsException ) exception.getCause() );
-        }
+        //region definition
+        Supplier< ResponseEntity< ? > > handleCars = ( ) -> handle( ( CarsException ) exception.getCause() );
+
+        Supplier< ResponseEntity< ? > > orElseGenericException = ( ) -> {
+            var body = Collections.singletonMap( MESSAGE, exception.getMessage() );
+            return new ResponseEntity<>( body, HttpStatus.UNPROCESSABLE_ENTITY );
+        };
+
         //endregion
 
-        var body = Collections.singletonMap( MESSAGE, exception.getMessage() );
-        return new ResponseEntity<>( body, HttpStatus.UNPROCESSABLE_ENTITY );
+        return conditionally( handleCars, orElseGenericException )
+                       .apply( exception.getCause() instanceof CarsException );
+
+
     }
 
     @ExceptionHandler( ValueInstantiationException.class )
     public ResponseEntity< ? > handle( ValueInstantiationException exception ) {
 
-        //region delegate when cars exception.
-        // Would love to use instanceof pattern matching here, but java11
-        if ( exception.getCause() instanceof CarsException ) {
-            return handle( ( CarsException ) exception.getCause() );
-        }
+        //region definitions
+        Supplier< ResponseEntity< ? > > handleCars = ( ) -> handle( ( CarsException ) exception.getCause() );
+
+        Supplier< ResponseEntity< ? > > orElseGenericException = ( ) -> {
+            var body = Collections.singletonMap( MESSAGE, exception.getMessage() );
+            return new ResponseEntity<>( body, HttpStatus.UNPROCESSABLE_ENTITY );
+        };
         //endregion
 
-        var body = Collections.singletonMap( MESSAGE, exception.getMessage() );
-        return new ResponseEntity<>( body, HttpStatus.UNPROCESSABLE_ENTITY );
+        return conditionally( handleCars, orElseGenericException )
+                       .apply( exception.getCause() instanceof CarsException );
+
     }
 
 

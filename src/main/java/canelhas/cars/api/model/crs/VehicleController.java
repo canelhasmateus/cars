@@ -3,6 +3,7 @@ package canelhas.cars.api.model.crs;
 import canelhas.cars.api.auth.Authorization;
 import canelhas.cars.api.auth.SessionService;
 import canelhas.cars.api.model.domain.VehicleDto;
+import canelhas.cars.api.model.model.Vehicle;
 import canelhas.cars.api.user.model.User;
 import canelhas.cars.common.functional.Chain;
 import canelhas.cars.common.type.TypedId;
@@ -51,11 +52,13 @@ public class VehicleController {
         //region definitions
         Function< Integer, TypedId< User > > toUserId      = id -> TypedId.of( User.class, id );
         Integer                              currentUserId = SessionService.getCurrentSession().getId();
+        final Function< Vehicle, VehicleDto > createDto = VehicleDto::fromEntity;
+
         //endregion
 
         return Chain.of( toUserId )
                     .andThen( vehicleService::read )
-                    .andThen( collectively( VehicleDto::fromEntity ) )
+                    .andThen( collectively( createDto ) )
                     .apply( currentUserId );
 
     }
