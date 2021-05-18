@@ -1,49 +1,61 @@
 package canelhas.cars.api.aspect;
 
 
-import canelhas.cars.common.exception.CarsException;
+import canelhas.cars.common.exception.CustomException;
+import canelhas.cars.common.functional.Chain;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.Collections;
-import java.util.function.Predicate;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static canelhas.cars.common.functional.Adjectives.conditionally;
-import static canelhas.cars.common.functional.Adjectives.partially;
+import static canelhas.cars.common.functional.Adjectives.hopefully;
+import static canelhas.cars.common.functional.Adjectives.lazily;
 
 @ControllerAdvice
 public class ExceptionAdvice {
 
     public static final String MESSAGE = "message";
 
-    @ExceptionHandler( Exception.class )
-    public ResponseEntity< ? > handle( Exception exception ) {
+
+    @ExceptionHandler( ValueInstantiationException.class )
+    public ResponseEntity< ? > handle( ValueInstantiationException exception ) {
+        return handleConditionally( exception );
+    }
+
+    @ExceptionHandler( JsonParseException.class )
+    public ResponseEntity< ? > handle( JsonParseException exception ) {
+        return handleConditionally( exception );
+    }
+
+    //region help
+    public ResponseEntity< ? > handleConditionally( Exception exception ) {
         //region definition
-        Supplier< ResponseEntity< ? > > handleCars = partially( this::handleCars,
-                                                                ( CarsException ) exception.getCause() );
+        final Function< Exception, ResponseEntity< ? > > handleSpecifically = Chain.of( Exception::getCause )
+                                                                                   .andThen( CustomException.class::cast )
+                                                                                   .andThen( ExceptionAdvice::handleCars );
 
-        Supplier< ResponseEntity< ? > > orElseGenericException = partially( this::handleGeneric, exception );
-
-        Predicate< Exception > isCarException = e -> e instanceof CarsException ||
-                                                     e.getCause() instanceof CarsException;
+        Supplier< ResponseEntity< ? > > treatGenerically = lazily( ExceptionAdvice::handleGeneric, exception );
         //endregion
 
-        return conditionally( handleCars, orElseGenericException )
-                       .on( isCarException.test( exception ) );
+        return hopefully( handleSpecifically )
+                       .apply( exception )
+                       .orElseGet( treatGenerically );
+
 
     }
 
-
-    //region help
-    public ResponseEntity< ? > handleGeneric( Exception exception ) {
+    public static ResponseEntity< ? > handleGeneric( Exception exception ) {
         var body = Collections.singletonMap( MESSAGE, exception.getMessage() );
         return new ResponseEntity<>( body, HttpStatus.INTERNAL_SERVER_ERROR );
     }
 
-    public ResponseEntity< ? > handleCars( CarsException exception ) {
+    public static ResponseEntity< ? > handleCars( CustomException exception ) {
         var body = Collections.singletonMap( MESSAGE, exception.getMessage() );
         return new ResponseEntity<>( body, exception.getStatus() );
     }

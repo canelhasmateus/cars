@@ -1,7 +1,6 @@
 package canelhas.cars.api.user.crs;
 
-import canelhas.cars.api.model.crs.VehicleRepository;
-import canelhas.cars.api.user.domain.RegistrationDto;
+import canelhas.cars.api.user.domain.UserDto;
 import canelhas.cars.api.user.model.User;
 import canelhas.cars.common.functional.Chain;
 import canelhas.cars.common.type.CPF;
@@ -16,15 +15,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
 
-    //region fields
-    private final UserRepository    userRepository;
-    private final VehicleRepository vehicleRepository;
-    //endregion
+    private final UserRepository userRepository;
 
     @Transactional
-    public User register( RegistrationDto request ) {
-        // TODO: 16/05/2021 friendly exception messages
-        return Chain.of( RegistrationDto::toEntity )
+    public User add( UserDto request ) {
+        return Chain.of( UserDto::toEntity )
                     .andThen( userRepository::save )
                     .apply( request );
     }

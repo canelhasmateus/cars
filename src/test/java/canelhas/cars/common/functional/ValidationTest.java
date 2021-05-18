@@ -1,6 +1,6 @@
 package canelhas.cars.common.functional;
 
-import canelhas.cars.common.exception.CarsException;
+import canelhas.cars.common.exception.CustomException;
 import canelhas.cars.common.exception.DomainException;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +24,7 @@ class ValidationTest {
         validation.assemble( message, error );
         validation.assemble( message, error );
 
-        assertThrows( CarsException.class, validation::verify );
+        assertThrows( CustomException.class, validation::verify );
 
     }
 

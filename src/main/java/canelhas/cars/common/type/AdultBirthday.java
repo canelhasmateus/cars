@@ -5,7 +5,7 @@ import canelhas.cars.common.functional.Chain;
 import canelhas.cars.common.utils.DateHelper;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.Builder;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Date;
 import java.util.function.UnaryOperator;
@@ -13,7 +13,7 @@ import java.util.function.UnaryOperator;
 import static canelhas.cars.common.exception.ExceptionMessages.*;
 
 
-@Builder( toBuilder = true )
+@RequiredArgsConstructor
 public class AdultBirthday extends ValueType< Date > {
 
     private final Date value;

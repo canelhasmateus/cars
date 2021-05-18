@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public class DomainException extends CarsException {
+public class DomainException extends CustomException {
     private final HttpStatus status;
 
     public DomainException( String message ) {

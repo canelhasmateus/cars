@@ -17,10 +17,11 @@ public class DatabaseColumns {
     //endregion
 
     //region vehicle
-    public static final String VEHICLE_ID    = "vehicle_id";
-    public static final String VEHICLE_MODEL = "model";
-    public static final String VEHICLE_YEAR  = "year";
-    public static final String VEHICLE_BRAND = "brand";
+    public static final String VEHICLE_ID  = "vehicle_id";
+    public static final String MODEL_ID    = "model_id";
+    public static final String MODEL_NAME  = "name";
+    public static final String MODEL_YEAR  = "year";
+    public static final String MODEL_BRAND = "brand";
     //endregion
 
 }

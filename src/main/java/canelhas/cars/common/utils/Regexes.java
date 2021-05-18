@@ -1,4 +1,4 @@
-package canelhas.cars.common.namespace;
+package canelhas.cars.common.utils;
 
 import java.util.regex.Pattern;
 

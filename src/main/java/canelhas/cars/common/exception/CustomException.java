@@ -3,14 +3,14 @@ package canelhas.cars.common.exception;
 import org.springframework.http.HttpStatus;
 
 
-public abstract class CarsException extends RuntimeException {
+public abstract class CustomException extends RuntimeException {
 
-    protected CarsException( String message ) {
+    protected CustomException( String message ) {
         super( message );
     }
 
 
-    protected CarsException( String message, HttpStatus httpStatus ) {
+    protected CustomException( String message, HttpStatus httpStatus ) {
         super( message );
     }
 

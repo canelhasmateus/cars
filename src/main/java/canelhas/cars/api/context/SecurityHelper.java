@@ -4,7 +4,7 @@ import canelhas.cars.api.auth.Authorization.Roles;
 import canelhas.cars.api.auth.domain.CarsClaims;
 import canelhas.cars.api.user.model.User;
 import canelhas.cars.common.functional.Chain;
-import canelhas.cars.common.namespace.Regexes;
+import canelhas.cars.common.utils.Regexes;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -86,11 +86,11 @@ public class SecurityHelper {
         final var           email   = user.getEmail();
         Predicate< String > isAdmin = s -> s != null && s.contains( "@admin" );
 
-        List< Roles > roles = new ArrayList<>();
-        roles.add( Roles.USER );
+        List< Roles > roles        = new ArrayList<>();
+        final var     addAdminRole = lazily( roles::add, Roles.ADMIN );
         //endregion
 
-        final var addAdminRole = lazily( roles::add, Roles.ADMIN );
+        roles.add( Roles.USER );
         conditionally( addAdminRole )
                 .on( isAdmin.test( email ) );
 

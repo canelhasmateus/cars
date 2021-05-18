@@ -2,16 +2,16 @@ package canelhas.cars.common.type;
 
 import canelhas.cars.common.exception.DomainException;
 import canelhas.cars.common.functional.Chain;
-import canelhas.cars.common.namespace.Regexes;
+import canelhas.cars.common.utils.Regexes;
 import canelhas.cars.common.utils.StringHelper;
-import lombok.Builder;
+import lombok.RequiredArgsConstructor;
 
 import java.util.function.UnaryOperator;
 
 import static canelhas.cars.common.exception.ExceptionMessages.CONTAINS_INVALID_CHARACTERS;
 import static canelhas.cars.common.exception.ExceptionMessages.NAME_REQUIRED;
 
-@Builder( toBuilder = true )
+@RequiredArgsConstructor
 public class ProperName extends ValueType< String > {
 
 

@@ -3,7 +3,6 @@ package canelhas.cars.api.auth.domain;
 import canelhas.cars.api.auth.Authorization;
 import canelhas.cars.common.type.EmailAddress;
 import canelhas.cars.common.type.ProperName;
-import canelhas.cars.common.utils.TypingHelper;
 
 import java.util.*;
 import java.util.function.Function;
@@ -11,6 +10,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static canelhas.cars.common.functional.Adjectives.lazily;
+import static canelhas.cars.common.utils.TypingHelper.maybe;
 
 public class CarsClaims extends HashMap< String, Object > {
 
@@ -27,7 +27,7 @@ public class CarsClaims extends HashMap< String, Object > {
     //region getters
     public Optional< ProperName > getName( ) {
 
-        return Optional.ofNullable( ( String ) this.get( NAME ) )
+        return maybe( ( String ) this.get( NAME ) )
                        .map( ProperName::of );
 
     }
@@ -37,13 +37,13 @@ public class CarsClaims extends HashMap< String, Object > {
     }
 
     public Optional< EmailAddress > getEmail( ) {
-        return Optional.ofNullable( ( String ) this.get( EMAIL ) )
+        return maybe( ( String ) this.get( EMAIL ) )
                        .map( EmailAddress::of );
     }
 
     public Optional< String > getVersion( ) {
 
-        return Optional.ofNullable( ( String ) this.get( VERSION ) );
+        return maybe( ( String ) this.get( VERSION ) );
     }
 
     public Set< Authorization.Roles > getRoles( ) {
@@ -52,9 +52,9 @@ public class CarsClaims extends HashMap< String, Object > {
         @SuppressWarnings( "unchecked" )
         Collection< String > roles = ( Collection< String > ) this.getOrDefault( ROLES, Collections.emptyList() );
         Function< String, Authorization.Roles > toRoles =
-                name -> TypingHelper.maybe( Authorization.Roles.class,
-                                            name )
-                                    .orElse( null );
+                name -> maybe( Authorization.Roles.class,
+                               name )
+                                .orElse( null );
         //endregion
 
         return roles.stream()

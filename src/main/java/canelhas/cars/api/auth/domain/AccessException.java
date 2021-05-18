@@ -1,9 +1,9 @@
 package canelhas.cars.api.auth.domain;
 
-import canelhas.cars.common.exception.CarsException;
+import canelhas.cars.common.exception.CustomException;
 import org.springframework.http.HttpStatus;
 
-public class AccessException extends CarsException {
+public class AccessException extends CustomException {
 
     private final HttpStatus status;
 

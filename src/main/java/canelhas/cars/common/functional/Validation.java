@@ -12,8 +12,8 @@ public class Validation {
     private final Function< String, ? extends RuntimeException > thrower;
     private       List< Exception >                              errors;
 
-    public Validation( Function< String, ? extends RuntimeException > thrower ) {
-        this.thrower = thrower;
+    public Validation( Function< String, ? extends RuntimeException > messageReceiver ) {
+        this.thrower = messageReceiver;
     }
 
     public < K, V > V assemble( K element, Function< K, V > action ) {

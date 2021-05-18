@@ -27,9 +27,24 @@ public class StringHelper {
             final var matcher = pattern.matcher( s );
             matcher.find();
             return matcher.group();
-
         };
 
+    }
+
+    public static boolean contains( String container, String containee ) {
+        return container.toLowerCase().contains( containee.toLowerCase() );
+    }
+
+    public static boolean contained( String containee, String container ) {
+        return contains( container, containee );
+    }
+
+    public static boolean areEqual( String name, String value ) {
+        return name.equalsIgnoreCase( value );
+    }
+
+    public static String normalize( String s ) {
+        return s.trim().toLowerCase();
     }
 
 }

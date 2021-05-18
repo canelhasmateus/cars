@@ -1,42 +1,44 @@
-package canelhas.cars.common.type;
+package canelhas.cars.api.vehicles.domain;
 
 import canelhas.cars.common.exception.DomainException;
 import canelhas.cars.common.functional.Chain;
-import canelhas.cars.common.namespace.Regexes;
-import lombok.Builder;
+import canelhas.cars.common.utils.Regexes;
+import canelhas.cars.common.utils.StringHelper;
+import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.RequiredArgsConstructor;
 
-import java.util.Optional;
 import java.util.function.Supplier;
 
 import static canelhas.cars.common.functional.Adjectives.hopefully;
 import static canelhas.cars.common.functional.Adjectives.lazily;
 import static canelhas.cars.common.utils.StringHelper.findWith;
+import static canelhas.cars.common.utils.TypingHelper.maybe;
 
 
-@Builder( toBuilder = true )
-public class ModelYear extends ValueType< String > {
+@RequiredArgsConstructor
+public class ModelYear {
+    //FIXME : WHY CANT EXTEND VALUE_TYPE
     private final String value;
 
     public static ModelYear of( String input ) {
 
-        Optional.ofNullable( input )
-                .orElseThrow( ModelYear.required() );
+        final var value = maybe( input ).map( StringHelper::normalize )
+                                        .orElseThrow( ModelYear.required() );
 
-        //definitions
-        final var toModelYear = Chain.of( String::trim )
-                                     .andThen( findWith( Regexes.VEHICLE_YEAR ) )
-                                     .andThen( ModelYear::new );
+        //region definitions
+        final var parseModelYear = Chain.of( findWith( Regexes.VEHICLE_YEAR ) )
+                                        .andThen( ModelYear::new );
         //endregion
 
-        return hopefully( toModelYear )
-                       .apply( input )
-                       .orElseThrow( ModelYear.invalidValue( input ) );
-
+        return hopefully( parseModelYear )
+                       .apply( value )
+                       .orElseThrow( invalidValue( input ) );
 
     }
 
 
-    @Override public String value( ) {
+    @JsonValue
+    public String value( ) {
         return value;
     }
 

@@ -2,8 +2,8 @@ package canelhas.cars.common.type;
 
 import canelhas.cars.common.exception.DomainException;
 import canelhas.cars.common.functional.Chain;
-import canelhas.cars.common.namespace.Regexes;
-import lombok.Builder;
+import canelhas.cars.common.utils.Regexes;
+import lombok.RequiredArgsConstructor;
 
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
@@ -11,7 +11,7 @@ import java.util.function.UnaryOperator;
 import static canelhas.cars.common.exception.ExceptionMessages.*;
 import static canelhas.cars.common.functional.Adjectives.lazily;
 
-@Builder( toBuilder = true )
+@RequiredArgsConstructor
 public class CPF extends ValueType< String > {
 
     private final String value;

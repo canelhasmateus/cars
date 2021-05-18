@@ -25,6 +25,7 @@ import static canelhas.cars.schema.DatabaseColumns.*;
 public class User {
 
     //region fields
+    //FIXME : CREATE CUSTOM SERIALIZERS
     @Id
     @GeneratedValue( strategy = GenerationType.AUTO )
     @Column( name = USER_ID )

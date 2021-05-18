@@ -1,8 +1,10 @@
 package canelhas.cars.common.type;
 
-public class TypedId< T > {
+import lombok.RequiredArgsConstructor;
 
-    //    WHY IS THERE A ERROR WHEN EXTENDING VALUETYPE?
+@RequiredArgsConstructor
+public class TypedId< T > extends ValueType< Integer > {
+
     private final Integer value;
 
     public TypedId( Class< T > clazz, Integer id ) {

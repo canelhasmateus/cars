@@ -1,12 +1,10 @@
 package canelhas.cars.common.functional;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.function.*;
 import java.util.stream.Collectors;
 
 public class Adjectives {
@@ -15,7 +13,7 @@ public class Adjectives {
     private Adjectives( ) {}
     //endregion
 
-    //region maybe
+    //region these ones are probably good
     public static < K, V > Function< K, Optional< V > > hopefully( Function< K, V > action ) {
         return ( K k ) -> {
             try {
@@ -28,45 +26,78 @@ public class Adjectives {
         };
     }
 
-    public static < K, V > Function< Optional< K >, Optional< V > > possibly( Function< K, V > action ) {
-
-        return ( Optional< K > k ) -> k.map( action );
-    }
-
-    public static < K, V > Function< Optional< K >, V > certainly( Function< K, V > action ) {
-
-        return ( Optional< K > k ) -> k.map( action ).orElse( null );
-    }
-    //endregion
-
-    //region collection
     public static < K, V > Function< Collection< K >, List< V > > collectively( Function< K, V > action ) {
         // TODO: 18/05/2021 let parameter choose destination collection.
-        return ( Collection< K > collection ) -> collection.stream()
+        return ( Collection< K > iterable ) -> {
+            final var result = new ArrayList< V >( iterable.size() );
+            for ( K element : iterable ) {
+                result.add( action.apply( element ) );
+            }
+            return result;
+        };
+
+    }
+
+    public static < K, V > Function< Collection< K >, List< V > > concurrently( Function< K, V > action ) {
+        // FIXME: 18/05/2021 how to let parameter choose destination collection.
+        return ( Collection< K > collection ) -> collection.stream().parallel()
                                                            .map( action )
                                                            .collect( Collectors.toList() );
 
     }
 
-    @SafeVarargs
-    public static < K > Consumer< K > applicativelly( Consumer< K >... actions ) {
+    @SafeVarargs public static < K > UnaryOperator< K > effectfully( Consumer< K >... sideEffects ) {
         return ( K k ) -> {
-            for ( Consumer< K > consumer : actions ) {
+            for ( Consumer< K > consumer : sideEffects ) {
                 consumer.accept( k );
             }
+            return k;
         };
+
     }
+
+    public static < K > UnaryOperator< Collection< K > > narrowingly( Function< K, Boolean > chooser ) {
+        // FIXME: 18/05/2021 how to let parameter choose destination collection.
+        return ( Collection< K > collection ) -> collection.stream()
+                                                           .filter( logically( chooser ) )
+                                                           .collect( Collectors.toList() );
+    }
+
+    public static < K, V > Supplier< V > lazily( Function< K, V > action, K element ) {
+        return ( ) -> action.apply( element );
+    }
+
+    public static < K, U, V > Function< U, V > partially( BiFunction< K, U, V > action, K element ) {
+        return ( U u ) -> action.apply( element, u );
+    }
+
     //endregion
 
-    //region conditionally
+    //region probably remake these.
     public static < K > Conditional< Boolean, K > conditionally( Supplier< K > trueAction, Supplier< K > falseAction ) {
-
-        // TODO: 18/05/2021 create dedicated functional interface
         return isTrue -> {
-            if ( isTrue ) {
+            if ( Boolean.TRUE.equals( isTrue ) ) {
                 return trueAction.get();
             }
             return falseAction.get();
+        };
+    }
+
+    public static < K, V > Conditional< Boolean, Function< K, V > > conditionally( Function< K, V > action ) {
+        return isTrue -> {
+            if ( Boolean.TRUE.equals( isTrue ) ) {
+                return action;
+            }
+            return k -> null;
+        };
+    }
+
+    public static < K > Conditional< Boolean, UnaryOperator< K > > conditionally( Consumer< K > action ) {
+        return isTrue -> {
+            if ( Boolean.TRUE.equals( isTrue ) ) {
+                return effectfully( action );
+            }
+            return k -> k;
         };
     }
 
@@ -76,37 +107,17 @@ public class Adjectives {
                               lazily( null ) );
     }
 
-
-    //endregion
-
-    //region partially
-    public static < K, U, V > Function< K, V > partially( BiFunction< K, U, V > action, U element ) {
-        return ( K k ) -> action.apply( k, element );
-    }
-
-    public static < K, V > Supplier< V > partially( Function< K, V > action, K element ) {
-        return ( ) -> action.apply( element );
-    }
-
-    public static < K, V > Supplier< V > lazily( Function< K, V > action, K element ) {
-        return partially( action, element );
-    }
-
     private static < K > Supplier< K > lazily( K k ) {
         return ( ) -> k;
     }
-    //endregion
 
-    @SafeVarargs public static < K, V > Function< K, V > fluently( Function< K, V > action, Consumer< V >... sideEffects ) {
-
-        return ( K k ) -> {
-            V result = action.apply( k );
-            applicativelly( sideEffects )
-                    .accept( result );
-            return result;
-        };
-
+    public static < K > Predicate< K > logically( Function< K, Boolean > predicate ) {
+        return predicate::apply;
     }
 
+    public static < K > Predicate< K > logicallyNot( Function< K, Boolean > predicate ) {
+        return Predicate.not( logically( predicate ) );
+    }
+    //endregion
 
 }

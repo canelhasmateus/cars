@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public class NotFoundException extends CarsException {
+public class NotFoundException extends CustomException {
 
     private final HttpStatus status;
 

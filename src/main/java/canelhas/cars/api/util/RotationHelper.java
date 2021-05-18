@@ -1,7 +1,7 @@
 package canelhas.cars.api.util;
 
-import canelhas.cars.api.model.model.Vehicle;
-import canelhas.cars.common.type.ModelYear;
+import canelhas.cars.api.vehicles.model.VehicleModel;
+import canelhas.cars.api.vehicles.domain.ModelYear;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -13,7 +13,8 @@ public class RotationHelper {
 
     //region monorepo
 
-    private RotationHelper(){}
+    private RotationHelper( ) {}
+
     //endregion
     private static Boolean rotatedOut( ModelYear year ) {
 
@@ -42,9 +43,9 @@ public class RotationHelper {
 
     }
 
-    public static Boolean isRotatedOut( Vehicle vehicle ) {
+    public static Boolean isRotatedOut( VehicleModel vehicleModel ) {
 
-        return Optional.ofNullable( vehicle.getYear() )
+        return Optional.ofNullable( vehicleModel.getYear() )
                        .map( ModelYear::of )
                        .map( RotationHelper::rotatedOut )
                        .orElse( null );
