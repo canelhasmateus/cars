@@ -10,10 +10,14 @@ import static java.util.Calendar.*;
 
 public class RotationHelper {
 
+    //region monorepo
+
+    private RotationHelper(){}
+    //endregion
     private static Boolean rotatedOut( ModelYear year ) {
 
         //region current weekDay
-        Calendar instance = Calendar.getInstance();
+        var instance = Calendar.getInstance();
         instance.setTime( new Date() );
         final var currentWeekDay = instance.get( Calendar.DAY_OF_WEEK );
         //endregion

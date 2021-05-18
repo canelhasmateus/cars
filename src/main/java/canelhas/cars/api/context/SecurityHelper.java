@@ -7,7 +7,6 @@ import canelhas.cars.common.namespace.Regexes;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -45,7 +44,7 @@ public class SecurityHelper {
         //endregion
 
         try {
-            RequestAttributes attributes = RequestContextHolder.currentRequestAttributes();
+            var attributes = RequestContextHolder.currentRequestAttributes();
             return Optional.of( attributes )
                            .map( ServletRequestAttributes.class::cast )
                            .map( ServletRequestAttributes::getRequest )
@@ -69,7 +68,7 @@ public class SecurityHelper {
                                           .setSigningKey( getJWTKey() )
                                           .parseClaimsJws( token );
 
-            CarsClaims carsClaims = new CarsClaims();
+            var carsClaims = new CarsClaims();
             carsClaims.putAll( claimsJws.getBody() );
             return Optional.of( carsClaims );
         }
@@ -89,13 +88,13 @@ public class SecurityHelper {
         }
         //endregion
 
-        CarsClaims claims = CarsClaims.builder()
-                                      .version( getVersion() )
-                                      .id( user.getId() )
-                                      .name( user.getName() )
-                                      .email( user.getEmail() )
-                                      .roles( roles )
-                                      .build();
+        var claims = CarsClaims.builder()
+                               .version( getVersion() )
+                               .id( user.getId() )
+                               .name( user.getName() )
+                               .email( user.getEmail() )
+                               .roles( roles )
+                               .build();
 
         return Jwts.builder()
                    .setClaims( claims )
