@@ -50,10 +50,10 @@ public class RegistrationDto {
         var validation = new Validation( DomainException::new );
 
         this.id = null;
-        this.email = validation.map( email, EmailAddress::of );
-        this.cpf = validation.map( cpf, CPF::of );
-        this.name = validation.map( name, ProperName::of );
-        this.birthday = validation.map( birthday, AdultBirthday::of );
+        this.email = validation.assemble( email, EmailAddress::of );
+        this.cpf = validation.assemble( cpf, CPF::of );
+        this.name = validation.assemble( name, ProperName::of );
+        this.birthday = validation.assemble( birthday, AdultBirthday::of );
 
         validation.verify();
     }

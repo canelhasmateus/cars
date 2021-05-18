@@ -1,5 +1,6 @@
-package canelhas.cars.api.user.mvc;
+package canelhas.cars.api.model.domain;
 
+import canelhas.cars.api.model.model.Vehicle;
 import canelhas.cars.api.user.model.User;
 import canelhas.cars.common.exception.DomainException;
 import canelhas.cars.common.functional.Validation;
@@ -14,11 +15,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
 
 import static canelhas.cars.common.exception.ExceptionMessages.BRAND_REQUIRED;
 import static canelhas.cars.common.exception.ExceptionMessages.MODEL_REQUIRED;
@@ -54,9 +53,9 @@ public class VehicleDto {
 
         var validation = new Validation( DomainException::new );
 
-        this.brand = validation.map( brand, checkBrand );
-        this.model = validation.map( model, checkModel );
-        this.year = validation.map( year, ModelYear::of );
+        this.brand = validation.assemble( brand, checkBrand );
+        this.model = validation.assemble( model, checkModel );
+        this.year = validation.assemble( year, ModelYear::of );
 
         validation.verify();
     }
@@ -76,11 +75,6 @@ public class VehicleDto {
                       .build();
     }
 
-    public static List< VehicleDto > fromEntity( List< Vehicle > vehicleList ) {
-        return vehicleList.stream()
-                          .map( VehicleDto::fromEntity )
-                          .collect( Collectors.toList() );
-    }
 
     public static VehicleDto fromEntity( Vehicle vehicle ) {
         //region definitions

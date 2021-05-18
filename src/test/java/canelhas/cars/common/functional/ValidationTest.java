@@ -21,8 +21,8 @@ class ValidationTest {
     void givenErrorsThenRethrowsWhenCalled( ) {
 
         var validation = new Validation( DomainException::new );
-        validation.map( message, error );
-        validation.map( message, error );
+        validation.assemble( message, error );
+        validation.assemble( message, error );
 
         assertThrows( CarsException.class, validation::verify );
 
@@ -32,8 +32,8 @@ class ValidationTest {
     void givenErrorsThenMergeMessages( ) {
 
         var validation = new Validation( DomainException::new );
-        validation.map( message, error );
-        validation.map( message, error );
+        validation.assemble( message, error );
+        validation.assemble( message, error );
 
         try { validation.verify(); }
         catch ( Exception e ) {
@@ -47,7 +47,7 @@ class ValidationTest {
     void givenValidThenReturnsResult( ) {
 
         var validation = new Validation( DomainException::new );
-        var result     = validation.map( message, identity );
+        var result     = validation.assemble( message, identity );
 
         assertEquals( message, result );
     }

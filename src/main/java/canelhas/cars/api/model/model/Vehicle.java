@@ -1,6 +1,7 @@
-package canelhas.cars.api.user.mvc;
+package canelhas.cars.api.model.model;
 
 
+import canelhas.cars.api.util.RotationHelper;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

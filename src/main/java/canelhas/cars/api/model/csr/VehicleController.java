@@ -1,8 +1,8 @@
-package canelhas.cars.api.user.mvc;
+package canelhas.cars.api.model.csr;
 
 import canelhas.cars.api.auth.Authorization;
 import canelhas.cars.api.auth.SessionService;
-import canelhas.cars.api.user.domain.RegistrationDto;
+import canelhas.cars.api.model.domain.VehicleDto;
 import canelhas.cars.api.user.model.User;
 import canelhas.cars.common.functional.Flux;
 import canelhas.cars.common.type.TypedId;
@@ -14,29 +14,18 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
-import static canelhas.cars.api.auth.Authorization.Roles.ADMIN;
 import static canelhas.cars.api.auth.Authorization.Roles.USER;
+import static canelhas.cars.common.utils.TypingHelper.collectively;
 
-@RestController
+@RestController( "api/users/current/vehicles" )
+@Authorization( USER )
 @RequiredArgsConstructor
-public class UserController {
+public class VehicleController {
 
-    //region fields
-    private final UserService userService;
-    //endregion
 
-    @ResponseStatus( HttpStatus.CREATED )
-    @PostMapping( "api/users" )
-    public RegistrationDto register( @RequestBody RegistrationDto request ) {
+    private final VehicleService vehicleService;
 
-        return Flux.of( userService::register )
-                   .andThen( RegistrationDto::fromEntity )
-                   .apply( request );
-
-    }
-
-    @PostMapping( "api/users/current/vehicles" )
-    @Authorization( USER )
+    @PostMapping
     @ResponseStatus( HttpStatus.CREATED )
     public VehicleDto addVehicle( @RequestBody VehicleDto request ) {
 
@@ -50,14 +39,13 @@ public class UserController {
         //endregion
 
         return Flux.of( addUserId )
-                   .andThen( userService::addVehicle )
+                   .andThen( vehicleService::register )
                    .andThen( VehicleDto::fromEntity )
                    .apply( request );
 
     }
 
-    @GetMapping( "api/users/current/vehicles" )
-    @Authorization( ADMIN )
+    @GetMapping
     public List< VehicleDto > getVehicles( ) {
 
         //region definitions
@@ -66,8 +54,8 @@ public class UserController {
         //endregion
 
         return Flux.of( toUserId )
-                   .andThen( userService::getVehicles )
-                   .andThen( VehicleDto::fromEntity )
+                   .andThen( vehicleService::read )
+                   .andThen( collectively( VehicleDto::fromEntity ) )
                    .apply( currentUserId );
 
     }

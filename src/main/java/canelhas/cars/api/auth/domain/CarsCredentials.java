@@ -24,8 +24,8 @@ public class CarsCredentials {
 
         var validation = new Validation( DomainException::new );
 
-        this.email = validation.map( email, EmailAddress::of );
-        this.cpf = validation.map( cpf, CPF::of );
+        this.email = validation.assemble( email, EmailAddress::of );
+        this.cpf = validation.assemble( cpf, CPF::of );
 
         validation.verify();
     }

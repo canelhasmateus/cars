@@ -1,4 +1,4 @@
-package canelhas.cars.api.user.mvc;
+package canelhas.cars.api.user.csr;
 
 import canelhas.cars.api.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;

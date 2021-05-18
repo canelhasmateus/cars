@@ -1,7 +1,11 @@
 package canelhas.cars.common.utils;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class TypingHelper {
 
@@ -28,4 +32,20 @@ public class TypingHelper {
 
         return ( Optional< K > k ) -> k.map( action );
     }
+
+    public static < K, V > Supplier< V > lazily( Function< K, V > action, K element ) {
+
+        return ( ) -> action.apply( element );
+
+    }
+
+    public static < K, V > Function< Collection< K >, List< V > > collectively( Function< K, V > action ) {
+
+        return ( Collection< K > collection ) -> collection.stream()
+                                                           .map( action )
+                                                           .collect( Collectors.toList() );
+
+    }
+
+
 }

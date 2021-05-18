@@ -1,5 +1,6 @@
-package canelhas.cars.api.user.mvc;
+package canelhas.cars.api.util;
 
+import canelhas.cars.api.model.model.Vehicle;
 import canelhas.cars.common.type.ModelYear;
 
 import java.util.Calendar;

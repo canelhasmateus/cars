@@ -1,19 +1,16 @@
-package canelhas.cars.api.user.mvc;
+package canelhas.cars.api.user.csr;
 
+import canelhas.cars.api.model.csr.VehicleRepository;
 import canelhas.cars.api.user.domain.RegistrationDto;
 import canelhas.cars.api.user.model.User;
 import canelhas.cars.common.functional.Flux;
 import canelhas.cars.common.type.CPF;
 import canelhas.cars.common.type.EmailAddress;
-import canelhas.cars.common.type.TypedId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
-import java.util.function.UnaryOperator;
 
 @Service
 @RequiredArgsConstructor
@@ -30,22 +27,6 @@ public class UserService {
         return Flux.of( RegistrationDto::toEntity )
                    .andThen( userRepository::save )
                    .apply( request );
-    }
-
-    @Transactional
-    public Vehicle addVehicle( VehicleDto request ) {
-
-        UnaryOperator< Vehicle > searchFromApi = v -> v;
-
-        return Flux.of( VehicleDto::toEntity )
-                   .andThen( searchFromApi )
-                   .andThen( vehicleRepository::save )
-                   .apply( request );
-
-    }
-
-    public List< Vehicle > getVehicles( TypedId< User > id ) {
-        return Collections.emptyList();
     }
 
     //region read

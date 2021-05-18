@@ -4,7 +4,7 @@ import canelhas.cars.api.auth.domain.CarsClaims;
 import canelhas.cars.api.auth.domain.CarsCredentials;
 import canelhas.cars.api.auth.domain.CarsSession;
 import canelhas.cars.api.context.SecurityHelper;
-import canelhas.cars.api.user.mvc.UserService;
+import canelhas.cars.api.user.csr.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
