@@ -3,6 +3,7 @@ package canelhas.cars.api.user.model;
 import canelhas.cars.common.exception.NotFoundException;
 import canelhas.cars.common.type.CPF;
 import canelhas.cars.common.type.EmailAddress;
+import canelhas.cars.common.type.TypedId;
 import canelhas.cars.schema.DatabaseTables;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,7 +28,7 @@ public class User {
     //region fields
     //FIXME : CREATE CUSTOM SERIALIZERS
     @Id
-    @GeneratedValue( strategy = GenerationType.AUTO )
+    @GeneratedValue( strategy = GenerationType.IDENTITY )
     @Column( name = USER_ID )
     private Integer id;
 
@@ -50,5 +51,26 @@ public class User {
         return lazily( NotFoundException::new,
                        "Não foi encontrado usuário com email " + email + " e cpf " + cpf + "." );
     }
+
+    public static Supplier< NotFoundException > notFound( TypedId< User > userId ) {
+        return lazily( NotFoundException::new,
+                       "Não foi encontrado usuário com o id " + userId );
+    }
+
+    //endregion
+
+    //region
+    public TypedId< User > typedId( ) {
+        return castId( getId() );
+    }
+
+    public static TypedId< User > castId( Integer id ) {
+        return TypedId.of( id );
+    }
+
+    public static User of( TypedId< User > userId ) {
+        return User.builder().id( userId.value() ).build();
+    }
+
     //endregion
 }

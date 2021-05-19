@@ -1,6 +1,6 @@
 package canelhas.cars.api.context;
 
-import canelhas.cars.api.auth.Authorization.Roles;
+import canelhas.cars.api.auth.domain.Authorization.Roles;
 import canelhas.cars.api.auth.domain.CarsClaims;
 import canelhas.cars.api.user.model.User;
 import canelhas.cars.common.functional.Chain;

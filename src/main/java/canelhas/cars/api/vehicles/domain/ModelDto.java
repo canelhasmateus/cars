@@ -8,8 +8,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Value;
 
-import javax.validation.constraints.NotNull;
-
 @Builder( toBuilder = true )
 @Value
 public class ModelDto {
@@ -21,9 +19,9 @@ public class ModelDto {
     //region constructor
 
     @JsonCreator( mode = JsonCreator.Mode.PROPERTIES )
-    public static ModelDto of( @JsonProperty( "brand" ) @NotNull String brand,
-                               @JsonProperty( "name" ) @NotNull String model,
-                               @JsonProperty( "year" ) @NotNull String year ) {
+    public static ModelDto of( @JsonProperty( "brand" ) String brand,
+                               @JsonProperty( "name" ) String model,
+                               @JsonProperty( "year" ) String year ) {
 
         var validation = new Validation( DomainException::new );
 

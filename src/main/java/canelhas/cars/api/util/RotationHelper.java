@@ -1,7 +1,7 @@
 package canelhas.cars.api.util;
 
-import canelhas.cars.api.vehicles.model.VehicleModel;
 import canelhas.cars.api.vehicles.domain.ModelYear;
+import canelhas.cars.api.vehicles.model.VehicleModel;
 
 import java.util.Calendar;
 import java.util.Date;

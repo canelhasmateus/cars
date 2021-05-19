@@ -56,6 +56,16 @@ public class Adjectives {
 
     }
 
+    @SafeVarargs public static < K > Function< K, K > effectfully( Function< K, ? >... sideEffects ) {
+        return ( K k ) -> {
+            for ( Function< K, ? > function : sideEffects ) {
+                function.apply( k );
+            }
+            return k;
+        };
+
+    }
+
     public static < K > UnaryOperator< Collection< K > > narrowingly( Function< K, Boolean > chooser ) {
         // FIXME: 18/05/2021 how to let parameter choose destination collection.
         return ( Collection< K > collection ) -> collection.stream()
@@ -67,8 +77,8 @@ public class Adjectives {
         return ( ) -> action.apply( element );
     }
 
-    public static < K, U, V > Function< U, V > partially( BiFunction< K, U, V > action, K element ) {
-        return ( U u ) -> action.apply( element, u );
+    public static < U, K, V > Function< K, V > partially( BiFunction< U, K, V > action, U element ) {
+        return ( K k ) -> action.apply( element, k );
     }
 
     //endregion

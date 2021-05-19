@@ -1,4 +1,4 @@
-package canelhas.cars.api.auth;
+package canelhas.cars.api.auth.crs;
 
 import canelhas.cars.api.auth.domain.CarsCredentials;
 import canelhas.cars.api.auth.domain.CarsSession;

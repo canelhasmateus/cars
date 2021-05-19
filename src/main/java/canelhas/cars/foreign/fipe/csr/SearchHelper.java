@@ -4,7 +4,6 @@ import canelhas.cars.common.exception.ConflictException;
 import canelhas.cars.common.exception.DomainException;
 import canelhas.cars.common.exception.NotFoundException;
 import canelhas.cars.common.exception.OperationException;
-import canelhas.cars.common.functional.Chain;
 import canelhas.cars.common.utils.StringHelper;
 
 import java.util.ArrayList;
@@ -27,18 +26,9 @@ public class SearchHelper {
     private SearchHelper( ) {}
 
     //endregion
-    public static < T > T genericSearch( Function< String, List< T > > request, Function< T, String > identify, String url, String search ) {
-        final var bestMatch = partially( SearchHelper::bestMatch, search );
 
-        final Function< List< String >, Integer > bestPosition = list -> list.indexOf( bestMatch.apply( list ) );
-        final List< T > foundList = Chain.of( request )
-                                         .apply( url );
-
-        final var bestIndex = collectively( identify )
-                                      .andThen( bestPosition )
-                                      .apply( foundList );
-
-        return foundList.get( bestIndex );
+    static int bestIndex( String value, List< String > searchList ) {
+        return searchList.indexOf( bestMatch( value, searchList ) );
     }
 
     public static String bestMatch( String search, List< String > names ) {

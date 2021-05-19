@@ -1,4 +1,4 @@
-package canelhas.cars.api.auth;
+package canelhas.cars.api.auth.domain;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -15,6 +15,10 @@ public class TypedId< T > extends ValueType< Integer > {
         return new TypedId<>( clazz, id );
     }
 
+    public static < T > TypedId< T > of( Integer id ) {
+        return new TypedId<>( id );
+    }
+
 
     public Integer value( ) {
         return value;

@@ -1,7 +1,7 @@
 package canelhas.cars.api.aspect;
 
-import canelhas.cars.api.auth.Authorization;
-import canelhas.cars.api.auth.SessionService;
+import canelhas.cars.api.auth.crs.SessionService;
+import canelhas.cars.api.auth.domain.Authorization;
 import canelhas.cars.api.auth.domain.CarsClaims;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -21,7 +21,7 @@ import static canelhas.cars.common.functional.Verbs.raise;
 @Component
 public class AuthorizationAdvice {
 
-    @Pointcut( "@annotation( canelhas.cars.api.auth.Authorization )" )
+    @Pointcut( "@annotation( canelhas.cars.api.auth.domain.Authorization )" )
     public void authRequired( ) { }
 
 

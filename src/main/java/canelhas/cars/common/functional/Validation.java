@@ -1,6 +1,7 @@
 package canelhas.cars.common.functional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
@@ -38,6 +39,7 @@ public class Validation {
             var message = errors.stream()
                                 .map( Exception::getMessage )
                                 .filter( Objects::nonNull )
+                                .sorted( Comparator.comparing( String::length ) )
                                 .collect( Collectors.joining( "\n" ) );
             throw thrower.apply( message );
         }

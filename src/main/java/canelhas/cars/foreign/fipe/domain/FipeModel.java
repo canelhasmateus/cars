@@ -9,14 +9,13 @@ import lombok.Value;
 @Value
 public class FipeModel {
 
-
-    private final String  name;
-    private final Integer code;
+    private final String name;
+    private final String code;
 
     //region constructor
     @JsonCreator( mode = JsonCreator.Mode.PROPERTIES )
     public static FipeModel of( @JsonProperty( "nome" ) String name,
-                                @JsonProperty( "codigo" ) Integer code ) {
+                                @JsonProperty( "codigo" ) String code ) {
 
         return FipeModel.builder()
                         .name( name )

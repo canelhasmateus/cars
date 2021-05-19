@@ -1,8 +1,10 @@
 package canelhas.cars.api.auth.domain;
 
-import canelhas.cars.api.auth.Authorization;
+import canelhas.cars.api.user.model.User;
+import canelhas.cars.common.exception.AccessException;
 import canelhas.cars.common.type.EmailAddress;
 import canelhas.cars.common.type.ProperName;
+import canelhas.cars.common.type.TypedId;
 
 import java.util.*;
 import java.util.function.Function;
@@ -32,8 +34,8 @@ public class CarsClaims extends HashMap< String, Object > {
 
     }
 
-    public Integer getId( ) {
-        return ( Integer ) this.get( ID );
+    public TypedId< User > getId( ) {
+        return TypedId.of( ( Integer ) this.get( ID ) );
     }
 
     public Optional< EmailAddress > getEmail( ) {

@@ -1,8 +1,9 @@
-package canelhas.cars.api.auth.domain;
+package canelhas.cars.common.exception;
 
-import canelhas.cars.common.exception.CustomException;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+@Getter
 public class AccessException extends CustomException {
 
     private final HttpStatus status;
@@ -17,7 +18,4 @@ public class AccessException extends CustomException {
         this.status = httpStatus;
     }
 
-    @Override public HttpStatus getStatus( ) {
-        return status;
-    }
 }

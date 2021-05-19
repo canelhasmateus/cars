@@ -5,6 +5,7 @@ import canelhas.cars.api.user.model.User;
 import canelhas.cars.common.functional.Chain;
 import canelhas.cars.common.type.CPF;
 import canelhas.cars.common.type.EmailAddress;
+import canelhas.cars.common.type.TypedId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +34,16 @@ public class UserService {
 
     private Optional< User > search( CPF cpf, EmailAddress email ) {
         return this.userRepository.findByCpfAndEmail( cpf.value(), email.value() );
+    }
+
+    public User find( TypedId< User > userId ) {
+        return search( userId )
+                       .orElseThrow( User.notFound( userId ) );
+    }
+
+    private Optional< User > search( TypedId< User > userId ) {
+
+        return userRepository.findById( userId.value() );
     }
 
     //endregion

@@ -9,7 +9,8 @@ public class JsonHelper {
 
     //region monorepo
 
-    private JsonHelper(){}
+    private JsonHelper( ) {}
+
     //endregion
     private static final ObjectMapper mapper = new ObjectMapper();
 

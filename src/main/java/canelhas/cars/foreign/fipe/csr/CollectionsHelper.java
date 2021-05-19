@@ -7,7 +7,8 @@ public class CollectionsHelper {
 
     //region monorepo
 
-    private CollectionsHelper(){}
+    private CollectionsHelper( ) {}
+
     //endregion
     public static < K > List< K > flatten( List< List< K > > nested ) {
         final List< K > flatenned = new ArrayList<>();

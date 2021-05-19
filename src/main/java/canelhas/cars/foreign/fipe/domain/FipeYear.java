@@ -10,18 +10,18 @@ import lombok.Value;
 public class FipeYear {
 
 
-    private final String  name;
-    private final Integer code;
+    private final String name;
+    private final String code;
 
     //region constructor
     @JsonCreator( mode = JsonCreator.Mode.PROPERTIES )
     public static FipeYear of( @JsonProperty( "nome" ) String name,
-                                @JsonProperty( "codigo" ) Integer code ) {
+                               @JsonProperty( "codigo" ) String code ) {
 
         return FipeYear.builder()
-                        .name( name )
-                        .code( code )
-                        .build();
+                       .name( name )
+                       .code( code )
+                       .build();
     }
 }
 //endregions

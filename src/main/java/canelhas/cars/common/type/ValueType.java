@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 public abstract class ValueType< T > implements Serializable {
 
+
     @JsonValue abstract T value( );
 
     @Override

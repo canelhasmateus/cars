@@ -8,17 +8,15 @@ import canelhas.cars.common.type.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Value;
 
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Optional;
 
-@Getter
+
 @Builder( toBuilder = true )
-@AllArgsConstructor
+@Value
 public class UserDto {
 
     @JsonProperty( "id" )
@@ -37,22 +35,27 @@ public class UserDto {
     private final AdultBirthday birthday;
 
     @JsonCreator( mode = JsonCreator.Mode.PROPERTIES )
-    public UserDto( @JsonProperty( "name" ) @NotNull String name,
-                    @JsonProperty( "email" ) @NotNull String email,
-                    @JsonProperty( "cpf" ) @NotNull String cpf,
-                    @JsonProperty( "birthday" ) @NotNull @JsonFormat(
-                            pattern = "yyyy-MM-dd",
-                            timezone = "Brazil/East" ) Date birthday ) {
+    public static UserDto of( @JsonProperty( "name" ) String name,
+                              @JsonProperty( "email" ) String email,
+                              @JsonProperty( "cpf" ) String cpf,
+                              @JsonProperty( "birthday" ) @JsonFormat( pattern = "yyyy-MM-dd", timezone = "Brazil/East" ) Date birthday ) {
 
-        var validation = new Validation( DomainException::new );
-
-        this.id = null;
-        this.email = validation.assemble( email, EmailAddress::of );
-        this.cpf = validation.assemble( cpf, CPF::of );
-        this.name = validation.assemble( name, ProperName::of );
-        this.birthday = validation.assemble( birthday, AdultBirthday::of );
-
+        //region definitions
+        var       validation   = new Validation( DomainException::new );
+        final var emailAddress = validation.assemble( email, EmailAddress::of );
+        final var cpfValue     = validation.assemble( cpf, CPF::of );
+        final var properName   = validation.assemble( name, ProperName::of );
+        final var userBirthday = validation.assemble( birthday, AdultBirthday::of );
         validation.verify();
+        //endregion
+
+        return UserDto.builder()
+                      .id( null )
+                      .email( emailAddress )
+                      .cpf( cpfValue )
+                      .name( properName )
+                      .birthday( userBirthday )
+                      .build();
     }
 
 
@@ -70,8 +73,10 @@ public class UserDto {
 
         return User.builder()
                    .id( id )
-                   .name( name ).birthday( birthday )
-                   .email( email ).cpf( cpf )
+                   .name( name )
+                   .birthday( birthday )
+                   .email( email )
+                   .cpf( cpf )
                    .build();
 
 
@@ -90,8 +95,10 @@ public class UserDto {
 
         return UserDto.builder()
                       .id( id )
-                      .name( name ).birthday( birthday )
-                      .email( email ).cpf( cpf )
+                      .name( name )
+                      .birthday( birthday )
+                      .email( email )
+                      .cpf( cpf )
                       .build();
     }
 }

@@ -1,12 +1,14 @@
 package canelhas.cars.foreign.fipe.domain;
 
+import canelhas.cars.api.vehicles.domain.ModelBrand;
+import canelhas.cars.api.vehicles.domain.ModelDto;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Value;
 
 @Builder( toBuilder = true )
-@Getter
+@Value
 public class FipeBrand {
 
     private final String  name;
@@ -22,5 +24,7 @@ public class FipeBrand {
                         .code( code )
                         .build();
     }
+
+
     //endregion
 }

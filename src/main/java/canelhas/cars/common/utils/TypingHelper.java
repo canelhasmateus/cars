@@ -7,7 +7,8 @@ import static canelhas.cars.common.functional.Adjectives.logicallyNot;
 public class TypingHelper {
     //region monorepo
 
-    private TypingHelper(){}
+    private TypingHelper( ) {}
+
     //endregion
     //endregion
     public static < T extends Enum< T > > Optional< T > maybe( Class< T > enumeration, String name ) {

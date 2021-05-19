@@ -6,12 +6,12 @@ import canelhas.cars.common.type.CPF;
 import canelhas.cars.common.type.EmailAddress;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Value;
 
-import javax.validation.constraints.NotNull;
 
-
-@Getter
+@Builder( toBuilder = true )
+@Value
 public class CarsCredentials {
 
     private final EmailAddress email;
@@ -19,14 +19,19 @@ public class CarsCredentials {
 
 
     @JsonCreator( mode = JsonCreator.Mode.PROPERTIES )
-    public CarsCredentials( @JsonProperty( "email" ) @NotNull String email,
-                            @JsonProperty( "cpf" ) @NotNull String cpf ) {
+    public static CarsCredentials of( @JsonProperty( "email" ) String email,
+                                      @JsonProperty( "cpf" ) String cpf ) {
 
-        var validation = new Validation( DomainException::new );
-
-        this.email = validation.assemble( email, EmailAddress::of );
-        this.cpf = validation.assemble( cpf, CPF::of );
-
+        //region definitions
+        final var validation   = new Validation( DomainException::new );
+        final var emailAddress = validation.assemble( email, EmailAddress::of );
+        final var betterCpf    = validation.assemble( cpf, CPF::of );
         validation.verify();
+        //endregion
+
+        return CarsCredentials.builder()
+                              .email( emailAddress )
+                              .cpf( betterCpf )
+                              .build();
     }
 }

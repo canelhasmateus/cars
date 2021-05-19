@@ -1,14 +1,17 @@
 package canelhas.cars.foreign.fipe.csr;
 
 import canelhas.cars.api.vehicles.domain.ModelBrand;
+import canelhas.cars.api.vehicles.domain.ModelDto;
 import canelhas.cars.api.vehicles.domain.ModelName;
 import canelhas.cars.api.vehicles.domain.ModelYear;
 import canelhas.cars.common.exception.DomainException;
 import canelhas.cars.common.type.TypedId;
 import canelhas.cars.foreign.fipe.domain.FipeBrand;
 import canelhas.cars.foreign.fipe.domain.FipeModel;
+import canelhas.cars.foreign.fipe.domain.FipeModelDto;
 import canelhas.cars.foreign.fipe.domain.FipeYear;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -18,45 +21,74 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.function.Function;
 
+import static canelhas.cars.common.functional.Adjectives.collectively;
+
 public class FipeClient {
 
     //region monorepo
 
-    private FipeClient(){}
+    private FipeClient( ) {}
     //endregion
 
     //region fields
     private static final String BASE = "https://parallelum.com.br/fipe/api/v1";
     //endregion
 
-    public static FipeBrand search( RestTemplate template, ModelBrand brand ) {
+    public static ModelDto search( RestTemplate template, ModelDto dto ) {
 
         //region definitions
-        final ParameterizedTypeReference< List< FipeBrand > > responseType = new ParameterizedTypeReference<>() {};
-        final Function< String, List< FipeBrand > >           doRequest    = successfully( getWith( template, responseType ) );
-        final var                                             urls         = interpolate( brand );
-        final var                                             value        = brand.value();
+        final var inputBrand = dto.getBrand();
+        final var inputYear  = dto.getYear();
+        final var inputName  = dto.getName();
+
+        final var                  fipeBrand   = search( inputBrand, template );
+        final TypedId< FipeBrand > brandId     = TypedId.of( fipeBrand.getCode() );
+        final var                  nameAndYear = search( inputName, inputYear, brandId, template );
+
+        final var outputBrand = ModelBrand.of( fipeBrand.getName() );
+        final var outputName  = ModelName.of( nameAndYear.getFirst().getName() );
+        final var outputYear  = ModelYear.of( nameAndYear.getSecond().getName() );
         //endregion
-        return SearchHelper.genericSearch( doRequest, FipeBrand::getName, urls, value );
+
+        return ModelDto.builder()
+                       .brand( outputBrand )
+                       .name( outputName )
+                       .year( outputYear )
+                       .build();
     }
 
-    public static FipeModel search( RestTemplate template, ModelName name, TypedId< FipeBrand > brandId ) {
-        //region definitions
-        final ParameterizedTypeReference< List< FipeModel > > elementType = new ParameterizedTypeReference<>() {};
-        final var                                             doRequest   = successfully( callGetWith( template, elementType ) );
-        final var                                             urls        = interpolate( brandId );
+    public static FipeBrand search( ModelBrand brand, RestTemplate template ) {
 
+        //region definitions
+        final var responseType = new ParameterizedTypeReference< List< FipeBrand > >() {};
+        final var urls         = interpolate( brand );
         //endregion
-        return SearchHelper.genericSearch( doRequest, FipeModel::getName, urls, name.value() );
+
+        final var response   = successfully( getWith( template, responseType ) ).apply( urls );
+        final var searchList = collectively( FipeBrand::getName ).apply( response );
+        final var bestIndex  = SearchHelper.bestIndex( brand.value(), searchList );
+
+        return response.get( bestIndex );
     }
 
-    public static FipeYear search( RestTemplate template, ModelYear year, TypedId< FipeBrand > brandId, TypedId< FipeModel > modelId ) {
+    public static Pair< FipeModel, FipeYear > search( ModelName name, ModelYear year, TypedId< FipeBrand > brandId, RestTemplate template ) {
         //region definitions
-        final ParameterizedTypeReference< List< FipeYear > > elementType = new ParameterizedTypeReference<>() {};
-        final var                                            doRequest   = successfully( callGetWith( template, elementType ) );
-        final var                                            urls        = interpolate( brandId, modelId );
+        final var elementType = new ParameterizedTypeReference< FipeModelDto >() {};
+        final var urls        = interpolate( brandId );
+        final var response    = successfully( getObjectWith( template, elementType ) ).apply( urls );
         //endregion
-        return SearchHelper.genericSearch( doRequest, FipeYear::getName, urls, year.value() );
+
+        final var models         = response.getModel();
+        final var modelNameList  = collectively( FipeModel::getName ).apply( models );
+        final var bestModelIndex = SearchHelper.bestIndex( name.value(), modelNameList );
+        final var bestModel      = models.get( bestModelIndex );
+
+        final var years         = response.getYear();
+        final var yearNameList  = collectively( FipeYear::getName ).apply( years );
+        final var bestYearIndex = SearchHelper.bestIndex( year.value(), yearNameList );
+        final var bestYear      = years.get( bestYearIndex );
+
+        return Pair.of( bestModel, bestYear );
     }
 
     //region url
@@ -73,7 +105,7 @@ public class FipeClient {
     }
     //endregion
 
-    private static < T > Function< String, ResponseEntity< List< T > > > callGetWith( RestTemplate template, ParameterizedTypeReference< List< T > > bodyType ) {
+    private static < T > Function< String, ResponseEntity< T > > getObjectWith( RestTemplate template, ParameterizedTypeReference< T > bodyType ) {
         return s -> template.exchange( s, HttpMethod.GET, HttpEntity.EMPTY, bodyType );
     }
 

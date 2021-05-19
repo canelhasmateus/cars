@@ -18,17 +18,16 @@ import static canelhas.cars.schema.DatabaseColumns.*;
 public class Vehicle {
 
     @Id
-    @GeneratedValue( strategy = GenerationType.AUTO )
+    @GeneratedValue( strategy = GenerationType.IDENTITY )
     @Column( name = VEHICLE_ID )
     private Integer id;
 
     @JoinColumn( name = USER_ID )
-    @ManyToOne( targetEntity = User.class, fetch = FetchType.LAZY )
+    @ManyToOne( targetEntity = User.class, fetch = FetchType.LAZY, cascade = CascadeType.REFRESH )
     private User owner;
 
     @JoinColumn( name = MODEL_ID )
-    @ManyToOne( targetEntity = VehicleModel.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE )
+    @ManyToOne( targetEntity = VehicleModel.class, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST )
     private VehicleModel model;
-
 
 }
