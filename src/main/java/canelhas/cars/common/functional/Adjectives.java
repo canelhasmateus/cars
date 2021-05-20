@@ -81,6 +81,10 @@ public class Adjectives {
         return ( K k ) -> action.apply( element, k );
     }
 
+    public static < K, U, V > Function< K, V > partially( U element, BiFunction< K, U, V > action ) {
+        return ( K k ) -> action.apply( k, element );
+    }
+
     //endregion
 
     //region probably remake these.
@@ -111,10 +115,9 @@ public class Adjectives {
         };
     }
 
-    public static < K > Conditional< Boolean, K > conditionally( Supplier< K > trueAction ) {
+    public static < K > Conditional< Boolean, K > conditionally( Supplier< K > sideEffect ) {
 
-        return conditionally( trueAction,
-                              lazily( null ) );
+        return conditionally( sideEffect, lazily( null ) );
     }
 
     private static < K > Supplier< K > lazily( K k ) {

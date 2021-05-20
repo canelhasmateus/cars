@@ -3,19 +3,22 @@ package canelhas.cars.api.aspect;
 import canelhas.cars.api.auth.crs.SessionService;
 import canelhas.cars.api.auth.domain.Authorization;
 import canelhas.cars.api.auth.domain.CarsClaims;
+import canelhas.cars.common.functional.Chain;
+import canelhas.cars.common.utils.AspectHelper;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
-import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import static canelhas.cars.common.functional.Adjectives.conditionally;
+import static canelhas.cars.common.functional.Adjectives.hopefully;
 import static canelhas.cars.common.functional.Verbs.raise;
+import static canelhas.cars.common.utils.AspectHelper.findAnnotation;
 
 @Aspect
 @Component
@@ -32,25 +35,29 @@ public class AuthorizationAdvice {
     @Before( "insideApi() && authRequired()" )
     public void assertAuthorization( JoinPoint joinPoint ) {
 
-        //region get Annotation
-        final var signature  = ( MethodSignature ) joinPoint.getSignature();
-        final var method     = signature.getMethod();
-        final var annotation = AnnotationUtils.findAnnotation( method, Authorization.class );
-        assert annotation != null;
+        //region definitions
+        final var findRequiredRoles = Chain.of( AspectHelper::getMethod )
+                                           .andThen( findAnnotation( Authorization.class ) )
+                                           .andThen( Authorization::value )
+                                           .andThen( Set::of );
         //endregion
 
-        //region find intersection of authorizations
+        //region implementation
         // TODO: 17/05/2021  hierarchical access;
-        final var requiredRoles = Set.of( annotation.value() );
-        final var intersection = SessionService
-                                         .getCurrentSession()
-                                         .getRoles().stream()
-                                         .filter( requiredRoles::contains )
-                                         .collect( Collectors.toList() );
+        final var requiredPermissions = hopefully( findRequiredRoles )
+                                                .apply( joinPoint )
+                                                .orElseGet( Collections::emptySet );
+
+        final var currentPermissions = SessionService.getCurrentSession()
+                                                     .getRoles();
+
+        final var sufficientPermissions = currentPermissions.stream()
+                                                            .filter( requiredPermissions::contains )
+                                                            .collect( Collectors.toSet() );
         //endregion
 
         conditionally( raise( CarsClaims.accessDenied() ) )
-                .on( intersection.isEmpty() );
+                .on( sufficientPermissions.isEmpty() );
 
     }
 
