@@ -83,7 +83,7 @@ public class SecurityHelper {
         final var id            = user.getId();
         final var name          = user.getName();
         final var email         = user.getEmail();
-        final var containsAdmin = partially( "@admin", StringHelper::contained );
+        final var containsAdmin = partially( StringHelper::contained, "@admin" );
 
         Predicate< String > isAdmin = s -> Optional.ofNullable( s )
                                                    .map( containsAdmin )
