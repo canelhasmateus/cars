@@ -2,10 +2,10 @@ package canelhas.cars.api.user.crs;
 
 import canelhas.cars.api.other.domain.Published;
 import canelhas.cars.api.user.model.User;
-import canelhas.cars.api.vehicles.crs.Insertion;
-import canelhas.cars.common.functional.Chain;
+import canelhas.cars.common.languaj.noun.Chain;
 import canelhas.cars.common.type.CPF;
 import canelhas.cars.common.type.EmailAddress;
+import canelhas.cars.common.type.Insertion;
 import canelhas.cars.common.type.TypedId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static canelhas.cars.common.functional.Verbs.raise;
+import static canelhas.cars.common.languaj.Verbs.raise;
 
 @Service
 @RequiredArgsConstructor

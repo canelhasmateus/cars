@@ -1,8 +1,8 @@
 package canelhas.cars.foreign.fipe.domain;
 
-import canelhas.cars.api.vehicles.domain.ModelName;
-import canelhas.cars.api.vehicles.domain.ModelYear;
-import canelhas.cars.common.interfaces.Responseable;
+import canelhas.cars.api.vehicles.type.ModelName;
+import canelhas.cars.api.vehicles.type.ModelYear;
+import canelhas.cars.common.type.Responseable;
 import canelhas.cars.foreign.fipe.csr.FipeClient;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.Builder;

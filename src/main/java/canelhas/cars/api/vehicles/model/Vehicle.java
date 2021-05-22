@@ -13,7 +13,7 @@ import static canelhas.cars.schema.DatabaseColumns.*;
 
 @Entity
 @Data
-@Builder
+@Builder( toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Table( name = DatabaseTables.VEHICLE )
@@ -31,5 +31,6 @@ public class Vehicle {
     @JoinColumn( name = MODEL_ID )
     @ManyToOne( targetEntity = VehicleModel.class, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST )
     private VehicleModel model;
+
 
 }

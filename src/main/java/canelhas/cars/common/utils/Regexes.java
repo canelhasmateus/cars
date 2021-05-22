@@ -7,6 +7,7 @@ public class Regexes {
     public static final Pattern NOT_NUMERICAL    = Pattern.compile( "[^0-9]+" );
     public static final Pattern FIRST_NUMERICALS = Pattern.compile( "^([0-9]+)" );
     public static final Pattern ALPHA            = Pattern.compile( "^[a-zÀ-ÖØ-öø-ÿ ]+$", Pattern.CASE_INSENSITIVE );
+    public static final Pattern PRICE            = Pattern.compile( "([0-9]+[.,]?)+$" );
 
     public static final Pattern BEARER = Pattern.compile( "(?:bearer +)?(\\S+)",
                                                           Pattern.CASE_INSENSITIVE );

@@ -1,11 +1,10 @@
 package canelhas.cars.api.foreign.fipe;
 
 import canelhas.cars.api.vehicles.crs.VehicleService;
-import canelhas.cars.api.vehicles.domain.ModelName;
-import canelhas.cars.api.vehicles.domain.ModelYear;
+import canelhas.cars.api.vehicles.type.ModelName;
+import canelhas.cars.api.vehicles.type.ModelYear;
 import canelhas.cars.api.vehicles.model.VehicleModel;
 import canelhas.cars.common.exception.ConflictException;
-import canelhas.cars.common.exception.DomainException;
 import canelhas.cars.common.exception.NotFoundException;
 import canelhas.cars.foreign.fipe.domain.FipeBrandRequest;
 import canelhas.cars.foreign.fipe.csr.FipeClient;
@@ -35,7 +34,7 @@ class FipeClientTest {
     @Test
     void givenInexactBrandThenThrows( ) {
         final var request = FipeBrandRequest.of( "lamborghin" );
-        assertThrows( DomainException.class, ( ) -> FipeClient.find( template, request ) );
+        assertThrows( ConflictException.class, ( ) -> FipeClient.find( template, request ) );
     }
 
     @Test
@@ -70,7 +69,7 @@ class FipeClientTest {
         final var modelName = ModelName.of( "AMAROK Highline CD 2.0 16V TDI 4x4 Die" );
         final var request   = FipeModelRequest.of( brand, modelName, modelYear );
 
-        assertThrows( DomainException.class, ( ) -> FipeClient.find( template, request ) );
+        assertThrows( ConflictException.class, ( ) -> FipeClient.find( template, request ) );
     }
 
     @Test
@@ -101,11 +100,11 @@ class FipeClientTest {
 
         final var model = VehicleModel.builder()
                                       .brand( "Lamborghini" )
-                                      .name( "Gallardo Coupe Valentino Balboni LP550-2" )
-                                      .year( "2020 Gasolina" )
+                                      .name( "AVENTADOR LP 700-4" )
+                                      .year( "2012 Gasolina" )
                                       .build();
 
-        assertNotNull( VehicleService.search( template, model ) );
+        assertNotNull( VehicleService.fipeSearch( template, model ) );
 
     }
 }

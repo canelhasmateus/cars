@@ -1,4 +1,4 @@
-package canelhas.cars.api.vehicles.crs;
+package canelhas.cars.common.type;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

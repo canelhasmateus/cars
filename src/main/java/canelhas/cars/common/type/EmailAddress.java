@@ -9,8 +9,8 @@ import java.util.function.Supplier;
 
 import static canelhas.cars.api.util.ExceptionMessages.EMAIL_REQUIRED;
 import static canelhas.cars.api.util.ExceptionMessages.IS_A_INVALID_EMAIL;
-import static canelhas.cars.common.functional.Adjectives.hopefully;
-import static canelhas.cars.common.functional.Adjectives.lazily;
+import static canelhas.cars.common.languaj.Adjectives.hopefully;
+import static canelhas.cars.common.languaj.Adverbs.lazily;
 import static canelhas.cars.common.utils.StringHelper.findWith;
 import static canelhas.cars.common.utils.TypingHelper.optionalOf;
 import static java.lang.String.format;

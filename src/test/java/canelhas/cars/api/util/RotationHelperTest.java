@@ -1,6 +1,6 @@
 package canelhas.cars.api.util;
 
-import canelhas.cars.api.vehicles.domain.ModelYear;
+import canelhas.cars.api.vehicles.type.ModelYear;
 import org.junit.jupiter.api.Test;
 
 import static java.util.Calendar.MONDAY;

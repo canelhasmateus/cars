@@ -22,5 +22,11 @@ public class FipeModel {
                         .code( code )
                         .build();
     }
+    public static FipeModel of( String name ) {
+
+        return FipeModel.builder()
+                        .name( name )
+                        .build();
+    }
     //endregion
 }

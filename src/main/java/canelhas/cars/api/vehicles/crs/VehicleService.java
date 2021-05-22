@@ -3,15 +3,17 @@ package canelhas.cars.api.vehicles.crs;
 import canelhas.cars.api.other.domain.Published;
 import canelhas.cars.api.user.crs.UserService;
 import canelhas.cars.api.user.model.User;
-import canelhas.cars.api.vehicles.domain.ModelBrand;
-import canelhas.cars.api.vehicles.domain.ModelName;
-import canelhas.cars.api.vehicles.domain.ModelYear;
+import canelhas.cars.api.vehicles.type.ModelBrand;
+import canelhas.cars.api.vehicles.type.ModelName;
+import canelhas.cars.api.vehicles.type.ModelYear;
 import canelhas.cars.api.vehicles.model.Vehicle;
 import canelhas.cars.api.vehicles.model.VehicleModel;
-import canelhas.cars.common.functional.Chain;
+import canelhas.cars.common.languaj.noun.Chain;
+import canelhas.cars.common.type.Insertion;
 import canelhas.cars.common.type.TypedId;
 import canelhas.cars.foreign.fipe.csr.FipeClient;
 import canelhas.cars.foreign.fipe.domain.FipeBrandRequest;
+import canelhas.cars.foreign.fipe.domain.FipeCarRequest;
 import canelhas.cars.foreign.fipe.domain.FipeModelRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import static canelhas.cars.common.functional.Adjectives.*;
+import static canelhas.cars.common.languaj.Adjectives.concurrently;
+import static canelhas.cars.common.languaj.Adjectives.hopefully;
+import static canelhas.cars.common.languaj.Adverbs.conditionally;
+import static canelhas.cars.common.languaj.Adverbs.lazily;
 
 @Service
 @RequiredArgsConstructor
@@ -40,25 +45,40 @@ public class VehicleService {
     @Published
     public Insertion< Vehicle > create( Vehicle vehicle ) {
 
-        //region definitions
-        final var setSearchedModel = Chain.of( Vehicle::getModel )
-                                          .andThen( this::fipeSearch )
-                                          .andThen( functionally( vehicle::setModel ) );
-        //endregion
-
-        return Chain.of( laterally( setSearchedModel ) )
-                    .andThen( this::manageEntity )
+        return Chain.of( this::fipeHydrate )
+                    .andThen( this::manage )
                     .andThen( vehicleRepository::save )
                     .andThen( Insertion::of )
                     .apply( vehicle );
 
     }
 
+    public List< Vehicle > list( TypedId< User > id ) {
 
-    //region help
+        return Chain.of( vehicleRepository::findAllByOwnerId )
+                    .andThen( concurrently( this::fipeHydrate ) )
+                    .apply( id.value() );
+
+    }
 
 
-    public static VehicleModel search( RestTemplate template, VehicleModel model ) {
+    //region fipe
+    public Vehicle fipeHydrate( Vehicle vehicle ) {
+
+        final var model = Chain.of( Vehicle::getModel )
+                               .andThen( this::fipeSearch )
+                               .apply( vehicle );
+
+        return vehicle.toBuilder()
+                      .model( model )
+                      .build();
+    }
+
+    private VehicleModel fipeSearch( VehicleModel model ) {
+        return fipeSearch( restTemplate, model );
+    }
+
+    public static VehicleModel fipeSearch( RestTemplate template, VehicleModel model ) {
 
         //region definitions
         final var inputBrand = model.typedBrand();
@@ -70,21 +90,24 @@ public class VehicleService {
 
 
         final var modelRequest = FipeModelRequest.of( foundBrand, inputName, inputYear );
-        final var foundCar     = FipeClient.find( template, modelRequest );
+        final var foundModel   = FipeClient.find( template, modelRequest );
+
+
+        final var carRequest = FipeCarRequest.of( foundModel );
+        final var foundCar   = FipeClient.find( template, carRequest );
         //endregion
 
         return VehicleModel.builder()
-                           .brand( foundCar.getBrand().getName() )
-                           .name( foundCar.getModel().getName() )
-                           .year( foundCar.getYear().getName() )
+                           .brand( foundModel.getBrand().getName() )
+                           .name( foundModel.getModel().getName() )
+                           .year( foundModel.getYear().getName() )
+                           .car( foundCar )
                            .build();
     }
+    //endregion
 
-    private VehicleModel fipeSearch( VehicleModel model ) {
-        return search( restTemplate, model );
-    }
-
-    private Vehicle manageEntity( Vehicle vehicle ) {
+    //region help
+    private Vehicle manage( Vehicle vehicle ) {
 
         final var owner = findOwner( vehicle );
         vehicle.setOwner( owner );
@@ -112,9 +135,6 @@ public class VehicleService {
     //endregion
 
     //region read
-    public List< Vehicle > list( TypedId< User > id ) {
-        return vehicleRepository.findAllByOwnerId( id.value() );
-    }
 
     public VehicleModel find( VehicleModel model ) {
         //region definitions
@@ -127,17 +147,6 @@ public class VehicleService {
 
     }
 
-    public Optional< VehicleModel > search( VehicleModel model ) {
-
-        //region definitions
-        var                                  searchUsingId     = lazily( this::search, model.typedId() );
-        Supplier< Optional< VehicleModel > > orUsingAttributes = ( ) -> search( model.typedBrand(), model.typedName(), model.typedYear() );
-        //endregion
-
-        return conditionally( searchUsingId, orUsingAttributes )
-                       .on( model.getId() == null );
-
-    }
 
     public VehicleModel find( TypedId< VehicleModel > modelId ) {
 

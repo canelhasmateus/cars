@@ -3,7 +3,7 @@ package canelhas.cars.api.aspect;
 import canelhas.cars.api.auth.crs.SessionService;
 import canelhas.cars.api.auth.domain.Authorization;
 import canelhas.cars.api.auth.domain.CarsClaims;
-import canelhas.cars.common.functional.Chain;
+import canelhas.cars.common.languaj.noun.Chain;
 import canelhas.cars.common.utils.AspectHelper;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -15,9 +15,9 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static canelhas.cars.common.functional.Adjectives.conditionally;
-import static canelhas.cars.common.functional.Adjectives.hopefully;
-import static canelhas.cars.common.functional.Verbs.raise;
+import static canelhas.cars.common.languaj.Adverbs.conditionally;
+import static canelhas.cars.common.languaj.Adjectives.hopefully;
+import static canelhas.cars.common.languaj.Verbs.raise;
 import static canelhas.cars.common.utils.AspectHelper.findAnnotation;
 
 @Aspect

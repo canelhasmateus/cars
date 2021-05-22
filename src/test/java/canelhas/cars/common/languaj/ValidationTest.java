@@ -1,7 +1,8 @@
-package canelhas.cars.common.functional;
+package canelhas.cars.common.languaj;
 
 import canelhas.cars.common.exception.CustomException;
 import canelhas.cars.common.exception.DomainException;
+import canelhas.cars.common.languaj.noun.Validation;
 import org.junit.jupiter.api.Test;
 
 import java.util.function.Function;

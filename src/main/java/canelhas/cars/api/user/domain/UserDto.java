@@ -3,7 +3,7 @@ package canelhas.cars.api.user.domain;
 
 import canelhas.cars.api.user.model.User;
 import canelhas.cars.common.exception.DomainException;
-import canelhas.cars.common.functional.Validation;
+import canelhas.cars.common.languaj.noun.Validation;
 import canelhas.cars.common.type.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -59,7 +59,7 @@ public class UserDto {
     }
 
 
-    public static User toEntity( UserDto request ) {
+    public static User asEntity( UserDto request ) {
 
         //region definitions
         final var id = Optional.ofNullable( request.getId() )
@@ -83,7 +83,7 @@ public class UserDto {
     }
 
 
-    public static UserDto fromEntity( User entity ) {
+    public static UserDto of( User entity ) {
 
         return UserDto.builder()
                       .id( entity.typedId() )
@@ -92,6 +92,10 @@ public class UserDto {
                       .email( entity.typedEmail() )
                       .cpf( entity.typedCpf() )
                       .build();
+    }
+
+    public static UserDto of( Insertion< User > insertion ) {
+        return UserDto.of( insertion.getEntity() );
     }
 
 

@@ -1,4 +1,4 @@
-package canelhas.cars.common.functional;
+package canelhas.cars.common.languaj.noun;
 
 @FunctionalInterface
 public interface Conditional< K, V > {

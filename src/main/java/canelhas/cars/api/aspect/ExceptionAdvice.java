@@ -2,7 +2,7 @@ package canelhas.cars.api.aspect;
 
 
 import canelhas.cars.common.exception.CustomException;
-import canelhas.cars.common.functional.Chain;
+import canelhas.cars.common.languaj.noun.Chain;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import org.springframework.http.HttpStatus;
@@ -14,8 +14,8 @@ import java.util.Collections;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static canelhas.cars.common.functional.Adjectives.hopefully;
-import static canelhas.cars.common.functional.Adjectives.lazily;
+import static canelhas.cars.common.languaj.Adjectives.hopefully;
+import static canelhas.cars.common.languaj.Adverbs.lazily;
 
 @ControllerAdvice
 public class ExceptionAdvice {

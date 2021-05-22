@@ -6,7 +6,7 @@ import canelhas.cars.api.auth.domain.CarsClaims;
 import canelhas.cars.api.vehicles.domain.ModelDto;
 import canelhas.cars.api.vehicles.domain.VehicleDto;
 import canelhas.cars.api.vehicles.model.Vehicle;
-import canelhas.cars.common.functional.Chain;
+import canelhas.cars.common.languaj.noun.Chain;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.function.Function;
 
 import static canelhas.cars.api.auth.domain.Authorization.Roles.USER;
-import static canelhas.cars.common.functional.Adjectives.collectively;
-import static canelhas.cars.common.functional.Adjectives.partially;
+import static canelhas.cars.common.languaj.Adjectives.collectively;
+import static canelhas.cars.common.languaj.Adjectives.partially;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,12 +30,11 @@ public class VehicleController {
     public VehicleDto create( @RequestBody ModelDto request ) {
         //region definitions
         final var currentUserId = SessionService.getCurrentSession().getId();
-        final var createEntity  = partially( VehicleDto::to, currentUserId );
+        final var createEntity  = partially( VehicleDto::asEntity, currentUserId );
         //endregion
 
         return Chain.of( createEntity )
                     .andThen( vehicleService::create )
-                    .andThen( Insertion::getEntity )
                     .andThen( VehicleDto::of )
                     .apply( request );
 
@@ -46,11 +45,10 @@ public class VehicleController {
     public List< ModelDto > list( ) {
         //region definitions
         Function< Vehicle, ModelDto > createDto = Chain.of( Vehicle::getModel )
-                                                       .andThen( ModelDto::fromEntity );
+                                                       .andThen( ModelDto::of );
         //endregion
 
         return Chain.of( CarsClaims::getId )
-
                     .andThen( vehicleService::list )
                     .andThen( collectively( createDto ) )
                     .apply( SessionService.getCurrentSession() );

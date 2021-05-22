@@ -1,9 +1,9 @@
 package canelhas.cars.api.vehicles.model;
 
 
-import canelhas.cars.api.vehicles.domain.ModelBrand;
-import canelhas.cars.api.vehicles.domain.ModelName;
-import canelhas.cars.api.vehicles.domain.ModelYear;
+import canelhas.cars.api.vehicles.type.ModelBrand;
+import canelhas.cars.api.vehicles.type.ModelName;
+import canelhas.cars.api.vehicles.type.ModelYear;
 import canelhas.cars.common.exception.NotFoundException;
 import canelhas.cars.common.type.TypedId;
 import canelhas.cars.foreign.fipe.domain.FipeCar;
@@ -14,9 +14,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Optional;
 import java.util.function.Supplier;
 
-import static canelhas.cars.common.functional.Adjectives.lazily;
+import static canelhas.cars.common.languaj.Adverbs.lazily;
 import static canelhas.cars.schema.DatabaseColumns.*;
 import static java.lang.String.format;
 
@@ -42,7 +43,7 @@ public class VehicleModel {
 
     @Column( name = MODEL_BRAND )
     private String brand;
-
+    //endregion
 
     //region exceptions
     public static Supplier< NotFoundException > notFound( TypedId< VehicleModel > modelId ) {
@@ -79,10 +80,11 @@ public class VehicleModel {
     }
     //endregion
 
-    //
+
     @Transient
     private FipeCar car;
-    //endregion
 
-
+    public Optional< FipeCar > getCar( ) {
+        return Optional.ofNullable( car );
+    }
 }

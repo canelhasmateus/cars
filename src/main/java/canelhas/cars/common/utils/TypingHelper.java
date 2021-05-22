@@ -3,7 +3,9 @@ package canelhas.cars.common.utils;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static canelhas.cars.common.functional.Adjectives.*;
+import static canelhas.cars.common.languaj.Adjectives.hopefully;
+import static canelhas.cars.common.languaj.Adjectives.partially;
+import static canelhas.cars.common.languaj.Adverbs.logicallyNot;
 
 public class TypingHelper {
     //region monorepo

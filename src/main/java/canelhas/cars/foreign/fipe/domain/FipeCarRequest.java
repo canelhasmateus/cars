@@ -1,38 +1,29 @@
 package canelhas.cars.foreign.fipe.domain;
 
-import canelhas.cars.api.vehicles.type.ModelBrand;
 import canelhas.cars.common.type.Responseable;
 import canelhas.cars.foreign.fipe.csr.FipeClient;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Optional;
 
+import static java.lang.String.format;
 
 @Builder( toBuilder = true )
 @Getter
-@Value
-public class FipeBrandRequest implements Responseable< List< FipeBrand > > {
+public class FipeCarRequest implements Responseable< FipeCarResponse > {
 
-    private final ModelBrand brand;
+    private final FipeCar car;
 
-    public static FipeBrandRequest of( ModelBrand brand ) {
+    public static FipeCarRequest of( FipeCar car ) {
 
-        return FipeBrandRequest.builder()
-                               .brand( brand )
-                               .build();
-    }
-
-    public static FipeBrandRequest of( String brand ) {
-        return FipeBrandRequest.builder()
-                               .brand( ModelBrand.of( brand ) )
-                               .build();
+        return FipeCarRequest.builder()
+                             .car( car )
+                             .build();
     }
 
     @Override public HttpHeaders getHeaders( ) {
@@ -44,14 +35,16 @@ public class FipeBrandRequest implements Responseable< List< FipeBrand > > {
     }
 
     @Override public String getUrl( ) {
-        return FipeClient.BASE + "/carros/marcas";
+        return FipeClient.BASE +
+               format( "/carros/marcas/%s/modelos/%s/anos/%s",
+                       car.getBrand().getCode(), car.getModel().getCode(), car.getYear().getCode() );
     }
 
     @Override public HttpMethod getMethod( ) {
         return HttpMethod.GET;
     }
 
-    @Override public TypeReference< List< FipeBrand > > getResponseType( ) {
+    @Override public TypeReference< FipeCarResponse > getResponseType( ) {
         return new TypeReference<>() {};
     }
 }

@@ -11,9 +11,11 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static canelhas.cars.api.util.ExceptionMessages.*;
-import static canelhas.cars.common.functional.Adjectives.*;
-import static canelhas.cars.common.functional.Verbs.raise;
-import static canelhas.cars.common.utils.StringHelper.areEqual;
+import static canelhas.cars.common.languaj.Adjectives.narrowingly;
+import static canelhas.cars.common.languaj.Adjectives.partially;
+import static canelhas.cars.common.languaj.Adverbs.conditionally;
+import static canelhas.cars.common.languaj.Adverbs.lazily;
+import static canelhas.cars.common.languaj.Verbs.raise;
 import static java.lang.String.format;
 
 public class SearchHelper {
@@ -26,26 +28,24 @@ public class SearchHelper {
 
         //region definitions
         Function< String, Boolean > containsSearch = partially( StringHelper::contained, search );
+        Function< String, Boolean > equalsSearch   = partially( StringHelper::areEqual, search );
         //endregion
 
-        final Collection< String > bestMatches = narrowingly( containsSearch ).apply( names );
+        final var nearMatches  = narrowingly( containsSearch ).apply( names );
+        final var exactMatches = narrowingly( equalsSearch ).apply( nearMatches );
 
-        //region raise if not unique
+        //region early returns
         conditionally( raise( notFound( search ) ) )
-                .on( bestMatches.isEmpty() );
+                .on( nearMatches.isEmpty() );
 
-        conditionally( raise( ambiguous( search, bestMatches ) ) )
-                .on( bestMatches.size() > 1 );
+        conditionally( raise( ambiguous( search, nearMatches ) ) )
+                .on( exactMatches.isEmpty() );
+
+        conditionally( raise( ambiguous( search, exactMatches ) ) )
+                .on( exactMatches.size() > 1 );
         //endregion
 
-        final var bestMatch = new ArrayList<>( bestMatches ).get( 0 );
-
-        //region raise if not exact
-        conditionally( raise( inexact( bestMatch, search ) ) )
-                .on( !areEqual( search, bestMatch ) );
-        //endregion
-
-        return bestMatch;
+        return new ArrayList<>( exactMatches ).get( 0 );
     }
 
     public static Supplier< NotFoundException > notFound( String search ) {
@@ -53,10 +53,18 @@ public class SearchHelper {
                        format( NONE_FOUND, search ) );
     }
 
-    public static Supplier< ConflictException > ambiguous( String search, Collection< String > possibles ) {
-        final var possibilities = String.join( ", ", possibles );
-        return lazily( ConflictException::new,
-                       format( AMBIGUOUS_SEARCH, search, possibilities ) );
+    public static Supplier< ConflictException > ambiguous( String search, Collection< String > candidates ) {
+
+        final var possibilities = String.join( ", ", candidates );
+
+        final var many = lazily( ConflictException::new,
+                                 format( AMBIGUOUS_SEARCH, search, possibilities ) );
+
+        final var single = lazily( ConflictException::new,
+                                   format( INEXACT_SEARCH, search, possibilities ) );
+
+        return ( ) -> conditionally( single, many )
+                              .on( candidates.size() == 1 );
     }
 
     public static Supplier< DomainException > inexact( String bestMatch, String search ) {

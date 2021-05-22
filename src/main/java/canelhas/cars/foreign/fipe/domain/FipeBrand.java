@@ -23,6 +23,12 @@ public class FipeBrand {
                         .build();
     }
 
+    public static FipeBrand of( String name ) {
+        return FipeBrand.builder()
+                        .name( name )
+                        .build();
+    }
+
 
     //endregion
 }

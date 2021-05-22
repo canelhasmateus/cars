@@ -1,20 +1,20 @@
 package canelhas.cars.foreign.fipe.csr;
 
-import canelhas.cars.api.other.domain.LRU;
 import canelhas.cars.common.utils.RequestHelper;
-import canelhas.cars.common.utils.SearchHelper;
 import canelhas.cars.foreign.fipe.domain.*;
 import org.springframework.web.client.RestTemplate;
 
-import static canelhas.cars.common.functional.Adjectives.collectively;
-import static canelhas.cars.common.functional.Adjectives.partially;
+import static canelhas.cars.common.languaj.Adjectives.collectively;
 import static canelhas.cars.common.utils.RequestHelper.successfully;
+import static canelhas.cars.common.utils.SearchHelper.bestIndex;
 
 public class FipeClient {
 
     public static final String BASE = "https://parallelum.com.br/fipe/api/v1";
 
-    public static FipeBrand find( RestTemplate template, @LRU FipeBrandRequest request ) {
+
+    // TODO: 22/05/2021 Cache these three requests.
+    public static FipeBrand find( RestTemplate template, FipeBrandRequest request ) {
 
         //region definitions
         final var requester = new RequestHelper( template );
@@ -22,50 +22,64 @@ public class FipeClient {
                                       .apply( request );
         //endregion
 
-        //region find best candidate
-        final var search        = request.getBrand().value();
-        final var findBestIndex = partially( SearchHelper::bestIndex, search );
+        //region bestBrand
+        final var search = request.getBrand().value();
         final var bestIndex = collectively( FipeBrand::getName )
-                                      .andThen( findBestIndex )
+                                      .andThen( s -> bestIndex( search, s ) )
                                       .apply( brandList );
         //endregion
 
         return brandList.get( bestIndex );
     }
-    //endregion
 
-    public static FipeCar find( RestTemplate template, @LRU FipeModelRequest request ) {
+    public static FipeCar find( RestTemplate template, FipeModelRequest request ) {
 
         //region response
-        final var brand     = request.getBrand();
+        final var bestBrand = request.getBrand();
         final var requester = new RequestHelper( template );
-        FipeModelResponse response = successfully( __ -> requester.doRequest( request ) )
-                                             .apply( request );
+        final var response = successfully( __ -> requester.doRequest( request ) )
+                                     .apply( request );
         //endregion
 
-        final var searchedModel  = request.getName().value();
-        final var models         = response.getModels();
-        final var modelNameList  = collectively( FipeModel::getName ).apply( models );
-        final var bestModelIndex = SearchHelper.bestIndex( searchedModel, modelNameList );
-        final var bestModel      = models.get( bestModelIndex );
+        //region bestModel
+        final var searchedModel = request.getName().value();
+        final var modelList     = response.getModels();
+        final var bestModelIndex = collectively( FipeModel::getName )
+                                           .andThen( s -> bestIndex( searchedModel, s ) )
+                                           .apply( modelList );
+        final var bestModel = modelList.get( bestModelIndex );
+        //endregion
 
-        final var searchedYear  = request.getYear().value();
-        final var years         = response.getYears();
-        final var yearNameList  = collectively( FipeYear::getName ).apply( years );
-        final var bestYearIndex = SearchHelper.bestIndex( searchedYear, yearNameList );
-        final var bestYear      = years.get( bestYearIndex );
+        //region bestYear
+        final var searchedYear = request.getYear().value();
+        final var yearList     = response.getYears();
+        final var bestYearIndex = collectively( FipeYear::getName )
+                                          .andThen( s -> bestIndex( searchedYear, s ) )
+                                          .apply( yearList );
+        final var bestYear = yearList.get( bestYearIndex );
+        //endregion
 
         return FipeCar.builder()
-                      .brand( brand )
-                      .year( bestYear )
+                      .brand( bestBrand )
                       .model( bestModel )
+                      .year( bestYear )
                       .build();
     }
-    //region url
+
+    public static FipeCar find( RestTemplate template, FipeCarRequest request ) {
+
+        //region response
+        final var requester = new RequestHelper( template );
+        final var response = successfully( __ -> requester.doRequest( request ) )
+                                     .apply( request );
+        //endregion
+
+        return FipeCar.of( response );
+    }
+
 
     //region monorepo
-
-    private FipeClient(){}
+    private FipeClient( ) {}
     //endregion
 
 }

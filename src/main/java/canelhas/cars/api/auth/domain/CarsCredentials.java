@@ -1,7 +1,7 @@
 package canelhas.cars.api.auth.domain;
 
 import canelhas.cars.common.exception.DomainException;
-import canelhas.cars.common.functional.Validation;
+import canelhas.cars.common.languaj.noun.Validation;
 import canelhas.cars.common.type.CPF;
 import canelhas.cars.common.type.EmailAddress;
 import com.fasterxml.jackson.annotation.JsonCreator;

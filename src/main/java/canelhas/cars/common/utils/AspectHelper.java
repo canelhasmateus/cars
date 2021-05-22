@@ -1,6 +1,6 @@
 package canelhas.cars.common.utils;
 
-import canelhas.cars.common.functional.Chain;
+import canelhas.cars.common.languaj.noun.Chain;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -9,7 +9,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.function.Function;
 
-import static canelhas.cars.common.functional.Adjectives.partially;
+import static canelhas.cars.common.languaj.Adjectives.partially;
 
 public class AspectHelper {
     //region monorepo

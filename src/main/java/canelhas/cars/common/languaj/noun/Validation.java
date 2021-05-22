@@ -1,4 +1,4 @@
-package canelhas.cars.common.functional;
+package canelhas.cars.common.languaj.noun;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -10,11 +10,11 @@ import java.util.stream.Collectors;
 public class Validation {
 
 
-    private final Function< String, ? extends RuntimeException > thrower;
+    private final Function< String, ? extends RuntimeException > messageReceiver;
     private       List< Exception >                              errors;
 
     public Validation( Function< String, ? extends RuntimeException > messageReceiver ) {
-        this.thrower = messageReceiver;
+        this.messageReceiver = messageReceiver;
     }
 
     public < K, V > V check( K element, Function< K, V > action ) {
@@ -41,7 +41,7 @@ public class Validation {
                                 .filter( Objects::nonNull )
                                 .sorted( Comparator.comparing( String::length ) )
                                 .collect( Collectors.joining( " \n " ) );
-            throw thrower.apply( message );
+            throw messageReceiver.apply( message );
         }
 
 

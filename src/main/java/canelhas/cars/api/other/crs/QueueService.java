@@ -1,7 +1,7 @@
 package canelhas.cars.api.other.crs;
 
 import canelhas.cars.api.user.model.User;
-import canelhas.cars.api.vehicles.crs.Insertion;
+import canelhas.cars.common.type.Insertion;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 

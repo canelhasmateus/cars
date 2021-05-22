@@ -1,8 +1,7 @@
 package canelhas.cars.api.user.crs;
 
 import canelhas.cars.api.user.domain.UserDto;
-import canelhas.cars.api.vehicles.crs.Insertion;
-import canelhas.cars.common.functional.Chain;
+import canelhas.cars.common.languaj.noun.Chain;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,10 +21,9 @@ public class UserController {
     @PostMapping( "api/users" )
     public UserDto create( @RequestBody UserDto request ) {
 
-        return Chain.of( UserDto::toEntity )
+        return Chain.of( UserDto::asEntity )
                     .andThen( userService::create )
-                    .andThen( Insertion::getEntity )
-                    .andThen( UserDto::fromEntity )
+                    .andThen( UserDto::of )
                     .apply( request );
 
     }

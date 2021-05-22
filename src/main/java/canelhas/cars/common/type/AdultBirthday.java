@@ -10,9 +10,9 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import static canelhas.cars.api.util.ExceptionMessages.*;
-import static canelhas.cars.common.functional.Adjectives.conditionally;
-import static canelhas.cars.common.functional.Adjectives.lazily;
-import static canelhas.cars.common.functional.Verbs.raise;
+import static canelhas.cars.common.languaj.Adverbs.conditionally;
+import static canelhas.cars.common.languaj.Adverbs.lazily;
+import static canelhas.cars.common.languaj.Verbs.raise;
 import static canelhas.cars.common.utils.DateHelper.findAge;
 import static java.lang.String.format;
 

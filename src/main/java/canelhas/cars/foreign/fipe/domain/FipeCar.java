@@ -1,8 +1,6 @@
 package canelhas.cars.foreign.fipe.domain;
 
-import canelhas.cars.api.vehicles.domain.ModelBrand;
-import canelhas.cars.api.vehicles.domain.ModelName;
-import canelhas.cars.api.vehicles.domain.ModelYear;
+import canelhas.cars.common.type.Price;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
@@ -14,17 +12,20 @@ public class FipeCar {
 
     private final FipeBrand brand;
     private final FipeModel model;
-    private final FipeYear  year;
+    private final FipeYear year;
+    private final Price    price;
 
-    public ModelBrand typedBrand( ) {
-        return ModelBrand.of( this.getBrand().getName() );
+    public static FipeCar of( FipeCarResponse response ) {
+        final var brand = FipeBrand.of( response.getBrand() );
+        final var model = FipeModel.of( response.getModel() );
+        final var year  = FipeYear.of( response.getYear() );
+        final var price = Price.of( response.getValue() );
+        return FipeCar.builder()
+                      .brand( brand )
+                      .year( year )
+                      .model( model )
+                      .price( price )
+                      .build();
     }
 
-    public ModelName typedName( ) {
-        return ModelName.of( this.getModel().getName() );
-    }
-
-    public ModelYear typedYear( ) {
-        return ModelYear.of( this.getYear().getName() );
-    }
 }

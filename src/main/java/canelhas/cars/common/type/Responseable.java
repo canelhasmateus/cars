@@ -1,4 +1,4 @@
-package canelhas.cars.common.interfaces;
+package canelhas.cars.common.type;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.http.HttpHeaders;

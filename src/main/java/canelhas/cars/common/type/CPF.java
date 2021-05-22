@@ -1,7 +1,7 @@
 package canelhas.cars.common.type;
 
 import canelhas.cars.common.exception.DomainException;
-import canelhas.cars.common.functional.Chain;
+import canelhas.cars.common.languaj.noun.Chain;
 import canelhas.cars.common.utils.Regexes;
 import canelhas.cars.common.utils.StringHelper;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 import static canelhas.cars.api.util.ExceptionMessages.*;
-import static canelhas.cars.common.functional.Adjectives.lazily;
+import static canelhas.cars.common.languaj.Adverbs.lazily;
 import static canelhas.cars.common.utils.TypingHelper.optionalOf;
 import static java.lang.String.format;
 

@@ -41,6 +41,11 @@ public class ExceptionMessages {
     public static final String INVALID_CPF_VALUE  = "%s não é um valor válido de cpf.";
     //endregion
 
+    //region price
+    public static final String INVALID_PRICE  = "%s não é um valor válido de preço.";
+    public static final String NEGATIVE_PRICE = "%s é um valor inválido de preço, pois é negativo.";
+    //endregion
+
     //endregion
 
     //region http
@@ -50,9 +55,11 @@ public class ExceptionMessages {
 
     //endregion
 
+    //region user
     public static final String EMAIL_IS_USED          = "Já existe um usuário usando o email %s.";
     public static final String CPF_IS_USED            = "Pare aí! Eu já vi o cpf %s por aqui...";
     public static final String USER_NOT_FOUND_WITH_ID = "Não foi encontrado usuário com o id %s";
+    //endregion
 
     //region monorepo
     private ExceptionMessages( ) {}

@@ -1,4 +1,4 @@
-package canelhas.cars.common.functional;
+package canelhas.cars.common.languaj.noun;
 
 import java.util.function.Function;
 

@@ -3,7 +3,7 @@ package canelhas.cars.api.context;
 import canelhas.cars.api.auth.domain.Authorization.Roles;
 import canelhas.cars.api.auth.domain.CarsClaims;
 import canelhas.cars.api.user.model.User;
-import canelhas.cars.common.functional.Chain;
+import canelhas.cars.common.languaj.noun.Chain;
 import canelhas.cars.common.utils.Regexes;
 import canelhas.cars.common.utils.StringHelper;
 import io.jsonwebtoken.Claims;
@@ -20,7 +20,8 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static canelhas.cars.common.functional.Adjectives.*;
+import static canelhas.cars.common.languaj.Adjectives.*;
+import static canelhas.cars.common.languaj.Adverbs.*;
 import static canelhas.cars.common.utils.StringHelper.findWith;
 import static io.jsonwebtoken.SignatureAlgorithm.HS512;
 
@@ -95,7 +96,7 @@ public class SecurityHelper {
 
         roles.add( Roles.USER );
         conditionally( addAdminRole )
-                .on( isAdmin.test( email ) );
+               .on( isAdmin.test( email ) );
 
         var claims = CarsClaims.builder()
                                .version( getVersion() )

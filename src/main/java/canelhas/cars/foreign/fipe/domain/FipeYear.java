@@ -23,5 +23,12 @@ public class FipeYear {
                        .code( code )
                        .build();
     }
+
+    public static FipeYear of( Integer name ) {
+
+        return FipeYear.builder()
+                       .name( String.valueOf( name ) )
+                       .build();
+    }
 }
 //endregions

@@ -1,12 +1,12 @@
 package canelhas.cars.api.util;
 
-import canelhas.cars.api.vehicles.domain.ModelYear;
+import canelhas.cars.api.vehicles.type.ModelYear;
 import canelhas.cars.api.vehicles.model.VehicleModel;
-import canelhas.cars.common.functional.Chain;
+import canelhas.cars.common.languaj.noun.Chain;
 
 import java.util.*;
 
-import static canelhas.cars.common.functional.Adjectives.partially;
+import static canelhas.cars.common.languaj.Adjectives.partially;
 import static java.util.Calendar.*;
 
 public class RotationHelper {

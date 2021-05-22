@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class CacheAdvice {
 
-    @Before( "execution(public * *.*(.., @canelhas.cars.api.other.domain.LRU ( * ),..))" )
+    @Before( "execution(public * *.*(.., @canelhas.cars.api.other.domain.CacheKey ( * ),..))" )
     public void lookupCache( JoinPoint joinPoint ) {
-        // TODO: 22/05/2021  
+        // TODO: 22/05/2021
     }
 }
