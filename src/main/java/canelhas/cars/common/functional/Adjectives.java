@@ -136,6 +136,19 @@ public class Adjectives {
     public static < K > Predicate< K > logicallyNot( Function< K, Boolean > predicate ) {
         return Predicate.not( logically( predicate ) );
     }
+
+
+    public static < K, V > Function< K, V > uncheckedly( Function< K, V > function ) {
+        return ( K k ) -> {
+
+            try {
+                return function.apply( k );
+            }
+            catch ( Exception e ) {
+                throw new RuntimeException( e );
+            }
+        };
+    }
     //endregion
 
 }

@@ -2,15 +2,16 @@ package canelhas.cars.foreign.fipe.csr;
 
 import canelhas.cars.api.vehicles.domain.ModelName;
 import canelhas.cars.api.vehicles.domain.ModelYear;
-import canelhas.cars.api.vehicles.model.VehicleModel;
 import canelhas.cars.common.interfaces.Responseable;
 import canelhas.cars.foreign.fipe.domain.FipeBrand;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.Builder;
 import lombok.Getter;
-import org.json.JSONObject;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+
+import java.io.Serializable;
+import java.util.Optional;
 
 import static java.lang.String.format;
 
@@ -29,8 +30,8 @@ public class FipeModelRequest implements Responseable< FipeModelResponse > {
         return new HttpHeaders();
     }
 
-    @Override public JSONObject getBody( ) {
-        return new JSONObject();
+    @Override public Optional< Serializable > getBody( ) {
+        return Optional.empty();
     }
 
     @Override public String getUrl( ) {

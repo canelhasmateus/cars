@@ -7,11 +7,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
-import org.json.JSONObject;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 
+import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 
 @Builder( toBuilder = true )
@@ -38,8 +39,8 @@ public class FipeBrandRequest implements Responseable< List< FipeBrand > > {
         return new HttpHeaders();
     }
 
-    @Override public JSONObject getBody( ) {
-        return new JSONObject();
+    @Override public Optional< Serializable > getBody( ) {
+        return Optional.empty();
     }
 
     @Override public String getUrl( ) {

@@ -17,6 +17,7 @@ public class JsonHelper {
                                                        .configure( DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false );
 
     public static < T > T map( Class< T > clazz, String serialized ) {
+        
         try {
             return mapper.readValue( serialized, clazz );
         }

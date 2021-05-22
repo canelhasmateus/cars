@@ -16,4 +16,6 @@ public class OperationException extends CustomException {
         super( message, httpStatus );
         this.status = httpStatus;
     }
+
+
 }
