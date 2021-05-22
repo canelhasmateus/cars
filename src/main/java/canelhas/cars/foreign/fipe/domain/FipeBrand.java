@@ -1,7 +1,5 @@
 package canelhas.cars.foreign.fipe.domain;
 
-import canelhas.cars.api.vehicles.domain.ModelBrand;
-import canelhas.cars.api.vehicles.domain.ModelDto;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;

@@ -12,7 +12,6 @@ import static canelhas.cars.common.functional.Adjectives.lazily;
 import static canelhas.cars.common.utils.TypingHelper.optionalOf;
 
 
-
 @RequiredArgsConstructor
 public class ModelBrand extends ValueType< String > {
 

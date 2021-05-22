@@ -3,7 +3,7 @@ package canelhas.cars.api.util;
 public class ExceptionMessages {
 
 
-    public static final String INVALID_YEAR      = "%s não é um valor válido de ano do veiculo.";
+    public static final String INVALID_YEAR         = "%s não é um valor válido de ano do veiculo.";
     public static final String COULD_NOT_PARSE_YEAR = "Erro ao tentar interpretar %s como numericamente.";
 
     //region monorepo

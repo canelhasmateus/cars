@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 @SpringBootTest
-public class FipeClientTest {
+class FipeClientTest {
 
     @Autowired RestTemplate template;
 

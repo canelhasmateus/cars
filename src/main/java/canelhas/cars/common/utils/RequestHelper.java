@@ -24,10 +24,10 @@ public class RequestHelper {
     public static < T > ResponseEntity< T > request( RestTemplate template, Responseable< T > responseable ) {
 
         //region definitions
-        final var url           = responseable.getUrl();
-        final var method        = responseable.getMethod();
-        final var httpEntity    = new HttpEntity<>( responseable.getBody().toString(), responseable.getHeaders() );
-        final var typeReference = responseable.getResponseType();
+        final var url        = responseable.getUrl();
+        final var method     = responseable.getMethod();
+        final var httpEntity = new HttpEntity<>( responseable.getBody().toString(), responseable.getHeaders() );
+
         //endregion
 
         final var response = template.exchange( url, method, httpEntity, String.class );
