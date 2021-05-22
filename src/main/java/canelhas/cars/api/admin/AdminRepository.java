@@ -23,5 +23,5 @@ public interface AdminRepository extends JpaRepository< User, Integer > {
     @Modifying
     @Query( value = " TRUNCATE TABLE tb_model" +
                     "", nativeQuery = true )
-    void truncateAllModels();
+    void truncateAllModels( );
 }

@@ -63,5 +63,9 @@ public class FipeClient {
     }
     //region url
 
+    //region monorepo
+
+    private FipeClient(){}
+    //endregion
 
 }
