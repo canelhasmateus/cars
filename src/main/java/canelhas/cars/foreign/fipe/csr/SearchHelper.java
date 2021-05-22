@@ -35,7 +35,7 @@ public class SearchHelper {
 
         //region definitions
 
-        // TODO: 19/05/2021 remove control flow
+        // TODO: 19/05/2021 remove control flow, remove lambda.
         Function< String, Integer >                  findDistance = name -> StringHelper.contains( name, search ) ? 0 : 1;
         final BiFunction< Integer, String, Boolean > isBest       = ( bestScore, candidate ) -> findDistance.apply( candidate ).equals( bestScore );
         //endregion
@@ -58,10 +58,9 @@ public class SearchHelper {
 
         final var bestMatch = new ArrayList<>( bestMatches ).get( 0 );
 
-        //region throw if not exact
+
         conditionally( raise( ambiguous( search, bestMatch ) ) )
                 .on( !areEqual( search, bestMatch ) );
-        //endregion
 
 
         return bestMatch;

@@ -7,6 +7,7 @@ import canelhas.cars.common.functional.Chain;
 import canelhas.cars.common.utils.Regexes;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -62,19 +63,16 @@ public class SecurityHelper {
         final Function< String, Jws< Claims > > createJws = token -> Jwts.parser()
                                                                          .setSigningKey( getJWTKey() )
                                                                          .parseClaimsJws( token );
-
-        final Function< Jws< Claims >, CarsClaims > createCarsClaims = signature -> {
-            final var carsClaims = new CarsClaims();
-            carsClaims.putAll( signature.getBody() );
-            return carsClaims;
-        };
-
         //endregion
 
-        return Chain.of( findWith( Regexes.BEARER ) )
-                    .andThen( createJws )
-                    .andThen( createCarsClaims )
-                    .apply( input );
+        final var claims = Chain.of( findWith( Regexes.BEARER ) )
+                                .andThen( createJws )
+                                .andThen( Jwt::getBody )
+                                .apply( input );
+
+        final var carsClaims = new CarsClaims();
+        carsClaims.putAll( claims );
+        return carsClaims;
 
     }
 
