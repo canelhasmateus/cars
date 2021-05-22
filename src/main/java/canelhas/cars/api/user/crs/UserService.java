@@ -1,7 +1,8 @@
 package canelhas.cars.api.user.crs;
 
-import canelhas.cars.api.user.domain.UserDto;
 import canelhas.cars.api.user.model.User;
+import canelhas.cars.api.vehicles.crs.Insertion;
+import canelhas.cars.api.queue.domain.Published;
 import canelhas.cars.common.functional.Chain;
 import canelhas.cars.common.type.CPF;
 import canelhas.cars.common.type.EmailAddress;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
@@ -19,9 +21,14 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public User create( UserDto request ) {
-        return Chain.of( UserDto::toEntity )
+    @Published
+    public Insertion< User > create( User request ) {
+        //region definitions
+        final Function< User, User > identity = Function.identity();
+        //endregion
+        return Chain.of( identity )
                     .andThen( userRepository::save )
+                    .andThen( Insertion::of )
                     .apply( request );
     }
 

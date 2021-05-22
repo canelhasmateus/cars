@@ -4,21 +4,15 @@ import canelhas.cars.common.utils.RequestHelper;
 import canelhas.cars.foreign.fipe.domain.FipeBrand;
 import canelhas.cars.foreign.fipe.domain.FipeModel;
 import canelhas.cars.foreign.fipe.domain.FipeYear;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.client.RestTemplate;
 
 import static canelhas.cars.common.functional.Adjectives.collectively;
 import static canelhas.cars.common.functional.Adjectives.partially;
 import static canelhas.cars.common.utils.RequestHelper.successfully;
 
-@RequiredArgsConstructor
 public class FipeClient {
 
     public static final String BASE = "https://parallelum.com.br/fipe/api/v1";
-
-    //region fields
-    private final RestTemplate template;
-    //endregion
 
     public static FipeBrand find( RestTemplate template, @LRU FipeBrandRequest request ) {
 

@@ -28,7 +28,6 @@ public class RequestHelper {
         return request( restTemplate, responseable );
     }
 
-
     public static < T > ResponseEntity< T > request( RestTemplate template, Responseable< T > responseable ) {
 
         //region definitions

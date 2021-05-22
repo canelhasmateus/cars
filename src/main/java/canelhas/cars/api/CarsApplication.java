@@ -2,11 +2,13 @@ package canelhas.cars.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import javax.annotation.PostConstruct;
 import java.util.TimeZone;
 
 @SpringBootApplication
+@EnableAsync
 public class CarsApplication {
 
     public static void main( String[] args ) {
@@ -15,8 +17,6 @@ public class CarsApplication {
 
         // TODO: 16/05/2021 friendly exception messages for unique constraints
         // TODO: 16/05/2021 Swagger Documentation.
-        // TODO: 16/05/2021 check NotNull imports
-        // TODO: 18/05/2021 centralize exceptionMessages
         // TODO: 18/05/2021 some caching at fipe api calls?
 
 
