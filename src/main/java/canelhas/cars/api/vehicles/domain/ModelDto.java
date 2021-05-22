@@ -25,9 +25,9 @@ public class ModelDto {
 
         var validation = new Validation( DomainException::new );
 
-        var modelBrand = validation.assemble( brand, ModelBrand::of );
-        var modelName  = validation.assemble( model, ModelName::of );
-        var modelYear  = validation.assemble( year, ModelYear::of );
+        var modelBrand = validation.check( brand, ModelBrand::of );
+        var modelName  = validation.check( model, ModelName::of );
+        var modelYear  = validation.check( year, ModelYear::of );
 
         validation.verify();
 

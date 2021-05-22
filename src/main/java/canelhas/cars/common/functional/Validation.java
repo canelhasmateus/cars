@@ -17,7 +17,7 @@ public class Validation {
         this.thrower = messageReceiver;
     }
 
-    public < K, V > V assemble( K element, Function< K, V > action ) {
+    public < K, V > V check( K element, Function< K, V > action ) {
 
         try {
             return action.apply( element );

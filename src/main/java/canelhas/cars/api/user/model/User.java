@@ -1,9 +1,7 @@
 package canelhas.cars.api.user.model;
 
 import canelhas.cars.common.exception.NotFoundException;
-import canelhas.cars.common.type.CPF;
-import canelhas.cars.common.type.EmailAddress;
-import canelhas.cars.common.type.TypedId;
+import canelhas.cars.common.type.*;
 import canelhas.cars.schema.DatabaseTables;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -60,16 +58,30 @@ public class User {
 
     //region
     public TypedId< User > typedId( ) {
-        return castId( getId() );
+        return TypedId.of( getId() );
     }
 
-    public static TypedId< User > castId( Integer id ) {
-        return TypedId.of( id );
+    public ProperName typedName( ) {
+        return ProperName.of( this.getName() );
     }
+
+    public AdultBirthday typedBirthday( ) {
+        return AdultBirthday.of( this.getBirthday() );
+    }
+
+    public EmailAddress typedEmail( ) {
+        return EmailAddress.of( this.getEmail() );
+    }
+
+    public CPF typedCpf( ) {
+        return CPF.of( this.getCpf() );
+    }
+
 
     public static User of( TypedId< User > userId ) {
         return User.builder().id( userId.value() ).build();
     }
+
 
     //endregion
 }

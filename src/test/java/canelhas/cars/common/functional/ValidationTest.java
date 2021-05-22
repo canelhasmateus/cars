@@ -21,8 +21,8 @@ class ValidationTest {
     void givenErrorsThenRethrowsWhenCalled( ) {
 
         var validation = new Validation( DomainException::new );
-        validation.assemble( message, error );
-        validation.assemble( message, error );
+        validation.check( message, error );
+        validation.check( message, error );
 
         assertThrows( CustomException.class, validation::verify );
 
@@ -32,8 +32,8 @@ class ValidationTest {
     void givenErrorsThenMergeMessages( ) {
 
         var validation = new Validation( DomainException::new );
-        validation.assemble( message, error );
-        validation.assemble( message, error );
+        validation.check( message, error );
+        validation.check( message, error );
 
         try { validation.verify(); }
         catch ( Exception e ) {
@@ -47,7 +47,7 @@ class ValidationTest {
     void givenValidThenReturnsResult( ) {
 
         var validation = new Validation( DomainException::new );
-        var result     = validation.assemble( message, identity );
+        var result     = validation.check( message, identity );
 
         assertEquals( message, result );
     }

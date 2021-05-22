@@ -12,6 +12,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import static canelhas.cars.api.util.ExceptionMessages.NOT_ENOUGH_PRIVILEGES;
+import static canelhas.cars.api.util.ExceptionMessages.NO_CURRENT_SESSION;
 import static canelhas.cars.common.functional.Adjectives.lazily;
 import static canelhas.cars.common.utils.TypingHelper.optionalOf;
 
@@ -124,13 +126,11 @@ public class CarsClaims extends HashMap< String, Object > {
 
     //region exceptions
     public static Supplier< AccessException > notFound( ) {
-        return lazily( AccessException::new,
-                       "Não existe sessão válida dentro do contexto atual" );
+        return lazily( AccessException::new, NO_CURRENT_SESSION );
     }
 
     public static Supplier< AccessException > accessDenied( ) {
-        return lazily( AccessException::new,
-                       "Você não possui os privilégios necessários de acesso." );
+        return lazily( AccessException::new, NOT_ENOUGH_PRIVILEGES );
     }
 
     //endregion

@@ -19,9 +19,9 @@ public class UserController {
 
     @ResponseStatus( HttpStatus.CREATED )
     @PostMapping( "api/users" )
-    public UserDto register( @RequestBody UserDto request ) {
+    public UserDto create( @RequestBody UserDto request ) {
 
-        return Chain.of( userService::add )
+        return Chain.of( userService::create )
                     .andThen( UserDto::fromEntity )
                     .apply( request );
 

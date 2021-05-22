@@ -16,7 +16,7 @@ public class VehicleDto {
     private final UserDto  owner;
     private final ModelDto model;
 
-    public static Vehicle toEntity( TypedId< User > userId, ModelDto modelDto ) {
+    public static Vehicle to( TypedId< User > userId, ModelDto modelDto ) {
 
         final var owner = User.of( userId );
         final var model = ModelDto.toEntity( modelDto );
@@ -27,7 +27,7 @@ public class VehicleDto {
                       .build();
     }
 
-    public static VehicleDto create( Vehicle vehicle ) {
+    public static VehicleDto of( Vehicle vehicle ) {
 
         final var owner = UserDto.fromEntity( vehicle.getOwner() );
         final var model = ModelDto.fromEntity( vehicle.getModel() );

@@ -24,8 +24,8 @@ public class CarsCredentials {
 
         //region definitions
         final var validation   = new Validation( DomainException::new );
-        final var emailAddress = validation.assemble( email, EmailAddress::of );
-        final var betterCpf    = validation.assemble( cpf, CPF::of );
+        final var emailAddress = validation.check( email, EmailAddress::of );
+        final var betterCpf    = validation.check( cpf, CPF::of );
         validation.verify();
         //endregion
 

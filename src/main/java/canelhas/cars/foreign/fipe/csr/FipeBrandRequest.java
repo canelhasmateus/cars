@@ -22,6 +22,7 @@ public class FipeBrandRequest implements Responseable< List< FipeBrand > > {
     private final ModelBrand brand;
 
     public static FipeBrandRequest of( ModelBrand brand ) {
+
         return FipeBrandRequest.builder()
                                .brand( brand )
                                .build();

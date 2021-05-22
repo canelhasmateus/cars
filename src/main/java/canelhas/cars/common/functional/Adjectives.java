@@ -13,6 +13,13 @@ public class Adjectives {
     private Adjectives( ) {}
     //endregion
 
+    public static < T > Function< T, Void > functionally( Consumer< T > consumer ) {
+        return ( T t ) -> {
+            consumer.accept( t );
+            return null;
+        };
+    }
+
     //region these ones are probably good
     public static < K, V > Function< K, Optional< V > > hopefully( Function< K, V > action ) {
         return ( K k ) -> {
@@ -65,8 +72,7 @@ public class Adjectives {
 
     }
 
-    public static < K > UnaryOperator< Collection< K > > narrowingly( Function< K, Boolean > chooser ) {
-        // FIXME: 18/05/2021 how to let parameter choose destination collection.
+    public static < K > Function< Collection< K >, Collection< K > > narrowingly( Function< K, Boolean > chooser ) {
         return ( Collection< K > collection ) -> collection.stream()
                                                            .filter( logically( chooser ) )
                                                            .collect( Collectors.toList() );

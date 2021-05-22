@@ -19,33 +19,33 @@ import java.util.Optional;
 @Value
 public class UserDto {
 
-    @JsonProperty( "id" )
+    @JsonProperty( ID )
     private final TypedId< User > id;
 
-    @JsonProperty( "name" )
+    @JsonProperty( NAME )
     private final ProperName name;
 
-    @JsonProperty( "email" )
+    @JsonProperty( EMAIL )
     private final EmailAddress email;
 
-    @JsonProperty( "cpf" )
+    @JsonProperty( CPF_ )
     private final CPF cpf;
 
-    @JsonProperty( "birthday" )
+    @JsonProperty( BIRTHDAY )
     private final AdultBirthday birthday;
 
     @JsonCreator( mode = JsonCreator.Mode.PROPERTIES )
-    public static UserDto of( @JsonProperty( "name" ) String name,
-                              @JsonProperty( "email" ) String email,
-                              @JsonProperty( "cpf" ) String cpf,
-                              @JsonProperty( "birthday" ) @JsonFormat( pattern = "yyyy-MM-dd", timezone = "Brazil/East" ) Date birthday ) {
+    public static UserDto of( @JsonProperty( NAME ) String name,
+                              @JsonProperty( EMAIL ) String email,
+                              @JsonProperty( CPF_ ) String cpf,
+                              @JsonProperty( BIRTHDAY ) @JsonFormat( pattern = "yyyy-MM-dd", timezone = "Brazil/East" ) Date birthday ) {
 
         //region definitions
-        var       validation   = new Validation( DomainException::new );
-        final var emailAddress = validation.assemble( email, EmailAddress::of );
-        final var cpfValue     = validation.assemble( cpf, CPF::of );
-        final var properName   = validation.assemble( name, ProperName::of );
-        final var userBirthday = validation.assemble( birthday, AdultBirthday::of );
+        final var validation   = new Validation( DomainException::new );
+        final var emailAddress = validation.check( email, EmailAddress::of );
+        final var cpfValue     = validation.check( cpf, CPF::of );
+        final var properName   = validation.check( name, ProperName::of );
+        final var userBirthday = validation.check( birthday, AdultBirthday::of );
         validation.verify();
         //endregion
 
@@ -85,21 +85,22 @@ public class UserDto {
 
     public static UserDto fromEntity( User entity ) {
 
-        //region definitions
-        final TypedId< User > id       = TypedId.of( entity.getId() );
-        final var             name     = ProperName.of( entity.getName() );
-        final var             birthday = AdultBirthday.of( entity.getBirthday() );
-        final var             email    = EmailAddress.of( entity.getEmail() );
-        final var             cpf      = CPF.of( entity.getCpf() );
-        //endregion
-
         return UserDto.builder()
-                      .id( id )
-                      .name( name )
-                      .birthday( birthday )
-                      .email( email )
-                      .cpf( cpf )
+                      .id( entity.typedId() )
+                      .name( entity.typedName() )
+                      .birthday( entity.typedBirthday() )
+                      .email( entity.typedEmail() )
+                      .cpf( entity.typedCpf() )
                       .build();
     }
+
+
+    //region keys
+    public static final String NAME     = "name";
+    public static final String EMAIL    = "email";
+    public static final String CPF_     = "cpf";
+    public static final String BIRTHDAY = "birthday";
+    public static final String ID       = "id";
+    //endregion
 }
 

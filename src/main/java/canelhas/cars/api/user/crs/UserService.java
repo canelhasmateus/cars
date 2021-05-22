@@ -19,7 +19,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public User add( UserDto request ) {
+    public User create( UserDto request ) {
         return Chain.of( UserDto::toEntity )
                     .andThen( userRepository::save )
                     .apply( request );

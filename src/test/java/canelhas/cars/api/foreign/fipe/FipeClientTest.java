@@ -1,10 +1,9 @@
 package canelhas.cars.api.foreign.fipe;
 
 import canelhas.cars.api.vehicles.crs.VehicleService;
-import canelhas.cars.api.vehicles.domain.ModelBrand;
-import canelhas.cars.api.vehicles.domain.ModelDto;
 import canelhas.cars.api.vehicles.domain.ModelName;
 import canelhas.cars.api.vehicles.domain.ModelYear;
+import canelhas.cars.api.vehicles.model.VehicleModel;
 import canelhas.cars.common.exception.ConflictException;
 import canelhas.cars.common.exception.DomainException;
 import canelhas.cars.common.exception.NotFoundException;
@@ -88,7 +87,6 @@ class FipeClientTest {
 
     @Test
     void givenCaseDifferentModelThenParses( ) {
-
         final var brand     = FipeBrand.of( "a", 59 );
         final var modelYear = new ModelYear( "2017 Gasolina" );
         final var modelName = ModelName.of( "AMAROK Highline CD 2.0 16V TDI 4x4 Dies.".toLowerCase() );
@@ -101,13 +99,13 @@ class FipeClientTest {
     @Test
     void givenValidThenParses( ) {
 
-        final var dto = ModelDto.builder()
-                                .brand( ModelBrand.of( "Lamborghini" ) )
-                                .name( ModelName.of( "Gallardo Coupe Valentino Balboni LP550-2" ) )
-                                .year( ModelYear.of( "2020 Gasolina" ) )
-                                .build();
+        final var model = VehicleModel.builder()
+                                      .brand( "Lamborghini" )
+                                      .name( "Gallardo Coupe Valentino Balboni LP550-2" )
+                                      .year( "2020 Gasolina" )
+                                      .build();
 
-        assertNotNull( VehicleService.search( template, dto ) );
+        assertNotNull( VehicleService.search( template, model ) );
 
     }
 }

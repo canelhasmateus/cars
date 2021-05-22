@@ -14,9 +14,9 @@ public class TypingHelper {
 
     public static < T extends Enum< T > > Optional< T > optionalOf( Class< T > enumeration, String name ) {
         //region definitions
-        final Function< String, T > convert = partially( Enum::valueOf, enumeration );
+        final Function< String, T > toEnum = partially( Enum::valueOf, enumeration );
         //endregion
-        return hopefully( convert ).apply( name );
+        return hopefully( toEnum ).apply( name );
     }
 
     public static Optional< String > optionalOf( String input ) {

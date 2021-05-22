@@ -96,7 +96,7 @@ public class CPF extends ValueType< String > {
     //region exception
     public static Supplier< DomainException > invalidValue( String input ) {
         return lazily( DomainException::new,
-                       format( IS_A_INVALID_CPF, input ) );
+                       format( INVALID_CPF_VALUE, input ) );
     }
 
     public static Supplier< DomainException > required( ) {

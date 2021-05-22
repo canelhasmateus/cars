@@ -6,6 +6,7 @@ import canelhas.cars.api.vehicles.domain.ModelName;
 import canelhas.cars.api.vehicles.domain.ModelYear;
 import canelhas.cars.common.exception.NotFoundException;
 import canelhas.cars.common.type.TypedId;
+import canelhas.cars.foreign.fipe.csr.FipeCar;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -41,8 +42,6 @@ public class VehicleModel {
     private String brand;
 
 
-    //endregion
-
     //region exceptions
     public static Supplier< NotFoundException > notFound( TypedId< VehicleModel > modelId ) {
         return lazily( NotFoundException::new,
@@ -76,6 +75,11 @@ public class VehicleModel {
     public static TypedId< VehicleModel > castId( Integer id ) {
         return TypedId.of( id );
     }
+    //endregion
+
+    //
+    @Transient
+    private FipeCar car;
     //endregion
 
 

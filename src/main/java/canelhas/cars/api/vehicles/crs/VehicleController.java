@@ -16,6 +16,7 @@ import java.util.function.Function;
 
 import static canelhas.cars.api.auth.domain.Authorization.Roles.USER;
 import static canelhas.cars.common.functional.Adjectives.collectively;
+import static canelhas.cars.common.functional.Adjectives.partially;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,9 +28,15 @@ public class VehicleController {
     @ResponseStatus( HttpStatus.CREATED )
     @Authorization( USER )
     public VehicleDto create( @RequestBody ModelDto request ) {
-        return Chain.of( vehicleService::create )
-                    .andThen( Insertion::value )
-                    .andThen( VehicleDto::create )
+        //region definitions
+        final var currentUserId = SessionService.getCurrentSession().getId();
+        final var createEntity  = partially( VehicleDto::to, currentUserId );
+        //endregion
+
+        return Chain.of( createEntity )
+                    .andThen( vehicleService::create )
+                    .andThen( Insertion::getEntity )
+                    .andThen( VehicleDto::of )
                     .apply( request );
 
     }

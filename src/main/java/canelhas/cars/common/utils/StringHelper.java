@@ -10,16 +10,11 @@ import java.util.stream.Stream;
 
 public class StringHelper {
 
-    //region monorepo
-
-    private StringHelper( ) {}
-
     public static String convert( String body, Charset charset ) {
 
         return new String( body.getBytes( charset ), charset );
 
     }
-    //endregion
 
     public static String toTitleCase( String name ) {
         return Stream.of( name.trim().toLowerCase().split( " " ) )
@@ -27,7 +22,6 @@ public class StringHelper {
                      .collect( Collectors.joining( " " ) );
 
     }
-
 
     public static Function< String, String > findWith( Pattern pattern ) {
         return s -> {
@@ -53,5 +47,9 @@ public class StringHelper {
     public static String normalize( String s ) {
         return s.trim().toLowerCase();
     }
+
+    //region monorepo
+    private StringHelper( ) {}
+    //endregion
 
 }
