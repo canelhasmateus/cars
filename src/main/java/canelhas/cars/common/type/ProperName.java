@@ -12,7 +12,6 @@ import static canelhas.cars.api.util.ExceptionMessages.NAME_REQUIRED;
 import static canelhas.cars.common.functional.Adjectives.hopefully;
 import static canelhas.cars.common.functional.Adjectives.lazily;
 import static canelhas.cars.common.utils.StringHelper.findWith;
-import static canelhas.cars.common.utils.StringHelper.toTitleCase;
 import static canelhas.cars.common.utils.TypingHelper.optionalOf;
 import static java.lang.String.format;
 
@@ -27,13 +26,13 @@ public class ProperName extends ValueType< String > {
 
         var value = optionalOf( input )
                             .map( StringHelper::normalize )
+                            .map( StringHelper::toTitleCase )
                             .orElseThrow( required() );
 
-        value = hopefully( findWith( Regexes.NOT_SPECIAL ) )
-                        .apply( value )
-                        .orElseThrow( invalid( value ) );
+        value = hopefully( findWith( Regexes.ALPHA ) ).apply( value )
+                                                      .orElseThrow( invalid( value ) );
 
-        return new ProperName( toTitleCase( value ) );
+        return new ProperName( value );
 
     }
 

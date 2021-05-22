@@ -1,6 +1,7 @@
 package canelhas.cars.api.vehicles.model;
 
 import canelhas.cars.api.user.model.User;
+import canelhas.cars.schema.DatabaseTables;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +16,7 @@ import static canelhas.cars.schema.DatabaseColumns.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Table( name = DatabaseTables.VEHICLE )
 public class Vehicle {
 
     @Id

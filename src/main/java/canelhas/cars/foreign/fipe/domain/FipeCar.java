@@ -1,4 +1,4 @@
-package canelhas.cars.foreign.fipe.csr;
+package canelhas.cars.foreign.fipe.domain;
 
 import canelhas.cars.api.vehicles.domain.ModelBrand;
 import canelhas.cars.api.vehicles.domain.ModelName;

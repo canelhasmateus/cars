@@ -11,13 +11,13 @@ class RotationHelperTest {
 
 
     @Test
-    public void givenExampleAThenReturnsTrue( ) {
+    void givenExampleAThenReturnsTrue( ) {
         final var year = ModelYear.of( "2001" );
         assertEquals( true, RotationHelper.rotatedOut( MONDAY, year ) );
     }
 
     @Test
-    public void givenExampleBThenReturnsFalse( ) {
+    void givenExampleBThenReturnsFalse( ) {
         final var year = ModelYear.of( "2021" );
         assertEquals( false, RotationHelper.rotatedOut( THURSDAY, year ) );
     }

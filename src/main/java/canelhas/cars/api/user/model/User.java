@@ -1,5 +1,7 @@
 package canelhas.cars.api.user.model;
 
+import canelhas.cars.api.util.ExceptionMessages;
+import canelhas.cars.common.exception.ConflictException;
 import canelhas.cars.common.exception.NotFoundException;
 import canelhas.cars.common.type.*;
 import canelhas.cars.schema.DatabaseTables;
@@ -12,8 +14,11 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.function.Supplier;
 
+import static canelhas.cars.api.util.ExceptionMessages.CPF_IS_USED;
+import static canelhas.cars.api.util.ExceptionMessages.EMAIL_IS_USED;
 import static canelhas.cars.common.functional.Adjectives.lazily;
 import static canelhas.cars.schema.DatabaseColumns.*;
+import static java.lang.String.format;
 
 @Builder( toBuilder = true )
 @Data
@@ -41,6 +46,8 @@ public class User {
 
     @Column( name = USER_BIRTHDAY )
     private Date birthday;
+
+
     //endregion
 
     //region exceptions
@@ -51,9 +58,18 @@ public class User {
 
     public static Supplier< NotFoundException > notFound( TypedId< User > userId ) {
         return lazily( NotFoundException::new,
-                       "Não foi encontrado usuário com o id " + userId );
+                       format( ExceptionMessages.USER_NOT_FOUND_WITH_ID, userId ) );
     }
 
+    public static Supplier< ConflictException > alreadyExistsWith( CPF cpf ) {
+        return lazily( ConflictException::new,
+                       format( CPF_IS_USED, cpf.value() ) );
+    }
+
+    public static Supplier< ConflictException > alreadyExistsWith( EmailAddress email ) {
+        return lazily( ConflictException::new,
+                       format( EMAIL_IS_USED, email.value() ) );
+    }
     //endregion
 
     //region
@@ -79,7 +95,9 @@ public class User {
 
 
     public static User of( TypedId< User > userId ) {
-        return User.builder().id( userId.value() ).build();
+        return User.builder()
+                   .id( userId.value() )
+                   .build();
     }
 
 

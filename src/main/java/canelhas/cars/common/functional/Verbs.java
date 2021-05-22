@@ -13,5 +13,4 @@ public class Verbs {
             throw exception.get();
         };
     }
-
 }

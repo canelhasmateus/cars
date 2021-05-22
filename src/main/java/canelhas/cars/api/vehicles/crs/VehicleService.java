@@ -1,6 +1,6 @@
 package canelhas.cars.api.vehicles.crs;
 
-import canelhas.cars.api.queue.domain.Published;
+import canelhas.cars.api.other.domain.Published;
 import canelhas.cars.api.user.crs.UserService;
 import canelhas.cars.api.user.model.User;
 import canelhas.cars.api.vehicles.domain.ModelBrand;
@@ -10,9 +10,9 @@ import canelhas.cars.api.vehicles.model.Vehicle;
 import canelhas.cars.api.vehicles.model.VehicleModel;
 import canelhas.cars.common.functional.Chain;
 import canelhas.cars.common.type.TypedId;
-import canelhas.cars.foreign.fipe.csr.FipeBrandRequest;
+import canelhas.cars.foreign.fipe.domain.FipeBrandRequest;
 import canelhas.cars.foreign.fipe.csr.FipeClient;
-import canelhas.cars.foreign.fipe.csr.FipeModelRequest;
+import canelhas.cars.foreign.fipe.domain.FipeModelRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

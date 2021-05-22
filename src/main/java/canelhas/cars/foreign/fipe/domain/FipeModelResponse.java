@@ -1,7 +1,5 @@
-package canelhas.cars.foreign.fipe.csr;
+package canelhas.cars.foreign.fipe.domain;
 
-import canelhas.cars.foreign.fipe.domain.FipeModel;
-import canelhas.cars.foreign.fipe.domain.FipeYear;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;

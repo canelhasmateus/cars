@@ -19,14 +19,11 @@ public class CarsApplication {
         // TODO: 16/05/2021 Swagger Documentation.
         // TODO: 18/05/2021 some caching at fipe api calls?
 
-
     }
-
 
     @PostConstruct
     public void setTimeZone( ) {
         TimeZone.setDefault( TimeZone.getTimeZone( "GMT-3" ) );
     }
-
 
 }

@@ -28,7 +28,7 @@ public class UserDto {
     @JsonProperty( EMAIL )
     private final EmailAddress email;
 
-    @JsonProperty( CPF_ )
+    @JsonProperty( CPF_KEY )
     private final CPF cpf;
 
     @JsonProperty( BIRTHDAY )
@@ -37,7 +37,7 @@ public class UserDto {
     @JsonCreator( mode = JsonCreator.Mode.PROPERTIES )
     public static UserDto of( @JsonProperty( NAME ) String name,
                               @JsonProperty( EMAIL ) String email,
-                              @JsonProperty( CPF_ ) String cpf,
+                              @JsonProperty( CPF_KEY ) String cpf,
                               @JsonProperty( BIRTHDAY ) @JsonFormat( pattern = "yyyy-MM-dd", timezone = "Brazil/East" ) Date birthday ) {
 
         //region definitions
@@ -98,7 +98,7 @@ public class UserDto {
     //region keys
     public static final String NAME     = "name";
     public static final String EMAIL    = "email";
-    public static final String CPF_     = "cpf";
+    public static final String CPF_KEY  = "cpf";
     public static final String BIRTHDAY = "birthday";
     public static final String ID       = "id";
     //endregion

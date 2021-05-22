@@ -1,9 +1,9 @@
 package canelhas.cars.foreign.fipe.csr;
 
+import canelhas.cars.api.other.domain.LRU;
 import canelhas.cars.common.utils.RequestHelper;
-import canelhas.cars.foreign.fipe.domain.FipeBrand;
-import canelhas.cars.foreign.fipe.domain.FipeModel;
-import canelhas.cars.foreign.fipe.domain.FipeYear;
+import canelhas.cars.common.utils.SearchHelper;
+import canelhas.cars.foreign.fipe.domain.*;
 import org.springframework.web.client.RestTemplate;
 
 import static canelhas.cars.common.functional.Adjectives.collectively;

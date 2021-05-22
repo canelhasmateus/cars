@@ -6,7 +6,8 @@ import canelhas.cars.api.vehicles.domain.ModelName;
 import canelhas.cars.api.vehicles.domain.ModelYear;
 import canelhas.cars.common.exception.NotFoundException;
 import canelhas.cars.common.type.TypedId;
-import canelhas.cars.foreign.fipe.csr.FipeCar;
+import canelhas.cars.foreign.fipe.domain.FipeCar;
+import canelhas.cars.schema.DatabaseTables;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,6 +25,7 @@ import static java.lang.String.format;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table( name = DatabaseTables.MODELS )
 public class VehicleModel {
 
     //region fields

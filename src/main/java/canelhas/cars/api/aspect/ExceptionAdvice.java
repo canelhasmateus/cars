@@ -23,6 +23,12 @@ public class ExceptionAdvice {
     public static final String MESSAGE = "message";
 
 
+    @ExceptionHandler( CustomException.class )
+    public static ResponseEntity< ? > handleCars( CustomException exception ) {
+        var body = Collections.singletonMap( MESSAGE, exception.getMessage() );
+        return new ResponseEntity<>( body, exception.getStatus() );
+    }
+
     @ExceptionHandler( ValueInstantiationException.class )
     public ResponseEntity< ? > handle( ValueInstantiationException exception ) {
         return handleConditionally( exception );
@@ -55,10 +61,7 @@ public class ExceptionAdvice {
         return new ResponseEntity<>( body, HttpStatus.INTERNAL_SERVER_ERROR );
     }
 
-    public static ResponseEntity< ? > handleCars( CustomException exception ) {
-        var body = Collections.singletonMap( MESSAGE, exception.getMessage() );
-        return new ResponseEntity<>( body, exception.getStatus() );
-    }
+
     //endregion
 
 

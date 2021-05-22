@@ -33,8 +33,15 @@ public class AdultBirthday extends ValueType< Date > {
                 .on( age <= 0 );
         conditionally( raise( tooBaby( age ) ) )
                 .on( age <= 18 );
+        conditionally( raise( immortal( age ) ) )
+                .on( age >= 100 );
 
         return new AdultBirthday( input );
+    }
+
+    private static Supplier< DomainException > immortal( Integer age ) {
+        return lazily( DomainException::new ,
+                       format( ARE_YOU_IMMORTAL , age ));
     }
 
     private static Supplier< DomainException > tooBaby( Integer age ) {

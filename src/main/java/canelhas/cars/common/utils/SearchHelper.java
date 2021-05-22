@@ -1,9 +1,8 @@
-package canelhas.cars.foreign.fipe.csr;
+package canelhas.cars.common.utils;
 
 import canelhas.cars.common.exception.ConflictException;
 import canelhas.cars.common.exception.DomainException;
 import canelhas.cars.common.exception.NotFoundException;
-import canelhas.cars.common.utils.StringHelper;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,7 +18,7 @@ import static java.lang.String.format;
 
 public class SearchHelper {
 
-    static int bestIndex( String value, List< String > searchList ) {
+    public static int bestIndex( String value, List< String > searchList ) {
         return searchList.indexOf( bestMatch( value, searchList ) );
     }
 

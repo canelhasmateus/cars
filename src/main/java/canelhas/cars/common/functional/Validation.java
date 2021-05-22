@@ -40,7 +40,7 @@ public class Validation {
                                 .map( Exception::getMessage )
                                 .filter( Objects::nonNull )
                                 .sorted( Comparator.comparing( String::length ) )
-                                .collect( Collectors.joining( "\n" ) );
+                                .collect( Collectors.joining( " \n " ) );
             throw thrower.apply( message );
         }
 

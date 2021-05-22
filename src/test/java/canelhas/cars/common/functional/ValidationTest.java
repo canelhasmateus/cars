@@ -37,7 +37,7 @@ class ValidationTest {
 
         try { validation.verify(); }
         catch ( Exception e ) {
-            assertEquals( e.getMessage(), message + "\n" + message );
+            assertEquals( e.getMessage(), message + " \n " + message );
         }
 
     }

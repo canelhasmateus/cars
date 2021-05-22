@@ -1,8 +1,8 @@
 package canelhas.cars.api.user.crs;
 
+import canelhas.cars.api.other.domain.Published;
 import canelhas.cars.api.user.model.User;
 import canelhas.cars.api.vehicles.crs.Insertion;
-import canelhas.cars.api.queue.domain.Published;
 import canelhas.cars.common.functional.Chain;
 import canelhas.cars.common.type.CPF;
 import canelhas.cars.common.type.EmailAddress;
@@ -12,7 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-import java.util.function.Function;
+
+import static canelhas.cars.common.functional.Verbs.raise;
 
 @Service
 @RequiredArgsConstructor
@@ -23,14 +24,25 @@ public class UserService {
     @Transactional
     @Published
     public Insertion< User > create( User request ) {
-        //region definitions
-        final Function< User, User > identity = Function.identity();
-        //endregion
-        return Chain.of( identity )
+
+        return Chain.of( this::searchDuplicate )
                     .andThen( userRepository::save )
                     .andThen( Insertion::of )
                     .apply( request );
     }
+
+    private User searchDuplicate( User user ) {
+
+        final var cpf   = user.typedCpf();
+        final var email = user.typedEmail();
+
+        search( cpf ).ifPresent( then -> raise( User.alreadyExistsWith( cpf ) ).get() );
+        search( email ).ifPresent( then -> raise( User.alreadyExistsWith( email ) ).get() );
+
+        return user;
+
+    }
+
 
     //region read
     public User find( CPF cpf, EmailAddress email ) {
@@ -53,6 +65,13 @@ public class UserService {
         return userRepository.findById( userId.value() );
     }
 
+    private Optional< User > search( EmailAddress email ) {
+        return userRepository.findByEmail( email.value() );
+    }
+
+    private Optional< User > search( CPF cpf ) {
+        return userRepository.findByCpf( cpf.value() );
+    }
     //endregion
 
 

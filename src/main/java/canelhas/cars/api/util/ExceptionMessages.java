@@ -22,6 +22,7 @@ public class ExceptionMessages {
     public static final String BIRTHDAY_REQUIRED       = "Informe alguma data de nascimento";
     public static final String TOO_BABY                = "%s anos é muito cedo para se cadastrar por aqui.";
     public static final String ARE_YOU_BENJAMIN_BUTTON = "%s anos de idade? Seria você o Benjamin Button?";
+    public static final String ARE_YOU_IMMORTAL        = "Você tem %s anos? Sério mesmo?";
     //endregion
 
     //region email
@@ -35,17 +36,23 @@ public class ExceptionMessages {
     //endregion
 
     //region cpf
-    public static final String CPF_REQUIRED          = "Informe algum valor de cpf.";
-    public static final String INVALID_CPF_LENGTH    = "%s não é um valor válido de cpf. Certifique-se que o valor contenha 11 digitos numéricos.";
-    public static final String INVALID_CPF_VALUE     = "%s não é um valor válido de cpf.";
-    public static final String NO_CURRENT_SESSION    = "Não existe sessão válida dentro do contexto atual";
-    public static final String NOT_ENOUGH_PRIVILEGES = "Você não possui os privilégios necessários de acesso.";
+    public static final String CPF_REQUIRED       = "Informe algum valor de cpf.";
+    public static final String INVALID_CPF_LENGTH = "%s não é um valor válido de cpf. Certifique-se que o valor contenha 11 digitos numéricos.";
+    public static final String INVALID_CPF_VALUE  = "%s não é um valor válido de cpf.";
     //endregion
+
     //endregion
 
     //region http
-    public static final String UNSUCCESSFUL_REQUEST = "Um recurso dependente falhou. Tente novamente mais tarde";
+    public static final String NO_CURRENT_SESSION    = "Não existe sessão válida dentro do contexto atual";
+    public static final String NOT_ENOUGH_PRIVILEGES = "Você não possui os privilégios necessários de acesso.";
+    public static final String UNSUCCESSFUL_REQUEST  = "Um recurso dependente falhou. Tente novamente mais tarde";
+
     //endregion
+
+    public static final String EMAIL_IS_USED          = "Já existe um usuário usando o email %s.";
+    public static final String CPF_IS_USED            = "Pare aí! Eu já vi o cpf %s por aqui...";
+    public static final String USER_NOT_FOUND_WITH_ID = "Não foi encontrado usuário com o id %s";
 
     //region monorepo
     private ExceptionMessages( ) {}
