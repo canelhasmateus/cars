@@ -11,5 +11,7 @@ import org.springframework.stereotype.Component;
 public class CacheAdvice {
 
     @Before( "execution(public * *.*(.., @canelhas.cars.api.other.domain.LRU ( * ),..))" )
-    public void lookupCache( JoinPoint joinPoint ) {}
+    public void lookupCache( JoinPoint joinPoint ) {
+        // TODO: 22/05/2021  
+    }
 }
