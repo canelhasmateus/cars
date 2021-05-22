@@ -8,7 +8,9 @@ import canelhas.cars.api.vehicles.model.Vehicle;
 import canelhas.cars.api.vehicles.model.VehicleModel;
 import canelhas.cars.common.functional.Chain;
 import canelhas.cars.common.type.TypedId;
+import canelhas.cars.foreign.fipe.csr.FipeBrandRequest;
 import canelhas.cars.foreign.fipe.csr.FipeClient;
+import canelhas.cars.foreign.fipe.csr.FipeModelRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +18,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static canelhas.cars.common.functional.Adjectives.*;
@@ -34,24 +35,49 @@ public class VehicleService {
 
 
     @Transactional
-    public Vehicle create( ModelDto request ) {
+    @Published
+    public Insertion< Vehicle > create( ModelDto request ) {
         //region definitions
-        Function< ModelDto, ModelDto > fipeSearch = partially( FipeClient::search, restTemplate );
-
         final var currentUserId = SessionService.getCurrentSession().getId();
-        final var toEntity      = partially( VehicleDto::toEntity, currentUserId );
+        final var createEntity  = partially( VehicleDto::toEntity, currentUserId );
         //endregion
-
-        return Chain.of( fipeSearch )
-                    .andThen( toEntity )
-                    .andThen( this::hydrate )
+        return Chain.of( this::fipeSearch )
+                    .andThen( createEntity )
+                    .andThen( this::manageEntity )
                     .andThen( vehicleRepository::save )
+                    .andThen( Insertion::of )
                     .apply( request );
 
     }
 
     //region help
-    private Vehicle hydrate( Vehicle vehicle ) {
+
+    public static ModelDto search( RestTemplate template, ModelDto dto ) {
+
+        //region definitions
+        final var inputBrand = dto.getBrand();
+        final var inputYear  = dto.getYear();
+        final var inputName  = dto.getName();
+
+        final var brandRequest = FipeBrandRequest.of( inputBrand );
+        final var foundBrand   = FipeClient.find( template, brandRequest );
+
+        final var modelRequest = FipeModelRequest.of( foundBrand, inputName, inputYear );
+        final var foundCar     = FipeClient.find( template, modelRequest );
+        //endregion
+
+        return ModelDto.builder()
+                       .brand( foundCar.typedBrand() )
+                       .name( foundCar.typedName() )
+                       .year( foundCar.typedYear() )
+                       .build();
+    }
+
+    private ModelDto fipeSearch( ModelDto dto ) {
+        return search( restTemplate, dto );
+    }
+
+    private Vehicle manageEntity( Vehicle vehicle ) {
 
         final var owner = findOwner( vehicle );
         vehicle.setOwner( owner );
@@ -84,7 +110,6 @@ public class VehicleService {
     }
 
     public VehicleModel find( VehicleModel model ) {
-
         //region definitions
         var                      findUsingId       = lazily( this::find, model.typedId() );
         Supplier< VehicleModel > orUsingAttributes = ( ) -> find( model.typedBrand(), model.typedName(), model.typedYear() );

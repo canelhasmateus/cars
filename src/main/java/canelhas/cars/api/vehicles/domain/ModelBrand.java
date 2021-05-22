@@ -1,25 +1,25 @@
 package canelhas.cars.api.vehicles.domain;
 
 import canelhas.cars.common.exception.DomainException;
+import canelhas.cars.common.type.ValueType;
 import canelhas.cars.common.utils.StringHelper;
-import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.RequiredArgsConstructor;
 
 import java.util.function.Supplier;
 
-import static canelhas.cars.common.exception.ExceptionMessages.BRAND_REQUIRED;
+import static canelhas.cars.api.util.ExceptionMessages.BRAND_REQUIRED;
 import static canelhas.cars.common.functional.Adjectives.lazily;
-import static canelhas.cars.common.utils.TypingHelper.maybe;
+import static canelhas.cars.common.utils.TypingHelper.optionalOf;
+
 
 
 @RequiredArgsConstructor
-public class ModelBrand {
+public class ModelBrand extends ValueType< String > {
 
-    //FIXME : WHY CANT EXTEND VALUE_TYPE
     private final String value;
 
     public static ModelBrand of( String input ) {
-        var value = maybe( input )
+        var value = optionalOf( input )
                             .map( StringHelper::normalize )
                             .map( StringHelper::toTitleCase )
                             .orElseThrow( required() );
@@ -27,7 +27,7 @@ public class ModelBrand {
         return new ModelBrand( value );
     }
 
-    @JsonValue public String value( ) {
+    public String value( ) {
         return value;
     }
 

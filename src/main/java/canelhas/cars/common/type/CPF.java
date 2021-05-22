@@ -3,13 +3,16 @@ package canelhas.cars.common.type;
 import canelhas.cars.common.exception.DomainException;
 import canelhas.cars.common.functional.Chain;
 import canelhas.cars.common.utils.Regexes;
+import canelhas.cars.common.utils.StringHelper;
 import lombok.RequiredArgsConstructor;
 
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
-import static canelhas.cars.common.exception.ExceptionMessages.*;
+import static canelhas.cars.api.util.ExceptionMessages.*;
 import static canelhas.cars.common.functional.Adjectives.lazily;
+import static canelhas.cars.common.utils.TypingHelper.optionalOf;
+import static java.lang.String.format;
 
 @RequiredArgsConstructor
 public class CPF extends ValueType< String > {
@@ -22,13 +25,13 @@ public class CPF extends ValueType< String > {
 
     public static CPF of( String input ) {
 
-        if ( input == null ) {
-            throw CPF.required().get();
-        }
+        final var value = optionalOf( input )
+                                  .map( StringHelper::normalize )
+                                  .orElseThrow( CPF.required() );
 
         //region definitions
         UnaryOperator< String > keepNumericals = s -> Regexes.NOT_NUMERICAL.matcher( s ).replaceAll( " " );
-        UnaryOperator< String > throwOnIncorrectLength = s -> {
+        UnaryOperator< String > checkLength = s -> {
             if ( s.length() != 11 ) {
                 throw CPF.invalidLength( s ).get();
             }
@@ -36,18 +39,18 @@ public class CPF extends ValueType< String > {
         };
         //endregion
 
-        var cpf = Chain.of( keepNumericals )
-                       .andThen( throwOnIncorrectLength )
-                       .andThen( CPF::validateDigits )
-                       .apply( input );
+        return Chain.of( keepNumericals )
+                    .andThen( checkLength )
+                    .andThen( CPF::validateDigits )
+                    .andThen( CPF::new )
+                    .apply( value );
 
-        return new CPF( cpf );
     }
-
 
     //region help
     private static String validateDigits( String input ) {
 
+//        NAO ANIMEI FAZER ESSA PARTE SEM IF / ELSE, SORRY
         char dig10;
         char dig11;
         int  i;
@@ -92,7 +95,8 @@ public class CPF extends ValueType< String > {
 
     //region exception
     public static Supplier< DomainException > invalidValue( String input ) {
-        return lazily( DomainException::new, input + IS_A_INVALID_CPF );
+        return lazily( DomainException::new,
+                       format( IS_A_INVALID_CPF, input ) );
     }
 
     public static Supplier< DomainException > required( ) {
@@ -100,7 +104,8 @@ public class CPF extends ValueType< String > {
     }
 
     public static Supplier< DomainException > invalidLength( String input ) {
-        return lazily( DomainException::new, input + INVALID_CPF_LENGTH );
+        return lazily( DomainException::new,
+                       format( INVALID_CPF_LENGTH, input ) );
     }
 
     //endregion

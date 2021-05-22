@@ -6,32 +6,33 @@ import canelhas.cars.common.utils.StringHelper;
 import lombok.RequiredArgsConstructor;
 
 import java.util.function.Supplier;
-import java.util.regex.Pattern;
 
-import static canelhas.cars.common.exception.ExceptionMessages.EMAIL_REQUIRED;
-import static canelhas.cars.common.exception.ExceptionMessages.IS_A_INVALID_EMAIL;
-import static canelhas.cars.common.functional.Adjectives.conditionally;
+import static canelhas.cars.api.util.ExceptionMessages.EMAIL_REQUIRED;
+import static canelhas.cars.api.util.ExceptionMessages.IS_A_INVALID_EMAIL;
+import static canelhas.cars.common.functional.Adjectives.hopefully;
 import static canelhas.cars.common.functional.Adjectives.lazily;
-import static canelhas.cars.common.functional.Verbs.raise;
-import static canelhas.cars.common.utils.TypingHelper.maybe;
+import static canelhas.cars.common.utils.StringHelper.findWith;
+import static canelhas.cars.common.utils.TypingHelper.optionalOf;
+import static java.lang.String.format;
 
 
 @RequiredArgsConstructor
 public class EmailAddress extends ValueType< String > {
-    public static final Pattern emailPattern = Regexes.EMAIL;
-    private final       String  value;
 
-    public static EmailAddress of( String value ) {
+    private final String value;
 
-        value = maybe( value ).map( StringHelper::normalize )
-                              .orElseThrow( required() );
+    public static EmailAddress of( String input ) {
 
-        var matcher = emailPattern.matcher( value );
+        var value = optionalOf( input )
+                            .map( StringHelper::normalize )
+                            .orElseThrow( required() );
 
-        conditionally( raise( invalid( value ) ) )
-                .on( !matcher.matches() );
+        value = hopefully( findWith( Regexes.EMAIL ) )
+                        .apply( value )
+                        .orElseThrow( invalid( value ) );
 
         return new EmailAddress( value );
+
     }
 
 
@@ -45,7 +46,8 @@ public class EmailAddress extends ValueType< String > {
     }
 
     private static Supplier< DomainException > invalid( String value ) {
-        return lazily( DomainException::new, value + IS_A_INVALID_EMAIL );
+        return lazily( DomainException::new,
+                       format( IS_A_INVALID_EMAIL, value ) );
     }
     //endregion
 

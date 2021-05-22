@@ -86,11 +86,11 @@ public class UserDto {
     public static UserDto fromEntity( User entity ) {
 
         //region definitions
-        final var id       = TypedId.of( User.class, entity.getId() );
-        final var name     = ProperName.of( entity.getName() );
-        final var birthday = AdultBirthday.of( entity.getBirthday() );
-        final var email    = EmailAddress.of( entity.getEmail() );
-        final var cpf      = CPF.of( entity.getCpf() );
+        final TypedId< User > id       = TypedId.of( entity.getId() );
+        final var             name     = ProperName.of( entity.getName() );
+        final var             birthday = AdultBirthday.of( entity.getBirthday() );
+        final var             email    = EmailAddress.of( entity.getEmail() );
+        final var             cpf      = CPF.of( entity.getCpf() );
         //endregion
 
         return UserDto.builder()

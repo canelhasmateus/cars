@@ -1,52 +1,57 @@
 package canelhas.cars.api.vehicles.domain;
 
 import canelhas.cars.common.exception.DomainException;
+import canelhas.cars.common.type.ValueType;
+import canelhas.cars.common.utils.Regexes;
 import canelhas.cars.common.utils.StringHelper;
-import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.RequiredArgsConstructor;
 
 import java.util.function.Supplier;
 
+import static canelhas.cars.api.util.ExceptionMessages.COULD_NOT_PARSE_YEAR;
+import static canelhas.cars.api.util.ExceptionMessages.YEAR_REQUIRED;
+import static canelhas.cars.common.functional.Adjectives.hopefully;
 import static canelhas.cars.common.functional.Adjectives.lazily;
-import static canelhas.cars.common.utils.TypingHelper.maybe;
+import static canelhas.cars.common.utils.StringHelper.findWith;
+import static canelhas.cars.common.utils.TypingHelper.optionalOf;
+import static java.lang.String.format;
 
 
 @RequiredArgsConstructor
-public class ModelYear {
-    //FIXME : WHY CANT EXTEND VALUE_TYPE
+public class ModelYear extends ValueType< String > {
+
     private final String value;
 
     public static ModelYear of( String input ) {
 
-        final var value = maybe( input ).map( StringHelper::normalize )
-                                        .orElseThrow( ModelYear.required() );
+        final var value = optionalOf( input )
+                                  .map( StringHelper::normalize )
+                                  .orElseThrow( ModelYear.required() );
 
         return new ModelYear( value );
     }
 
-
-    @JsonValue
     public String value( ) {
         return value;
     }
 
     public static int asInteger( ModelYear input ) {
-        // TODO: 17/05/2021 fazer direito
         final var value = input.value();
-        final var year  = value.split( "-" )[ 0 ];
-        return Integer.parseInt( year );
+        return hopefully( findWith( Regexes.FIRST_NUMERICALS ) )
+                       .apply( value )
+                       .map( Integer::parseInt )
+                       .orElseThrow( couldNotParse( value ) );
+
     }
 
     //region exceptions
-    public static Supplier< DomainException > invalidValue( String input ) {
+    private static Supplier< DomainException > couldNotParse( String value ) {
         return lazily( DomainException::new,
-                       input + "não é um valor válido de ano do veiculo." );
-
+                       format( COULD_NOT_PARSE_YEAR, value ) );
     }
 
     public static Supplier< DomainException > required( ) {
-        return lazily( DomainException::new,
-                       "Informe algum valor de ano do veículo." );
+        return lazily( DomainException::new, YEAR_REQUIRED );
     }
     //endregion
 }

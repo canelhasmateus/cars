@@ -1,8 +1,9 @@
 package canelhas.cars.common.utils;
 
 import java.util.Optional;
+import java.util.function.Function;
 
-import static canelhas.cars.common.functional.Adjectives.logicallyNot;
+import static canelhas.cars.common.functional.Adjectives.*;
 
 public class TypingHelper {
     //region monorepo
@@ -10,22 +11,15 @@ public class TypingHelper {
     private TypingHelper( ) {}
 
     //endregion
-    //endregion
-    public static < T extends Enum< T > > Optional< T > maybe( Class< T > enumeration, String name ) {
 
-        try {
-
-            return Optional.of( Enum.valueOf( enumeration, name ) );
-
-        }
-
-        catch ( Exception e ) {
-
-            return Optional.empty();
-        }
+    public static < T extends Enum< T > > Optional< T > optionalOf( Class< T > enumeration, String name ) {
+        //region definitions
+        final Function< String, T > convert = partially( Enum::valueOf, enumeration );
+        //endregion
+        return hopefully( convert ).apply( name );
     }
 
-    public static Optional< String > maybe( String input ) {
+    public static Optional< String > optionalOf( String input ) {
         return Optional.ofNullable( input )
                        .filter( logicallyNot( ""::equals ) );
     }

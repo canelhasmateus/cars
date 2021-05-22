@@ -1,32 +1,32 @@
 package canelhas.cars.api.vehicles.domain;
 
 import canelhas.cars.common.exception.DomainException;
+import canelhas.cars.common.type.ValueType;
 import canelhas.cars.common.utils.StringHelper;
-import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.RequiredArgsConstructor;
 
 import java.util.function.Supplier;
 
-import static canelhas.cars.common.exception.ExceptionMessages.MODEL_REQUIRED;
+import static canelhas.cars.api.util.ExceptionMessages.MODEL_REQUIRED;
 import static canelhas.cars.common.functional.Adjectives.lazily;
-import static canelhas.cars.common.utils.TypingHelper.maybe;
+import static canelhas.cars.common.utils.StringHelper.toTitleCase;
+import static canelhas.cars.common.utils.TypingHelper.optionalOf;
 
 
 @RequiredArgsConstructor
-public class ModelName {
-    //FIXME : WHY CANT EXTEND VALUE_TYPE
+public class ModelName extends ValueType< String > {
+
     private final String value;
 
     public static ModelName of( String input ) {
-        final var value = maybe( input )
+
+        final var value = optionalOf( input )
                                   .map( StringHelper::normalize )
-                                  .map( StringHelper::toTitleCase )
                                   .orElseThrow( required() );
-        return new ModelName( value );
+
+        return new ModelName( toTitleCase( value ) );
     }
 
-
-    @JsonValue
     public String value( ) {
         return value;
     }

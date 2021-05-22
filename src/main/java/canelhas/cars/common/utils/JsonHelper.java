@@ -1,9 +1,9 @@
 package canelhas.cars.common.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.util.Collection;
 
 public class JsonHelper {
 
@@ -12,8 +12,9 @@ public class JsonHelper {
     private JsonHelper( ) {}
 
     //endregion
-    private static final ObjectMapper mapper = new ObjectMapper();
 
+    private static final ObjectMapper mapper = new ObjectMapper()
+                                                       .configure( DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false );
 
     public static < T > T map( Class< T > clazz, String serialized ) {
         try {
@@ -24,15 +25,13 @@ public class JsonHelper {
         }
     }
 
-    public static < C extends Collection< ? >, V > Collection< V > map( Class< C > collection, Class< V > valueType, String serialized ) {
-
-        final var collectionType1 = mapper.getTypeFactory().constructCollectionType( collection, valueType );
-
+    public static < T > T map( TypeReference< T > clazz, String serialized ) {
         try {
-            return mapper.readValue( serialized, collectionType1 );
+            return mapper.readValue( serialized, clazz );
         }
         catch ( JsonProcessingException e ) {
             throw new RuntimeException( e );
         }
     }
+
 }

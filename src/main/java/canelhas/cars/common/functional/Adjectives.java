@@ -27,7 +27,6 @@ public class Adjectives {
     }
 
     public static < K, V > Function< Collection< K >, List< V > > collectively( Function< K, V > action ) {
-        // TODO: 18/05/2021 let parameter choose destination collection.
         return ( Collection< K > iterable ) -> {
             final var result = new ArrayList< V >( iterable.size() );
             for ( K element : iterable ) {
@@ -39,14 +38,14 @@ public class Adjectives {
     }
 
     public static < K, V > Function< Collection< K >, List< V > > concurrently( Function< K, V > action ) {
-        // FIXME: 18/05/2021 how to let parameter choose destination collection.
-        return ( Collection< K > collection ) -> collection.stream().parallel()
+        return ( Collection< K > collection ) -> collection.stream()
+                                                           .parallel()
                                                            .map( action )
                                                            .collect( Collectors.toList() );
 
     }
 
-    @SafeVarargs public static < K > UnaryOperator< K > effectfully( Consumer< K >... sideEffects ) {
+    @SafeVarargs public static < K > UnaryOperator< K > laterally( Consumer< K >... sideEffects ) {
         return ( K k ) -> {
             for ( Consumer< K > consumer : sideEffects ) {
                 consumer.accept( k );
@@ -56,7 +55,7 @@ public class Adjectives {
 
     }
 
-    @SafeVarargs public static < K > Function< K, K > effectfully( Function< K, ? >... sideEffects ) {
+    @SafeVarargs public static < K > Function< K, K > laterally( Function< K, ? >... sideEffects ) {
         return ( K k ) -> {
             for ( Function< K, ? > function : sideEffects ) {
                 function.apply( k );
@@ -109,7 +108,7 @@ public class Adjectives {
     public static < K > Conditional< Boolean, UnaryOperator< K > > conditionally( Consumer< K > action ) {
         return isTrue -> {
             if ( Boolean.TRUE.equals( isTrue ) ) {
-                return effectfully( action );
+                return laterally( action );
             }
             return k -> k;
         };

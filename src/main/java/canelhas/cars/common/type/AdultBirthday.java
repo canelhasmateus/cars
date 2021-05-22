@@ -1,16 +1,20 @@
 package canelhas.cars.common.type;
 
 import canelhas.cars.common.exception.DomainException;
-import canelhas.cars.common.functional.Chain;
-import canelhas.cars.common.utils.DateHelper;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Date;
-import java.util.function.UnaryOperator;
+import java.util.Optional;
+import java.util.function.Supplier;
 
-import static canelhas.cars.common.exception.ExceptionMessages.*;
+import static canelhas.cars.api.util.ExceptionMessages.*;
+import static canelhas.cars.common.functional.Adjectives.conditionally;
+import static canelhas.cars.common.functional.Adjectives.lazily;
+import static canelhas.cars.common.functional.Verbs.raise;
+import static canelhas.cars.common.utils.DateHelper.findAge;
+import static java.lang.String.format;
 
 
 @RequiredArgsConstructor
@@ -21,28 +25,30 @@ public class AdultBirthday extends ValueType< Date > {
 
     public static AdultBirthday of( Date input ) {
 
-        if ( input == null ) {
-            throw new DomainException( BIRTHDAY_REQUIRED );
-        }
+        Optional.ofNullable( input )
+                .orElseThrow( required() );
 
-        //region definitions
-        UnaryOperator< Date > throwOnTooRecent = date -> {
-            int diff = DateHelper.yearDifference( new Date(), date );
+        final var age = findAge( new Date(), input );
+        conditionally( raise( benjaminButton( age ) ) )
+                .on( age <= 0 );
+        conditionally( raise( tooBaby( age ) ) )
+                .on( age <= 18 );
 
-            if ( diff <= 0 ) {
-                throw new DomainException( diff + ARE_YOU_BENJAMIN_BUTTON );
-            }
-            else if ( diff < 18 ) {
-                throw new DomainException( diff + IS_TOO_EARLY );
-            }
-            return date;
-        };
-        //endregion
+        return new AdultBirthday( input );
+    }
 
-        var birthday = Chain.of( throwOnTooRecent )
-                            .apply( input );
+    private static Supplier< DomainException > tooBaby( Integer age ) {
+        return lazily( DomainException::new,
+                       format( TOO_BABY, age ) );
+    }
 
-        return new AdultBirthday( birthday );
+    private static Supplier< DomainException > benjaminButton( Integer age ) {
+        return lazily( DomainException::new,
+                       format( ARE_YOU_BENJAMIN_BUTTON, age ) );
+    }
+
+    public static Supplier< DomainException > required( ) {
+        return lazily( DomainException::new, BIRTHDAY_REQUIRED );
     }
 
     @JsonValue

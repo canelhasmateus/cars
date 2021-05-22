@@ -1,5 +1,6 @@
 package canelhas.cars.api.foreign.fipe;
 
+import canelhas.cars.api.vehicles.crs.VehicleService;
 import canelhas.cars.api.vehicles.domain.ModelBrand;
 import canelhas.cars.api.vehicles.domain.ModelDto;
 import canelhas.cars.api.vehicles.domain.ModelName;
@@ -7,8 +8,9 @@ import canelhas.cars.api.vehicles.domain.ModelYear;
 import canelhas.cars.common.exception.ConflictException;
 import canelhas.cars.common.exception.DomainException;
 import canelhas.cars.common.exception.NotFoundException;
-import canelhas.cars.common.type.TypedId;
+import canelhas.cars.foreign.fipe.csr.FipeBrandRequest;
 import canelhas.cars.foreign.fipe.csr.FipeClient;
+import canelhas.cars.foreign.fipe.csr.FipeModelRequest;
 import canelhas.cars.foreign.fipe.domain.FipeBrand;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,63 +29,71 @@ public class FipeClientTest {
     //region brand
     @Test
     void givenTooVagueBrandThenThrows( ) {
-        final var value = ModelBrand.of( "a" );
-        assertThrows( ConflictException.class, ( ) -> FipeClient.search( value, template ) );
+        final var request = FipeBrandRequest.of( "a" );
+        assertThrows( ConflictException.class, ( ) -> FipeClient.find( template, request ) );
     }
 
     @Test
     void givenInexactBrandThenThrows( ) {
-        final var value = ModelBrand.of( "lamborghin" );
-        assertThrows( DomainException.class, ( ) -> FipeClient.search( value, template ) );
+        final var request = FipeBrandRequest.of( "lamborghin" );
+        assertThrows( DomainException.class, ( ) -> FipeClient.find( template, request ) );
     }
 
     @Test
     void givenInexistingBrandThenThrows( ) {
-        final var value = ModelBrand.of( "definitivamente nao existe" );
-        assertThrows( NotFoundException.class, ( ) -> FipeClient.search( value, template ) );
+        final var value = FipeBrandRequest.of( "definitivamente nao existe" );
+        assertThrows( NotFoundException.class, ( ) -> FipeClient.find( template, value ) );
     }
 
     @Test
     void givenCaseDifferentBrandThenParses( ) {
-        final var value = ModelBrand.of( "toyota" );
-        assertNotNull( FipeClient.search( value, template ) );
+        final var request = FipeBrandRequest.of( "toyota" );
+        assertNotNull( FipeClient.find( template, request ) );
     }
     //endregion
 
     //region model
     @Test
     void givenTooVagueModelThenThrows( ) {
+
+        final var brand     = FipeBrand.of( "a", 59 );
         final var modelYear = new ModelYear( "" );
-        final var brandId   = TypedId.of( FipeBrand.class, 59 );
         final var modelName = ModelName.of( "a" );
-        assertThrows( ConflictException.class, ( ) -> FipeClient.search( modelName, modelYear, brandId, template ) );
+        final var request   = FipeModelRequest.of( brand, modelName, modelYear );
+
+        assertThrows( ConflictException.class, ( ) -> FipeClient.find( template, request ) );
     }
 
     @Test
     void givenInexactModelThenThrows( ) {
+        final var brand     = FipeBrand.of( "a", 59 );
         final var modelYear = new ModelYear( "" );
-        final var brandId   = TypedId.of( FipeBrand.class, 59 );
         final var modelName = ModelName.of( "AMAROK Highline CD 2.0 16V TDI 4x4 Die" );
-        assertThrows( DomainException.class, ( ) -> FipeClient.search( modelName, modelYear, brandId, template ) );
+        final var request   = FipeModelRequest.of( brand, modelName, modelYear );
+
+        assertThrows( DomainException.class, ( ) -> FipeClient.find( template, request ) );
     }
 
     @Test
     void givenInexistingModelThenThrows( ) {
-        final var modelYear = new ModelYear( "" );
-        final var brandId   = TypedId.of( FipeBrand.class, 59 );
-        final var modelName = ModelName.of( "definitivamente nao existe" );
 
-        assertThrows( NotFoundException.class, ( ) -> FipeClient.search( modelName, modelYear, brandId, template ) );
+        final var brand     = FipeBrand.of( "a", 59 );
+        final var modelYear = new ModelYear( "" );
+        final var modelName = ModelName.of( "definitivamente nao existe" );
+        final var request   = FipeModelRequest.of( brand, modelName, modelYear );
+
+        assertThrows( NotFoundException.class, ( ) -> FipeClient.find( template, request ) );
     }
 
 
     @Test
     void givenCaseDifferentModelThenParses( ) {
 
+        final var brand     = FipeBrand.of( "a", 59 );
         final var modelYear = new ModelYear( "2017 Gasolina" );
-        final var brandId   = TypedId.of( FipeBrand.class, 59 );
         final var modelName = ModelName.of( "AMAROK Highline CD 2.0 16V TDI 4x4 Dies.".toLowerCase() );
-        assertNotNull( FipeClient.search( modelName, modelYear, brandId, template ) );
+        final var request   = FipeModelRequest.of( brand, modelName, modelYear );
+        assertNotNull( FipeClient.find( template, request ) );
 
     }
     //endregion
@@ -97,7 +107,7 @@ public class FipeClientTest {
                                 .year( ModelYear.of( "2020 Gasolina" ) )
                                 .build();
 
-        assertNotNull( FipeClient.search( template, dto ) );
+        assertNotNull( VehicleService.search( template, dto ) );
 
     }
 }

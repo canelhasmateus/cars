@@ -1,49 +1,56 @@
 package canelhas.cars.common.type;
 
 import canelhas.cars.common.exception.DomainException;
-import canelhas.cars.common.functional.Chain;
 import canelhas.cars.common.utils.Regexes;
 import canelhas.cars.common.utils.StringHelper;
 import lombok.RequiredArgsConstructor;
 
-import java.util.function.UnaryOperator;
+import java.util.function.Supplier;
 
-import static canelhas.cars.common.exception.ExceptionMessages.CONTAINS_INVALID_CHARACTERS;
-import static canelhas.cars.common.exception.ExceptionMessages.NAME_REQUIRED;
+import static canelhas.cars.api.util.ExceptionMessages.CONTAINS_INVALID_CHARACTERS;
+import static canelhas.cars.api.util.ExceptionMessages.NAME_REQUIRED;
+import static canelhas.cars.common.functional.Adjectives.hopefully;
+import static canelhas.cars.common.functional.Adjectives.lazily;
+import static canelhas.cars.common.utils.StringHelper.findWith;
+import static canelhas.cars.common.utils.StringHelper.toTitleCase;
+import static canelhas.cars.common.utils.TypingHelper.optionalOf;
+import static java.lang.String.format;
 
 @RequiredArgsConstructor
 public class ProperName extends ValueType< String > {
 
+    //    CREATE SQL SERIALIZERS
 
     private final String value;
 
     public static ProperName of( String input ) {
 
+        var value = optionalOf( input )
+                            .map( StringHelper::normalize )
+                            .orElseThrow( required() );
 
-        if ( input == null ) {
-            throw new DomainException( NAME_REQUIRED );
-        }
+        value = hopefully( findWith( Regexes.NOT_SPECIAL ) )
+                        .apply( value )
+                        .orElseThrow( invalid( value ) );
 
-        //region definition
-        UnaryOperator< String > throwOnSpecialCharacters = s -> {
-            if ( !Regexes.NOT_SPECIAL.matcher( s ).matches() ) {
-                throw new DomainException( input + CONTAINS_INVALID_CHARACTERS );
-            }
+        return new ProperName( toTitleCase( value ) );
 
-            return s;
-        };
-        //endregion
-
-        var name = Chain.of( String::trim )
-                        .andThen( throwOnSpecialCharacters )
-                        .andThen( StringHelper::toTitleCase )
-                        .apply( input );
-
-        return new ProperName( name );
     }
-
 
     @Override public String value( ) {
         return value;
     }
+
+
+    //region exceptions
+    private static Supplier< DomainException > required( ) {
+        return lazily( DomainException::new, NAME_REQUIRED );
+    }
+
+    private static Supplier< DomainException > invalid( String value ) {
+        return lazily( DomainException::new,
+                       format( CONTAINS_INVALID_CHARACTERS, value ) );
+    }
+    //endregion
+
 }

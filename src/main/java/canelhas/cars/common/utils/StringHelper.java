@@ -2,6 +2,7 @@ package canelhas.cars.common.utils;
 
 import org.springframework.util.StringUtils;
 
+import java.nio.charset.Charset;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -12,6 +13,12 @@ public class StringHelper {
     //region monorepo
 
     private StringHelper( ) {}
+
+    public static String convert( String body, Charset charset ) {
+
+        return new String( body.getBytes( charset ), charset );
+
+    }
     //endregion
 
     public static String toTitleCase( String name ) {

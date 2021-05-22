@@ -24,7 +24,7 @@ import static java.lang.String.format;
 @NoArgsConstructor
 @AllArgsConstructor
 public class VehicleModel {
-    //FIXME : CREATE CUSTOM SERIALIZERS
+
     //region fields
     @Id
     @Column( name = MODEL_ID )

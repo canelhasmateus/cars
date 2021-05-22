@@ -28,6 +28,7 @@ public class VehicleController {
     @Authorization( USER )
     public VehicleDto create( @RequestBody ModelDto request ) {
         return Chain.of( vehicleService::create )
+                    .andThen( Insertion::value )
                     .andThen( VehicleDto::create )
                     .apply( request );
 

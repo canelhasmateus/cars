@@ -9,7 +9,7 @@ public class DateHelper {
     private DateHelper( ) {}
 
     //endregion
-    public static int yearDifference( Date start, Date finish ) {
+    public static int findAge( Date start, Date finish ) {
 
         long diff = start.getTime() - finish.getTime();
 
