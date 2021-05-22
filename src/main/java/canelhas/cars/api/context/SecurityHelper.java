@@ -5,6 +5,7 @@ import canelhas.cars.api.auth.domain.CarsClaims;
 import canelhas.cars.api.user.model.User;
 import canelhas.cars.common.functional.Chain;
 import canelhas.cars.common.utils.Regexes;
+import canelhas.cars.common.utils.StringHelper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwt;
@@ -79,10 +80,14 @@ public class SecurityHelper {
     public static String encode( User user ) {
 
         //region definitions
-        final var           id      = user.getId();
-        final var           name    = user.getName();
-        final var           email   = user.getEmail();
-        Predicate< String > isAdmin = s -> s != null && s.contains( "@admin" );
+        final var id            = user.getId();
+        final var name          = user.getName();
+        final var email         = user.getEmail();
+        final var containsAdmin = partially( "@admin", StringHelper::contained );
+
+        Predicate< String > isAdmin = s -> Optional.ofNullable( s )
+                                                   .map( containsAdmin )
+                                                   .orElse( false );
 
         List< Roles > roles        = new ArrayList<>();
         final var     addAdminRole = lazily( roles::add, Roles.ADMIN );

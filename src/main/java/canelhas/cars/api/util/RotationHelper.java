@@ -9,7 +9,6 @@ import static java.util.Calendar.*;
 
 public class RotationHelper {
 
-
     private static final Map< Integer, Integer > rotationDay = new HashMap<>();
 
     static {
