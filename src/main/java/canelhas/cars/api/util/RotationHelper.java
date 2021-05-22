@@ -3,14 +3,27 @@ package canelhas.cars.api.util;
 import canelhas.cars.api.vehicles.domain.ModelYear;
 import canelhas.cars.api.vehicles.model.VehicleModel;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
 
 import static java.util.Calendar.*;
 
 public class RotationHelper {
 
+
+    private static final Map< Integer, Integer > rotationDay = new HashMap<>();
+
+    static {
+        rotationDay.put( 0, MONDAY );
+        rotationDay.put( 1, MONDAY );
+        rotationDay.put( 2, TUESDAY );
+        rotationDay.put( 3, TUESDAY );
+        rotationDay.put( 4, WEDNESDAY );
+        rotationDay.put( 5, WEDNESDAY );
+        rotationDay.put( 6, THURSDAY );
+        rotationDay.put( 7, THURSDAY );
+        rotationDay.put( 8, FRIDAY );
+        rotationDay.put( 9, FRIDAY );
+    }
     //region monorepo
 
     private RotationHelper( ) {}
@@ -26,21 +39,7 @@ public class RotationHelper {
 
         var lastDigit = ModelYear.asInteger( year ) % 10;
 
-        switch ( currentWeekDay ) {
-            case MONDAY:
-                return ( lastDigit == 0 || lastDigit == 1 );
-            case TUESDAY:
-                return ( lastDigit == 2 || lastDigit == 3 );
-            case WEDNESDAY:
-                return ( lastDigit == 4 || lastDigit == 5 );
-            case THURSDAY:
-                return ( lastDigit == 6 || lastDigit == 7 );
-            case FRIDAY:
-                return ( lastDigit == 8 || lastDigit == 9 );
-            default:
-                return false;
-        }
-
+        return currentWeekDay == rotationDay.getOrDefault( lastDigit, -1 );
     }
 
     public static Boolean isRotatedOut( VehicleModel vehicleModel ) {
