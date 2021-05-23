@@ -2,7 +2,6 @@ package canelhas.cars.common.type;
 
 import canelhas.cars.api.util.ExceptionMessages;
 import canelhas.cars.common.exception.DomainException;
-import canelhas.cars.common.languaj.Verbs;
 import canelhas.cars.common.languaj.noun.ValueType;
 import canelhas.cars.common.utils.Regexes;
 import canelhas.cars.common.utils.StringHelper;
@@ -13,7 +12,9 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import static canelhas.cars.api.util.ExceptionMessages.INVALID_PRICE;
-import static canelhas.cars.common.languaj.Adjectives.*;
+import static canelhas.cars.common.languaj.Adjectives.hopefully;
+import static canelhas.cars.common.languaj.Adjectives.lazily;
+import static canelhas.cars.common.languaj.Verbs.raise;
 import static canelhas.cars.common.utils.StringHelper.findWith;
 import static canelhas.cars.common.utils.TypingHelper.optionalOf;
 import static java.lang.String.format;
@@ -45,9 +46,9 @@ public class Price extends ValueType< BigDecimal > {
                                   .map( BigDecimal::valueOf )
                                   .orElseThrow( required() );
 
-        conditionally( isNegative( value ) )
-                .when( input.doubleValue() < 0 )
-                .map( Verbs::raise );
+        raise( isNegative( value ) )
+                .when( input.doubleValue() < 0 );
+
 
         return new Price( value );
     }

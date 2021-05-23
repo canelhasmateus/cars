@@ -3,7 +3,6 @@ package canelhas.cars.api.aspect;
 import canelhas.cars.api.auth.crs.SessionService;
 import canelhas.cars.api.auth.domain.Authorization;
 import canelhas.cars.api.auth.domain.CarsClaims;
-import canelhas.cars.common.languaj.Verbs;
 import canelhas.cars.common.languaj.noun.Chain;
 import canelhas.cars.common.utils.AspectHelper;
 import org.aspectj.lang.JoinPoint;
@@ -16,8 +15,8 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static canelhas.cars.common.languaj.Adjectives.conditionally;
 import static canelhas.cars.common.languaj.Adjectives.hopefully;
+import static canelhas.cars.common.languaj.Verbs.raise;
 import static canelhas.cars.common.utils.AspectHelper.findAnnotation;
 
 @Aspect
@@ -51,9 +50,8 @@ public class AuthorizationAdvice {
                                                             .collect( Collectors.toSet() );
         //endregion
 
-        conditionally( CarsClaims.accessDenied() )
-                .when( sufficientPermissions.isEmpty() )
-                .map( Verbs::raise );
+        raise( CarsClaims.accessDenied() ).when( sufficientPermissions.isEmpty() );
+
 
     }
 

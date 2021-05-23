@@ -2,7 +2,6 @@ package canelhas.cars.common.utils;
 
 import canelhas.cars.common.exception.ConflictException;
 import canelhas.cars.common.exception.NotFoundException;
-import canelhas.cars.common.languaj.Verbs;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,6 +10,7 @@ import java.util.function.Supplier;
 
 import static canelhas.cars.api.util.ExceptionMessages.*;
 import static canelhas.cars.common.languaj.Adjectives.*;
+import static canelhas.cars.common.languaj.Verbs.raise;
 import static java.lang.String.format;
 
 public class SearchHelper {
@@ -29,23 +29,13 @@ public class SearchHelper {
         final var nearMatches  = narrowingly( containsSearch ).apply( names );
         final var exactMatches = narrowingly( equalsSearch ).apply( nearMatches );
 
-        //region early returns
-        conditionally( notFound( search ) )
-                .when( nearMatches.isEmpty() )
-                .map( Verbs::raise );
-
-        conditionally( ambiguous( search, nearMatches ) )
-                .when( exactMatches.isEmpty() )
-                .map( Verbs::raise );
-
-        conditionally( ambiguous( search, exactMatches ) )
-                .when( exactMatches.size() > 1 )
-                .map( Verbs::raise );
-        //endregion
+        raise( notFound( search ) ).when( nearMatches.isEmpty() );
+        raise( ambiguous( search, nearMatches ) ).when( exactMatches.isEmpty() );
 
         return new ArrayList<>( exactMatches ).get( 0 );
     }
 
+    //region exceptions
     public static Supplier< NotFoundException > notFound( String search ) {
         return lazily( NotFoundException::new,
                        format( NONE_FOUND, search ) );
@@ -68,7 +58,7 @@ public class SearchHelper {
                        .orElse( many );
 
     }
-
+    //endregion
     //region help
 
     //region monorepo

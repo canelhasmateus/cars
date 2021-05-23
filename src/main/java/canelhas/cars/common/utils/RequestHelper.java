@@ -1,7 +1,6 @@
 package canelhas.cars.common.utils;
 
 import canelhas.cars.common.exception.OperationException;
-import canelhas.cars.common.languaj.Verbs;
 import canelhas.cars.common.languaj.noun.Chain;
 import canelhas.cars.common.type.Responseable;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +15,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static canelhas.cars.api.util.ExceptionMessages.UNSUCCESSFUL_REQUEST;
-import static canelhas.cars.common.languaj.Adjectives.conditionally;
 import static canelhas.cars.common.languaj.Adjectives.partially;
+import static canelhas.cars.common.languaj.Verbs.raise;
 
 @RequiredArgsConstructor
 public class RequestHelper {
@@ -55,16 +54,16 @@ public class RequestHelper {
 
     public static < K, V > Function< K, V > successfully( Function< K, ResponseEntity< V > > request ) {
         return ( K k ) -> {
+
             final var response = request.apply( k );
-
-            //region exit if unsucessful
-            final var firstChar = Chain.of( String::valueOf )
-                                       .andThen( s -> s.charAt( 0 ) );
-
-            conditionally( requestFailed() )
-                    .when( firstChar.apply( response.getStatusCodeValue() ) != '2' )
-                    .map( Verbs::raise );
+            //region defnitions
+            final var firstResponseCodeChar = Chain.of( String::valueOf )
+                                                   .andThen( s -> s.charAt( 0 ) )
+                                                   .apply( response.getStatusCodeValue() );
             //endregion
+
+            raise( requestFailed() )
+                    .when( firstResponseCodeChar != '2' );
 
             return response.getBody();
         };

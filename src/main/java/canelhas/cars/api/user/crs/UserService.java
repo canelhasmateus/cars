@@ -36,8 +36,11 @@ public class UserService {
         final var cpf   = user.typedCpf();
         final var email = user.typedEmail();
 
-        search( cpf ).ifPresent( then -> raise( User.alreadyExistsWith( cpf ) ) );
-        search( email ).ifPresent( then -> raise( User.alreadyExistsWith( email ) ) );
+        raise( User.alreadyExistsWith( cpf ) )
+                .when( search( cpf ).isPresent() );
+
+        raise( User.alreadyExistsWith( email ) )
+                .when( search( email ).isPresent() );
 
         return user;
 
