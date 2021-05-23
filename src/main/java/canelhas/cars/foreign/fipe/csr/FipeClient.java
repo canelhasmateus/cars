@@ -1,10 +1,13 @@
 package canelhas.cars.foreign.fipe.csr;
 
-import canelhas.cars.common.utils.RequestHelper;
 import canelhas.cars.foreign.fipe.domain.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+import java.util.function.Function;
+
 import static canelhas.cars.common.languaj.Adjectives.collectively;
+import static canelhas.cars.common.utils.RequestHelper.request;
 import static canelhas.cars.common.utils.RequestHelper.successfully;
 import static canelhas.cars.common.utils.SearchHelper.bestIndex;
 
@@ -14,47 +17,45 @@ public class FipeClient {
 
 
     // TODO: 22/05/2021 Cache these three requests.
-    public static FipeBrand find( RestTemplate template, FipeBrandRequest request ) {
+    public static FipeBrand find( RestTemplate template, FipeBrandRequest requestEntity ) {
 
         //region definitions
-        final var requester = new RequestHelper( template );
-        final var brandList = successfully( __ -> requester.doRequest( request ) )
-                                      .apply( request );
+        Function< FipeBrandRequest, List< FipeBrand > > doRequest = successfully( req -> request( template, req ) );
         //endregion
 
-        //region bestBrand
-        final var search = request.getBrand().value();
+        final var search    = requestEntity.getBrand().value();
+        final var brandList = doRequest.apply( requestEntity );
+
         final var bestIndex = collectively( FipeBrand::getName )
-                                      .andThen( s -> bestIndex( search, s ) )
+                                      .andThen( candidates -> bestIndex( search, candidates ) )
                                       .apply( brandList );
-        //endregion
 
         return brandList.get( bestIndex );
     }
 
-    public static FipeCar find( RestTemplate template, FipeModelRequest request ) {
+    public static FipeCar find( RestTemplate template, FipeModelRequest requestEntity ) {
 
         //region response
-        final var bestBrand = request.getBrand();
-        final var requester = new RequestHelper( template );
-        final var response = successfully( __ -> requester.doRequest( request ) )
-                                     .apply( request );
+        Function< FipeModelRequest, FipeModelResponse > doRequest = successfully( req -> request( template, req ) );
+        final var                                       bestBrand = requestEntity.getBrand();
+
+        final var response  = doRequest.apply( requestEntity );
+        final var model     = requestEntity.getName().value();
+        final var modelList = response.getModels();
+        final var year      = requestEntity.getYear().value();
+        final var yearList  = response.getYears();
         //endregion
 
         //region bestModel
-        final var searchedModel = request.getName().value();
-        final var modelList     = response.getModels();
         final var bestModelIndex = collectively( FipeModel::getName )
-                                           .andThen( s -> bestIndex( searchedModel, s ) )
+                                           .andThen( candidates -> bestIndex( model, candidates ) )
                                            .apply( modelList );
         final var bestModel = modelList.get( bestModelIndex );
         //endregion
 
         //region bestYear
-        final var searchedYear = request.getYear().value();
-        final var yearList     = response.getYears();
         final var bestYearIndex = collectively( FipeYear::getName )
-                                          .andThen( s -> bestIndex( searchedYear, s ) )
+                                          .andThen( candidates -> bestIndex( year, candidates ) )
                                           .apply( yearList );
         final var bestYear = yearList.get( bestYearIndex );
         //endregion
@@ -66,14 +67,13 @@ public class FipeClient {
                       .build();
     }
 
-    public static FipeCar find( RestTemplate template, FipeCarRequest request ) {
+    public static FipeCar find( RestTemplate template, FipeCarRequest requestEntity ) {
 
         //region response
-        final var requester = new RequestHelper( template );
-        final var response = successfully( __ -> requester.doRequest( request ) )
-                                     .apply( request );
+        Function< FipeCarRequest, FipeCarResponse > doRequest = successfully( req -> request( template, req ) );
         //endregion
 
+        final var response = doRequest.apply( requestEntity );
         return FipeCar.of( response );
     }
 

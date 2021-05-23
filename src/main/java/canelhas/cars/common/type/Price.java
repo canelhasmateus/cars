@@ -34,7 +34,7 @@ public class Price extends ValueType< BigDecimal > {
                         .orElseThrow( invalid( value ) );
 
         value = value.replace( ".", "" )
-                     .replace(  "," , ".");
+                     .replace( ",", "." );
 
         return Price.of( Double.parseDouble( value ) );
     }

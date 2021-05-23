@@ -58,4 +58,9 @@ public class Adverbs {
     public static < K > Predicate< K > logicallyNot( Function< K, Boolean > predicate ) {
         return Predicate.not( logically( predicate ) );
     }
+
+
+    //region monorepo
+    private Adverbs( ) {}
+    //endregion
 }

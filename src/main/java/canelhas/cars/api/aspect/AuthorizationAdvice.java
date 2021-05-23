@@ -15,8 +15,8 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static canelhas.cars.common.languaj.Adverbs.conditionally;
 import static canelhas.cars.common.languaj.Adjectives.hopefully;
+import static canelhas.cars.common.languaj.Adverbs.conditionally;
 import static canelhas.cars.common.languaj.Verbs.raise;
 import static canelhas.cars.common.utils.AspectHelper.findAnnotation;
 

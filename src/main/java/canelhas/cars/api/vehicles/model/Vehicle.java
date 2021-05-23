@@ -13,7 +13,7 @@ import static canelhas.cars.schema.DatabaseColumns.*;
 
 @Entity
 @Data
-@Builder( toBuilder = true)
+@Builder( toBuilder = true )
 @AllArgsConstructor
 @NoArgsConstructor
 @Table( name = DatabaseTables.VEHICLE )

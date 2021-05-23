@@ -12,8 +12,8 @@ public class FipeCar {
 
     private final FipeBrand brand;
     private final FipeModel model;
-    private final FipeYear year;
-    private final Price    price;
+    private final FipeYear  year;
+    private final Price     price;
 
     public static FipeCar of( FipeCarResponse response ) {
         final var brand = FipeBrand.of( response.getBrand() );

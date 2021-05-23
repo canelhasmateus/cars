@@ -1,6 +1,5 @@
 package canelhas.cars.common.utils;
 
-import canelhas.cars.api.other.domain.CacheKey;
 import canelhas.cars.common.exception.OperationException;
 import canelhas.cars.common.languaj.noun.Chain;
 import canelhas.cars.common.type.Responseable;
@@ -16,8 +15,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static canelhas.cars.api.util.ExceptionMessages.UNSUCCESSFUL_REQUEST;
-import static canelhas.cars.common.languaj.Adverbs.conditionally;
 import static canelhas.cars.common.languaj.Adjectives.partially;
+import static canelhas.cars.common.languaj.Adverbs.conditionally;
 import static canelhas.cars.common.languaj.Verbs.raise;
 
 @RequiredArgsConstructor
@@ -29,7 +28,7 @@ public class RequestHelper {
         return request( restTemplate, responseable );
     }
 
-    public static < T > ResponseEntity< T > request( RestTemplate template,  Responseable< T > responseable ) {
+    public static < T > ResponseEntity< T > request( RestTemplate template, Responseable< T > responseable ) {
 
         //region definitions
         final var                   toUTF  = partially( StandardCharsets.UTF_8, StringHelper::convert );

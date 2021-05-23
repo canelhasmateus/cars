@@ -1,7 +1,7 @@
 package canelhas.cars.api.util;
 
-import canelhas.cars.api.vehicles.type.ModelYear;
 import canelhas.cars.api.vehicles.model.VehicleModel;
+import canelhas.cars.api.vehicles.type.ModelYear;
 import canelhas.cars.common.languaj.noun.Chain;
 
 import java.util.*;

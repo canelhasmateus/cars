@@ -40,8 +40,8 @@ public class AdultBirthday extends ValueType< Date > {
     }
 
     private static Supplier< DomainException > immortal( Integer age ) {
-        return lazily( DomainException::new ,
-                       format( ARE_YOU_IMMORTAL , age ));
+        return lazily( DomainException::new,
+                       format( ARE_YOU_IMMORTAL, age ) );
     }
 
     private static Supplier< DomainException > tooBaby( Integer age ) {
