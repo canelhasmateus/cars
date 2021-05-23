@@ -12,6 +12,7 @@ import java.util.function.UnaryOperator;
 
 import static canelhas.cars.api.util.ExceptionMessages.*;
 import static canelhas.cars.common.languaj.Adjectives.lazily;
+import static canelhas.cars.common.languaj.Verbs.raise;
 import static canelhas.cars.common.utils.TypingHelper.optionalOf;
 import static java.lang.String.format;
 
@@ -59,9 +60,8 @@ public class CPF extends ValueType< String > {
         var  sm   = 0;
         var  peso = 10;
 
-        if ( input.chars().distinct().count() == 1 ) {
-            throw CPF.invalidValue( input ).get();
-        }
+        raise( CPF.invalidValue( input ) )
+                .when( input.chars().distinct().count() == 1 );
 
         for ( i = 0; i < 9; i++ ) {
             num  = ( input.charAt( i ) - 48 );

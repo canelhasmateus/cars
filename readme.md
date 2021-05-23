@@ -36,5 +36,5 @@
 8. Algumas partes estão menos legíveis devido as imposições, mas ficou MUITO melhor do que pensei inicialmente.
 9. Batendo o olho, não senti valor no feign, por isso não usei. Adoraria ser convencido do contrário.
 10. Não consegui pushar as Docker Images pra um repositório público. Se alguém souber o porque, me diga.
-11. Overkill total, eu sei. Poderiam re-avaliar minhas capacidades técnicas?
+11. Overkill total, eu sei. Poderiam fazer uma reavaliação técnica?
     
