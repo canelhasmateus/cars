@@ -29,14 +29,12 @@ public class VehicleController {
     public VehicleDto create( @RequestBody ModelDto request ) {
         //region definitions
         final var currentUserId = SessionService.getCurrentSession().getId();
-        final var createEntity = Chain.of( VehicleDto::asEntity )
-                                      .partialize( currentUserId );
         //endregion
 
-        return Chain.of( createEntity )
+        return Chain.of( VehicleDto::asEntity )
                     .andThen( vehicleService::create )
                     .andThen( VehicleDto::of )
-                    .apply( request );
+                    .apply( currentUserId, request );
 
     }
 

@@ -2,7 +2,6 @@ package canelhas.cars.common.utils;
 
 import canelhas.cars.common.exception.ConflictException;
 import canelhas.cars.common.exception.NotFoundException;
-import canelhas.cars.common.languaj.noun.Chain;
 import canelhas.cars.common.type.Nameable;
 
 import java.util.ArrayList;
@@ -17,8 +16,7 @@ import static java.lang.String.format;
 
 public class SearchHelper {
     public static < T extends Nameable > T findBest( String inputSearch, List< T > candidates ) {
-        final var findBestIndex = Chain.of( SearchHelper::bestIndex )
-                                       .partialize( inputSearch );
+        final var findBestIndex = partially( SearchHelper::bestIndex, inputSearch );
 
         final var bestModelIndex = collectively( T::getName )
                                            .andThen( findBestIndex )

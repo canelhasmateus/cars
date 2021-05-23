@@ -24,12 +24,11 @@ public class RequestHelper {
     public static < T > ResponseEntity< T > request( RestTemplate template, Responseable< T > responseable ) {
 
         //region definitions
-        final var                   toUTF  = partially( StandardCharsets.UTF_8, StringHelper::convert );
-        final Function< String, T > toType = partially( JsonHelper::map, responseable.getResponseType() );
+        final var                   toUTF          = partially( StandardCharsets.UTF_8, StringHelper::convert );
+        final Function< String, T > toResponseType = partially( JsonHelper::map, responseable.getResponseType() );
 
         final var url    = responseable.getUrl();
         final var method = responseable.getMethod();
-
         final var body = responseable.getBody()
                                      .map( Object::toString )
                                      .orElse( null );
@@ -40,7 +39,7 @@ public class RequestHelper {
 
         final var typedBody = Optional.ofNullable( response.getBody() )
                                       .map( toUTF )
-                                      .map( toType )
+                                      .map( toResponseType )
                                       .orElse( null );
 
         return new ResponseEntity<>( typedBody, response.getHeaders(), response.getStatusCode() );
