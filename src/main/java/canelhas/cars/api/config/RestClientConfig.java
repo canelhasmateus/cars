@@ -11,7 +11,6 @@ import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
-import java.util.Collections;
 
 @Configuration
 public class RestClientConfig {
@@ -30,7 +29,6 @@ public class RestClientConfig {
                 //refused bequest. whatever. Shamelessly copied from the internet
             }
         } ).setConnectTimeout( Duration.ofSeconds( 3 ) ).setReadTimeout( Duration.ofSeconds( 10 ) ).build();
-
 
 
         var requestFactory = new SimpleClientHttpRequestFactory();

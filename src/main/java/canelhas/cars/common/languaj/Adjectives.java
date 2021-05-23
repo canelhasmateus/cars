@@ -2,7 +2,6 @@ package canelhas.cars.common.languaj;
 
 import canelhas.cars.common.languaj.noun.Conditional;
 import canelhas.cars.common.languaj.noun.Functional;
-import canelhas.cars.common.languaj.noun.FunctionalPredicate;
 import canelhas.cars.common.languaj.noun.FunctionalSupplier;
 
 import java.util.ArrayList;
@@ -11,7 +10,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static canelhas.cars.common.languaj.Adverbs.logically;
@@ -71,7 +69,7 @@ public class Adjectives {
 
     }
 
-    public static < K > Functional< Collection< K >, Collection< K > > narrowingly( Function< K , Boolean > chooser ) {
+    public static < K > Functional< Collection< K >, Collection< K > > narrowingly( Function< K, Boolean > chooser ) {
         return ( Collection< K > collection ) -> collection.stream()
                                                            .filter( logically( chooser ) )
                                                            .collect( Collectors.toList() );

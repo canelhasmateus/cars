@@ -1,3 +1,8 @@
+
+
+
+
+/swagger-ui/index.html
 add sonar url
 add docs url
 add api url

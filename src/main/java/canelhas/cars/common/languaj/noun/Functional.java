@@ -5,5 +5,4 @@ import java.util.function.Function;
 public interface Functional< K, V > extends Function< K, V > {
 
 
-
 }

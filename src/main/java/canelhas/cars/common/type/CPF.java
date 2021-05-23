@@ -64,8 +64,8 @@ public class CPF extends ValueType< String > {
         }
 
         for ( i = 0; i < 9; i++ ) {
-            num = ( input.charAt( i ) - 48 );
-            sm = sm + ( num * peso );
+            num  = ( input.charAt( i ) - 48 );
+            sm   = sm + ( num * peso );
             peso = peso - 1;
         }
 
@@ -73,11 +73,11 @@ public class CPF extends ValueType< String > {
         if ( ( r == 10 ) || ( r == 11 ) ) { dig10 = '0'; }
         else { dig10 = ( char ) ( r + 48 ); }
 
-        sm = 0;
+        sm   = 0;
         peso = 11;
         for ( i = 0; i < 10; i++ ) {
-            num = input.charAt( i ) - 48;
-            sm = sm + ( num * peso );
+            num  = input.charAt( i ) - 48;
+            sm   = sm + ( num * peso );
             peso = peso - 1;
         }
 
