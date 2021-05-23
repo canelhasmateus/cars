@@ -107,13 +107,14 @@ public class VehicleService {
     private Vehicle manage( Vehicle vehicle ) {
 
         final var owner = findOwner( vehicle );
-        vehicle.setOwner( owner );
+        final var model = hopefully( this::findModel )
+                                  .apply( vehicle )
+                                  .orElse( vehicle.getModel() );
 
-        hopefully( this::findModel )
-                .apply( vehicle )
-                .ifPresent( vehicle::setModel );
-
-        return vehicle;
+        return vehicle.toBuilder()
+                      .owner( owner )
+                      .model( model )
+                      .build();
 
     }
 

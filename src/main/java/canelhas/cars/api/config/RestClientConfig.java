@@ -32,7 +32,6 @@ public class RestClientConfig {
         } ).setConnectTimeout( Duration.ofSeconds( 3 ) ).setReadTimeout( Duration.ofSeconds( 10 ) ).build();
 
 
-        restTemplate.setInterceptors( Collections.emptyList() );
 
         var requestFactory = new SimpleClientHttpRequestFactory();
         restTemplate.setRequestFactory( new BufferingClientHttpRequestFactory( requestFactory ) );

@@ -2,6 +2,7 @@ package canelhas.cars.common.languaj;
 
 import canelhas.cars.common.languaj.noun.Conditional;
 import canelhas.cars.common.languaj.noun.Functional;
+import lombok.SneakyThrows;
 
 import java.util.Optional;
 import java.util.function.Supplier;

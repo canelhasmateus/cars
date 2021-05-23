@@ -21,12 +21,6 @@ import static canelhas.cars.common.languaj.Verbs.raise;
 @RequiredArgsConstructor
 public class RequestHelper {
 
-    private final RestTemplate restTemplate;
-
-    public < T > ResponseEntity< T > doRequest( Responseable< T > responseable ) {
-        return request( restTemplate, responseable );
-    }
-
     public static < T > ResponseEntity< T > request( RestTemplate template, Responseable< T > responseable ) {
 
         //region definitions
@@ -56,7 +50,8 @@ public class RequestHelper {
         return ( K k ) -> {
 
             final var response = request.apply( k );
-            //region defnitions
+
+            //region definitions
             final var firstResponseCodeChar = Chain.of( String::valueOf )
                                                    .andThen( s -> s.charAt( 0 ) )
                                                    .apply( response.getStatusCodeValue() );
@@ -72,6 +67,14 @@ public class RequestHelper {
     //region exceptions
     public static Supplier< OperationException > requestFailed( ) {
         return ( ) -> new OperationException( UNSUCCESSFUL_REQUEST, HttpStatus.BAD_GATEWAY );
+    }
+    //endregion
+
+    //region help
+    private final RestTemplate restTemplate;
+
+    public < T > ResponseEntity< T > request( Responseable< T > responseable ) {
+        return request( restTemplate, responseable );
     }
     //endregion
 

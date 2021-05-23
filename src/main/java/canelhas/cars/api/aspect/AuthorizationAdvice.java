@@ -37,7 +37,7 @@ public class AuthorizationAdvice {
         //endregion
 
         //region implementation
-        // TODO: 17/05/2021  hierarchical access;
+        // Should implement hierarchical access here
         final var requiredPermissions = hopefully( findRequiredRoles )
                                                 .apply( joinPoint )
                                                 .orElseGet( Collections::emptySet );
@@ -50,7 +50,8 @@ public class AuthorizationAdvice {
                                                             .collect( Collectors.toSet() );
         //endregion
 
-        raise( CarsClaims.accessDenied() ).when( sufficientPermissions.isEmpty() );
+        raise( CarsClaims.accessDenied() )
+                .when( sufficientPermissions.isEmpty() );
 
 
     }

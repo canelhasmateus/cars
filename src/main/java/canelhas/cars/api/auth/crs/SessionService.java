@@ -1,15 +1,12 @@
 package canelhas.cars.api.auth.crs;
 
-import canelhas.cars.api.auth.domain.Authorization;
 import canelhas.cars.api.auth.domain.CarsClaims;
 import canelhas.cars.api.auth.domain.CarsCredentials;
 import canelhas.cars.api.auth.domain.CarsSession;
 import canelhas.cars.api.user.crs.UserService;
 import canelhas.cars.api.user.model.User;
-import canelhas.cars.common.languaj.Adjectives;
 import canelhas.cars.common.languaj.noun.Chain;
 import canelhas.cars.common.utils.Regexes;
-import canelhas.cars.common.utils.StringHelper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwt;
@@ -21,12 +18,13 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.function.Supplier;
 
+import static canelhas.cars.api.auth.domain.Authorization.Roles;
 import static canelhas.cars.common.languaj.Adjectives.*;
+import static canelhas.cars.common.utils.StringHelper.contains;
 import static canelhas.cars.common.utils.StringHelper.findWith;
 import static io.jsonwebtoken.SignatureAlgorithm.HS512;
 
@@ -40,9 +38,10 @@ public class SessionService {
     private static CarsClaims decode( String input ) {
 
         //region definitions
-        final Function< String, Jws< Claims > > createJws = token -> Jwts.parser()
-                                                                         .setSigningKey( SecurityHolder.getJWTKey() )
-                                                                         .parseClaimsJws( token );
+        final Function< String, Jws< Claims > > createJws =
+                token -> Jwts.parser()
+                             .setSigningKey( SecurityHolder.getJWTKey() )
+                             .parseClaimsJws( token );
         //endregion
 
         final var claims = Chain.of( findWith( Regexes.BEARER ) )
@@ -59,22 +58,21 @@ public class SessionService {
     public static String encode( User user ) {
 
         //region definitions
-        final var id            = user.getId();
-        final var name          = user.getName();
-        final var email         = user.getEmail();
-        final var containsAdmin = partially( StringHelper::contained, " @admin" );
-
-        Predicate< String > isAdmin = s -> Optional.ofNullable( s )
-                                                   .map( containsAdmin )
-                                                   .orElse( false );
-
-        List< Authorization.Roles > roles        = new ArrayList<>();
-        final var                   addAdminRole = lazily( roles::add, Authorization.Roles.ADMIN );
+        final var id    = user.getId();
+        final var name  = user.getName();
+        final var email = user.getEmail();
         //endregion
 
-        roles.add( Authorization.Roles.USER );
-        Adjectives.conditionally( addAdminRole )
-                  .when( isAdmin.test( email ) );
+        //region implementation
+        final var roles = new ArrayList< Roles >();
+        roles.add( Roles.USER );
+
+        final var addAdmin = lazily( roles::add, Roles.ADMIN );
+        conditionally( addAdmin )
+                .when( contains( email, "@admin" ) )
+                .ifPresent( Supplier::get );
+        //endregion
+
 
         var claims = CarsClaims.builder()
                                .version( SecurityHolder.getVersion() )
@@ -94,12 +92,12 @@ public class SessionService {
     public static Optional< CarsClaims > getCurrentClaims( ) {
 
         //region definitions
-        Function< HttpServletRequest, String > getBearer = request -> request.getHeader( AUTHORIZATION );
+        final var toServletRequest = Chain.of( ServletRequestAttributes.class::cast )
+                                          .andThen( ServletRequestAttributes::getRequest )
+                                          .andThen( HttpServletRequest.class::cast );
 
-        final var parseRequest = Chain.of( ServletRequestAttributes.class::cast )
-                                      .andThen( ServletRequestAttributes::getRequest )
-                                      .andThen( HttpServletRequest.class::cast )
-                                      .andThen( getBearer )
+        final var parseRequest = Chain.of( toServletRequest )
+                                      .andThen( request -> request.getHeader( AUTHORIZATION ) )
                                       .andThen( SessionService::decode );
         //endregion
 
