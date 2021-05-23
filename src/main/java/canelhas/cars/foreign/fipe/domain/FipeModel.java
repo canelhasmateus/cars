@@ -1,5 +1,6 @@
 package canelhas.cars.foreign.fipe.domain;
 
+import canelhas.cars.common.type.Nameable;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
@@ -7,8 +8,7 @@ import lombok.Value;
 
 @Builder( toBuilder = true )
 @Value
-public class FipeModel {
-
+public class FipeModel implements Nameable {
     private final String name;
     private final String code;
 
@@ -30,4 +30,6 @@ public class FipeModel {
                         .build();
     }
     //endregion
+
+
 }

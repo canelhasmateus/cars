@@ -20,10 +20,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import static canelhas.cars.api.auth.domain.Authorization.Roles;
-import static canelhas.cars.common.languaj.Adjectives.*;
+import static canelhas.cars.common.languaj.Adjectives.conditionally;
+import static canelhas.cars.common.languaj.Adjectives.hopefully;
 import static canelhas.cars.common.utils.StringHelper.contains;
 import static canelhas.cars.common.utils.StringHelper.findWith;
 import static io.jsonwebtoken.SignatureAlgorithm.HS512;
@@ -58,33 +58,33 @@ public class SessionService {
     public static String encode( User user ) {
 
         //region definitions
-        final var id    = user.getId();
-        final var name  = user.getName();
-        final var email = user.getEmail();
+        final var id      = user.getId();
+        final var name    = user.getName();
+        final var email   = user.getEmail();
+        final var version = SecurityHolder.getVersion();
+        final var key     = SecurityHolder.getJWTKey();
         //endregion
 
-        //region implementation
         final var roles = new ArrayList< Roles >();
         roles.add( Roles.USER );
 
-        final var addAdmin = lazily( roles::add, Roles.ADMIN );
-        conditionally( addAdmin )
-                .when( contains( email, "@admin" ) )
-                .ifPresent( Supplier::get );
-        //endregion
 
+        conditionally( Roles.ADMIN )
+                .when( contains( email, "@admin" ) )
+                .map( roles::add );
 
         var claims = CarsClaims.builder()
-                               .version( SecurityHolder.getVersion() )
+                               .version( version )
                                .id( id )
                                .name( name )
                                .email( email )
                                .roles( roles )
                                .build();
 
+
         return Jwts.builder()
                    .setClaims( claims )
-                   .signWith( HS512, SecurityHolder.getJWTKey() )
+                   .signWith( HS512, key )
                    .compact();
 
     }
@@ -112,19 +112,17 @@ public class SessionService {
         final var cpf   = request.getCpf();
         final var email = request.getEmail();
         final var user  = userService.find( cpf, email );
-        final var token = encode( user );
         //endregion
 
-        return CarsSession.builder()
-                          .token( token )
-                          .build();
+        final var token = encode( user );
+        return CarsSession.of( token );
 
     }
 
     //region help
     public static CarsClaims getCurrentSession( ) {
-        return getCurrentClaims()
-                       .orElseThrow( CarsClaims.notFound() );
+        return SessionService.getCurrentClaims()
+                             .orElseThrow( CarsClaims.notFound() );
     }
     //endregion
 }

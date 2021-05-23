@@ -1,4 +1,4 @@
-package canelhas.cars.api.queue.crs;
+package canelhas.cars.api.queue;
 
 import canelhas.cars.api.user.model.User;
 import canelhas.cars.api.vehicles.model.Vehicle;

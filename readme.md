@@ -16,7 +16,7 @@
 2. Pipelines de teste, build e deploy via GitHub Actions
 3. Api via CloudFront + Beanstalk
 4. QA via SonarCloud
-5. Debug remoto liberado (Carsapi-env.eba-hmmauepx.us-east-1.elasticbeanstalk.com:7777 - Se alguém souber porque não consigo conectar passando pelo cloudfront, me conta.)
+5. Debug remoto liberado
 6. Controle de Acesso ( Is this even a feature? )
 
 # Urls

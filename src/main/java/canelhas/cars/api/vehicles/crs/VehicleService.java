@@ -1,6 +1,6 @@
 package canelhas.cars.api.vehicles.crs;
 
-import canelhas.cars.api.queue.domain.Published;
+import canelhas.cars.api.queue.Published;
 import canelhas.cars.api.user.crs.UserService;
 import canelhas.cars.api.user.model.User;
 import canelhas.cars.api.vehicles.model.Vehicle;
@@ -42,8 +42,12 @@ public class VehicleService {
     @Published
     public Insertion< Vehicle > create( Vehicle vehicle ) {
 
-        return Chain.of( this::fipeHydrate )
-                    .andThen( this::manage )
+        //region definitions
+        final var bureaucracy = Chain.of( this::fipeHydrate )
+                                     .andThen( this::manage );
+        //endregion
+
+        return Chain.of( bureaucracy )
                     .andThen( vehicleRepository::save )
                     .andThen( Insertion::of )
                     .apply( vehicle );
@@ -78,15 +82,11 @@ public class VehicleService {
     public static VehicleModel fipeSearch( RestTemplate template, VehicleModel model ) {
 
         //region definitions
-        final var inputBrand = model.typedBrand();
-        final var inputName  = model.typedName();
-        final var inputYear  = model.typedYear();
-
-        final var brandRequest = FipeBrandRequest.of( inputBrand );
+        final var brandRequest = FipeBrandRequest.of( model.typedBrand() );
         final var foundBrand   = FipeClient.find( template, brandRequest );
 
 
-        final var modelRequest = FipeModelRequest.of( foundBrand, inputName, inputYear );
+        final var modelRequest = FipeModelRequest.of( foundBrand, model.typedName(), model.typedYear() );
         final var foundModel   = FipeClient.find( template, modelRequest );
 
 

@@ -1,6 +1,6 @@
 package canelhas.cars.api.user.crs;
 
-import canelhas.cars.api.queue.domain.Published;
+import canelhas.cars.api.queue.Published;
 import canelhas.cars.api.user.model.User;
 import canelhas.cars.common.languaj.noun.Chain;
 import canelhas.cars.common.type.CPF;
@@ -33,14 +33,16 @@ public class UserService {
 
     private User searchDuplicate( User user ) {
 
-        final var cpf   = user.typedCpf();
-        final var email = user.typedEmail();
+        //region definitions
+        final var thisCpf   = user.typedCpf();
+        final var thisEmail = user.typedEmail();
+        //endregion
 
-        raise( User.alreadyExistsWith( cpf ) )
-                .when( search( cpf ).isPresent() );
+        raise( User.alreadyExistsWith( thisCpf ) )
+                .when( search( thisCpf ).isPresent() );
 
-        raise( User.alreadyExistsWith( email ) )
-                .when( search( email ).isPresent() );
+        raise( User.alreadyExistsWith( thisEmail ) )
+                .when( search( thisEmail ).isPresent() );
 
         return user;
 
@@ -50,7 +52,8 @@ public class UserService {
     //region read
     public User find( CPF cpf, EmailAddress email ) {
 
-        return search( cpf, email ).orElseThrow( User.notFound( cpf, email ) );
+        return search( cpf, email )
+                       .orElseThrow( User.notFound( cpf, email ) );
 
     }
 

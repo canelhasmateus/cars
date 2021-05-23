@@ -2,6 +2,8 @@ package canelhas.cars.common.utils;
 
 import canelhas.cars.common.exception.ConflictException;
 import canelhas.cars.common.exception.NotFoundException;
+import canelhas.cars.common.languaj.noun.Chain;
+import canelhas.cars.common.type.Nameable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,12 +16,22 @@ import static canelhas.cars.common.languaj.Verbs.raise;
 import static java.lang.String.format;
 
 public class SearchHelper {
+    public static < T extends Nameable > T findBest( String inputSearch, List< T > candidates ) {
+        final var findBestIndex = Chain.of( SearchHelper::bestIndex )
+                                       .partialize( inputSearch );
 
-    public static int bestIndex( String value, List< String > searchList ) {
+        final var bestModelIndex = collectively( T::getName )
+                                           .andThen( findBestIndex )
+                                           .apply( candidates );
+
+        return candidates.get( bestModelIndex );
+    }
+
+    private static int bestIndex( String value, List< String > searchList ) {
         return searchList.indexOf( bestMatch( value, searchList ) );
     }
 
-    public static String bestMatch( String search, List< String > names ) {
+    private static String bestMatch( String search, List< String > names ) {
 
         //region definitions
         final var containsSearch = partially( StringHelper::contained, search );
@@ -34,6 +46,7 @@ public class SearchHelper {
 
         return new ArrayList<>( exactMatches ).get( 0 );
     }
+
 
     //region exceptions
     public static Supplier< NotFoundException > notFound( String search ) {
@@ -59,7 +72,7 @@ public class SearchHelper {
 
     }
     //endregion
-    //region help
+
 
     //region monorepo
 

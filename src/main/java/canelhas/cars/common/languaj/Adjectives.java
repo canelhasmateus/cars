@@ -52,6 +52,10 @@ public class Adjectives {
     public static < K, V > FunctionalSupplier< V > lazily( Function< K, V > action, K element ) {
         return ( Void v ) -> action.apply( element );
     }
+
+    public static < V > FunctionalSupplier< V > lazily( V element ) {
+        return ( Void v ) -> element;
+    }
     //endregion
 
     //region collections

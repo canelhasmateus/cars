@@ -73,7 +73,7 @@ public class RequestHelper {
     //region help
     private final RestTemplate restTemplate;
 
-    public < T > ResponseEntity< T > request( Responseable< T > responseable ) {
+    public < T > ResponseEntity< T > doRequest( Responseable< T > responseable ) {
         return request( restTemplate, responseable );
     }
     //endregion

@@ -19,6 +19,7 @@ import java.util.Optional;
 @Value
 public class UserDto {
 
+    //region fields
     @JsonProperty( ID )
     private final TypedId< User > id;
 
@@ -33,7 +34,9 @@ public class UserDto {
 
     @JsonProperty( BIRTHDAY )
     private final AdultBirthday birthday;
+    //endregion
 
+    //region constructors
     @JsonCreator( mode = JsonCreator.Mode.PROPERTIES )
     public static UserDto of( @JsonProperty( NAME ) String name,
                               @JsonProperty( EMAIL ) String email,
@@ -58,7 +61,23 @@ public class UserDto {
                       .build();
     }
 
+    public static UserDto of( User entity ) {
 
+        return UserDto.builder()
+                      .id( entity.typedId() )
+                      .name( entity.typedName() )
+                      .birthday( entity.typedBirthday() )
+                      .email( entity.typedEmail() )
+                      .cpf( entity.typedCpf() )
+                      .build();
+    }
+
+    public static UserDto of( Insertion< User > insertion ) {
+        return UserDto.of( insertion.getEntity() );
+    }
+    //endregion
+
+    //region mappings
     public static User asEntity( UserDto request ) {
 
         //region definitions
@@ -81,23 +100,7 @@ public class UserDto {
 
 
     }
-
-
-    public static UserDto of( User entity ) {
-
-        return UserDto.builder()
-                      .id( entity.typedId() )
-                      .name( entity.typedName() )
-                      .birthday( entity.typedBirthday() )
-                      .email( entity.typedEmail() )
-                      .cpf( entity.typedCpf() )
-                      .build();
-    }
-
-    public static UserDto of( Insertion< User > insertion ) {
-        return UserDto.of( insertion.getEntity() );
-    }
-
+    //endregion
 
     //region keys
     public static final String NAME     = "name";

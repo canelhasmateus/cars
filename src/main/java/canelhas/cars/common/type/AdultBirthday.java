@@ -1,6 +1,7 @@
 package canelhas.cars.common.type;
 
 import canelhas.cars.common.exception.DomainException;
+import canelhas.cars.common.languaj.noun.FunctionalSupplier;
 import canelhas.cars.common.languaj.noun.ValueType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -8,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Date;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 import static canelhas.cars.api.util.ExceptionMessages.*;
 import static canelhas.cars.common.languaj.Adjectives.lazily;
@@ -25,34 +25,34 @@ public class AdultBirthday extends ValueType< Date > {
 
     public static AdultBirthday of( Date input ) {
 
-        Optional.ofNullable( input )
-                .orElseThrow( required() );
+        var value = Optional.ofNullable( input )
+                            .orElseThrow( required() );
 
-        final var age = findAge( new Date(), input );
+        final var age = findAge( new Date(), value );
 
         raise( benjaminButton( age ) ).when( age <= 0 );
         raise( tooBaby( age ) ).when( age <= 18 );
         raise( immortal( age ) ).when( age >= 100 );
 
-        return new AdultBirthday( input );
+        return new AdultBirthday( value );
     }
 
-    private static Supplier< DomainException > immortal( Integer age ) {
+    public static FunctionalSupplier< DomainException > immortal( Integer age ) {
         return lazily( DomainException::new,
                        format( ARE_YOU_IMMORTAL, age ) );
     }
 
-    private static Supplier< DomainException > tooBaby( Integer age ) {
+    public static FunctionalSupplier< DomainException > tooBaby( Integer age ) {
         return lazily( DomainException::new,
                        format( TOO_BABY, age ) );
     }
 
-    private static Supplier< DomainException > benjaminButton( Integer age ) {
+    public static FunctionalSupplier< DomainException > benjaminButton( Integer age ) {
         return lazily( DomainException::new,
                        format( ARE_YOU_BENJAMIN_BUTTON, age ) );
     }
 
-    public static Supplier< DomainException > required( ) {
+    public static FunctionalSupplier< DomainException > required( ) {
         return lazily( DomainException::new, BIRTHDAY_REQUIRED );
     }
 

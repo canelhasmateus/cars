@@ -1,7 +1,6 @@
 package canelhas.cars.api.aspect;
 
 import lombok.RequiredArgsConstructor;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -16,11 +15,11 @@ public class PublishingAdvice {
     private final ApplicationEventPublisher publisher;
 
 
-    @Pointcut( "@annotation( canelhas.cars.api.queue.domain.Published)" )
+    @Pointcut( "@annotation( canelhas.cars.api.queue.Published)" )
     public void published( ) {}
 
     @AfterReturning( value = "published()", returning = "value" )
-    public void publish( JoinPoint jp, Object value ) {
+    public void publish( Object value ) {
         publisher.publishEvent( value );
     }
 }

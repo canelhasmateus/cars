@@ -11,4 +11,9 @@ public class CarsSession {
     @JsonProperty( "token" )
     private final String token;
 
+    public static CarsSession of( String token ) {
+        return CarsSession.builder()
+                          .token( token )
+                          .build();
+    }
 }
