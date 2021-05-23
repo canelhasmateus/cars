@@ -4,7 +4,8 @@ import canelhas.cars.api.vehicles.type.ModelYear;
 import org.junit.jupiter.api.Test;
 
 import static java.util.Calendar.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RotationHelperTest {
 

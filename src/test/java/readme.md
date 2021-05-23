@@ -1,2 +1,1 @@
-basic basic testing
-i suck at tdd
+basic basic testing i suck at tdd

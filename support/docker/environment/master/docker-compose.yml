@@ -11,5 +11,6 @@ services:
       - ${API_ENV}
     ports:
       - ${API_EXTERNAL_PORT}:5000
+      - ${API_DEBUG_PORT}:7777
     command: sh -c "java -jar deployment.jar"
 

@@ -1,15 +1,15 @@
 package canelhas.cars.api.foreign.fipe;
 
 import canelhas.cars.api.vehicles.crs.VehicleService;
+import canelhas.cars.api.vehicles.model.VehicleModel;
 import canelhas.cars.api.vehicles.type.ModelName;
 import canelhas.cars.api.vehicles.type.ModelYear;
-import canelhas.cars.api.vehicles.model.VehicleModel;
 import canelhas.cars.common.exception.ConflictException;
 import canelhas.cars.common.exception.NotFoundException;
-import canelhas.cars.foreign.fipe.domain.FipeBrandRequest;
 import canelhas.cars.foreign.fipe.csr.FipeClient;
-import canelhas.cars.foreign.fipe.domain.FipeModelRequest;
 import canelhas.cars.foreign.fipe.domain.FipeBrand;
+import canelhas.cars.foreign.fipe.domain.FipeBrandRequest;
+import canelhas.cars.foreign.fipe.domain.FipeModelRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

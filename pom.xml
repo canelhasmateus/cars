@@ -10,7 +10,7 @@
     </parent>
     <groupId>canelhas</groupId>
     <artifactId>cars</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>cars</name>
     <description>desafio?</description>
     <properties>
