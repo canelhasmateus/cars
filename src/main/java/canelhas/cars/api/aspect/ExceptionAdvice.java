@@ -15,7 +15,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static canelhas.cars.common.languaj.Adjectives.hopefully;
-import static canelhas.cars.common.languaj.Adverbs.lazily;
+import static canelhas.cars.common.languaj.Adjectives.lazily;
 
 @ControllerAdvice
 public class ExceptionAdvice {

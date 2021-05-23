@@ -6,6 +6,7 @@ import canelhas.cars.api.auth.domain.CarsCredentials;
 import canelhas.cars.api.auth.domain.CarsSession;
 import canelhas.cars.api.user.crs.UserService;
 import canelhas.cars.api.user.model.User;
+import canelhas.cars.common.languaj.Adjectives;
 import canelhas.cars.common.languaj.noun.Chain;
 import canelhas.cars.common.utils.Regexes;
 import canelhas.cars.common.utils.StringHelper;
@@ -25,10 +26,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static canelhas.cars.common.languaj.Adjectives.hopefully;
-import static canelhas.cars.common.languaj.Adjectives.partially;
-import static canelhas.cars.common.languaj.Adverbs.conditionally;
-import static canelhas.cars.common.languaj.Adverbs.lazily;
+import static canelhas.cars.common.languaj.Adjectives.*;
 import static canelhas.cars.common.utils.StringHelper.findWith;
 import static io.jsonwebtoken.SignatureAlgorithm.HS512;
 
@@ -36,8 +34,8 @@ import static io.jsonwebtoken.SignatureAlgorithm.HS512;
 @RequiredArgsConstructor
 public class SessionService {
 
-    public static final String AUTHORIZATION = "authorization";
-    private final UserService userService;
+    public static final String      AUTHORIZATION = "authorization";
+    private final       UserService userService;
 
     private static CarsClaims decode( String input ) {
 
@@ -75,8 +73,8 @@ public class SessionService {
         //endregion
 
         roles.add( Authorization.Roles.USER );
-        conditionally( addAdminRole )
-                .on( isAdmin.test( email ) );
+        Adjectives.conditionally( addAdminRole )
+                  .when( isAdmin.test( email ) );
 
         var claims = CarsClaims.builder()
                                .version( SecurityHolder.getVersion() )
@@ -128,7 +126,7 @@ public class SessionService {
     //region help
     public static CarsClaims getCurrentSession( ) {
         return getCurrentClaims()
-                             .orElseThrow( CarsClaims.notFound() );
+                       .orElseThrow( CarsClaims.notFound() );
     }
     //endregion
 }

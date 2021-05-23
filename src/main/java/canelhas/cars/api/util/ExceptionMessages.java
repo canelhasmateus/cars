@@ -56,10 +56,10 @@ public class ExceptionMessages {
     //endregion
 
     //region user
-    public static final String EMAIL_IS_USED          = "Já existe um usuário usando o email %s.";
-    public static final String CPF_IS_USED            = "Pare aí! Eu já vi o cpf %s por aqui...";
-    public static final String USER_NOT_FOUND_WITH_ID = "Não foi encontrado usuário com o id %s";
-    public static final String MODEL_NOT_FOUND_WITH_ID = "Não foram encontrados registros de modelo para o id %s";
+    public static final String EMAIL_IS_USED                   = "Já existe um usuário usando o email %s.";
+    public static final String CPF_IS_USED                     = "Pare aí! Eu já vi o cpf %s por aqui...";
+    public static final String USER_NOT_FOUND_WITH_ID          = "Não foi encontrado usuário com o id %s";
+    public static final String MODEL_NOT_FOUND_WITH_ID         = "Não foram encontrados registros de modelo para o id %s";
     public static final String MODEL_NOT_FOUND_WITH_ATTRIBUTES = "Não foram encontrados registros de modelo para a marca %s , com o nome %s e do ano %s";
     //endregion
 

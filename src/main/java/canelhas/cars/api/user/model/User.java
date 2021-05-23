@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 
 import static canelhas.cars.api.util.ExceptionMessages.CPF_IS_USED;
 import static canelhas.cars.api.util.ExceptionMessages.EMAIL_IS_USED;
-import static canelhas.cars.common.languaj.Adverbs.lazily;
+import static canelhas.cars.common.languaj.Adjectives.lazily;
 import static canelhas.cars.schema.DatabaseColumns.*;
 import static java.lang.String.format;
 

@@ -1,5 +1,6 @@
 package canelhas.cars.common.type;
 
+import canelhas.cars.common.languaj.noun.ValueType;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

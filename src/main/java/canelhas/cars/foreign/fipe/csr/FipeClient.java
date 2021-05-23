@@ -39,10 +39,10 @@ public class FipeClient {
         //region definitions
         Function< FipeModelRequest, FipeModelResponse > doRequest = successfully( req -> request( template, req ) );
 
-        final var response  = doRequest.apply( requestEntity );
-        final var model     = requestEntity.getName().value();
+        final var response       = doRequest.apply( requestEntity );
+        final var model          = requestEntity.getName().value();
         final var possibleModels = response.getModels();
-        final var year      = requestEntity.getYear().value();
+        final var year           = requestEntity.getYear().value();
         final var possibleYears  = response.getYears();
         //endregion
 

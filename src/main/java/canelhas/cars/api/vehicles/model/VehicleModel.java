@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 
 import static canelhas.cars.api.util.ExceptionMessages.MODEL_NOT_FOUND_WITH_ATTRIBUTES;
 import static canelhas.cars.api.util.ExceptionMessages.MODEL_NOT_FOUND_WITH_ID;
-import static canelhas.cars.common.languaj.Adverbs.lazily;
+import static canelhas.cars.common.languaj.Adjectives.lazily;
 import static canelhas.cars.schema.DatabaseColumns.*;
 import static java.lang.String.format;
 

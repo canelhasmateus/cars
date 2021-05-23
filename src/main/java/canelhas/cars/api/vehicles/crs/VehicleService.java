@@ -9,6 +9,7 @@ import canelhas.cars.api.vehicles.type.ModelBrand;
 import canelhas.cars.api.vehicles.type.ModelName;
 import canelhas.cars.api.vehicles.type.ModelYear;
 import canelhas.cars.common.languaj.noun.Chain;
+import canelhas.cars.common.languaj.noun.FunctionalSupplier;
 import canelhas.cars.common.type.Insertion;
 import canelhas.cars.common.type.TypedId;
 import canelhas.cars.foreign.fipe.csr.FipeClient;
@@ -22,12 +23,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 
-import static canelhas.cars.common.languaj.Adjectives.concurrently;
-import static canelhas.cars.common.languaj.Adjectives.hopefully;
-import static canelhas.cars.common.languaj.Adverbs.conditionally;
-import static canelhas.cars.common.languaj.Adverbs.lazily;
+import static canelhas.cars.common.languaj.Adjectives.*;
 
 @Service
 @RequiredArgsConstructor
@@ -138,12 +135,14 @@ public class VehicleService {
 
     public VehicleModel find( VehicleModel model ) {
         //region definitions
-        var                      findUsingId       = lazily( this::find, model.typedId() );
-        Supplier< VehicleModel > orUsingAttributes = ( ) -> find( model.typedBrand(), model.typedName(), model.typedYear() );
+        var                                findUsingId   = lazily( this::find, model.typedId() );
+        FunctionalSupplier< VehicleModel > useAttributes = ( Void v ) -> find( model.typedBrand(), model.typedName(), model.typedYear() );
         //endregion
 
-        return conditionally( findUsingId, orUsingAttributes )
-                       .on( model.getId() != null );
+        return conditionally( findUsingId )
+                       .when( model.getId() != null )
+                       .orElse( useAttributes )
+                       .get();
 
     }
 

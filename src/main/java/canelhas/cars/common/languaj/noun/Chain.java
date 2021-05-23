@@ -11,7 +11,7 @@ public class Chain {
     /**
      * enables use of .andThen method chaining over functions ::references, while maintaining syntatical style.
      **/
-    public static < K, V > Function< K, V > of( Function< K, V > reference ) {
-        return reference;
+    public static < K, V > Functional< K, V > of( Function< K, V > reference ) {
+        return reference::apply;
     }
 }

@@ -1,4 +1,4 @@
-package canelhas.cars.common.type;
+package canelhas.cars.common.languaj.noun;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 

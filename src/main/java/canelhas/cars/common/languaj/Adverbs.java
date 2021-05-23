@@ -1,64 +1,42 @@
 package canelhas.cars.common.languaj;
 
-import canelhas.cars.common.languaj.noun.Conditional;
+import canelhas.cars.common.languaj.noun.FunctionalConsumer;
+import canelhas.cars.common.languaj.noun.FunctionalOperator;
+import canelhas.cars.common.languaj.noun.FunctionalPredicate;
+import canelhas.cars.common.languaj.noun.FunctionalSupplier;
 
 import java.util.function.*;
 
 public class Adverbs {
 
-    public static < K, V > Conditional< Boolean, Function< K, V > > conditionally( Function< K, V > action ) {
-        return isTrue -> {
-            if ( Boolean.TRUE.equals( isTrue ) ) {
-                return action;
-            }
-            return k -> null;
-        };
+    //region functionally
+    public static < K > FunctionalPredicate< K > functionally( Predicate< K > predicate ) {
+        return predicate::test;
     }
 
-    public static < K > Conditional< Boolean, K > conditionally( Supplier< K > trueAction, Supplier< K > falseAction ) {
-        return isTrue -> {
-            if ( Boolean.TRUE.equals( isTrue ) ) {
-                return trueAction.get();
-            }
-            return falseAction.get();
-        };
-    }
-
-    public static < K > Conditional< Boolean, UnaryOperator< K > > conditionally( Consumer< K > action ) {
-        return isTrue -> {
-            if ( Boolean.TRUE.equals( isTrue ) ) {
-                return ( K k ) -> {
-                    action.accept( k );
-                    return k;
-                };
-            }
-            return k -> k;
-        };
-    }
-
-    public static < K > Conditional< Boolean, K > conditionally( Supplier< K > sideEffect ) {
-        return conditionally( sideEffect, ( ) -> null );
-    }
-
-    public static < T > Function< T, Void > functionally( Consumer< T > consumer ) {
-        return ( T t ) -> {
-            consumer.accept( t );
+    public static < K > FunctionalConsumer< K > functionally( Consumer< K > consumer ) {
+        return ( K k ) -> {
+            consumer.accept( k );
             return null;
         };
     }
 
-    public static < K, V > Supplier< V > lazily( Function< K, V > action, K element ) {
-        return ( ) -> action.apply( element );
+    public static < K > FunctionalOperator< K > functionally( UnaryOperator< K > operator ) {
+        return operator::apply;
     }
 
-    public static < K > Predicate< K > logically( Function< K, Boolean > predicate ) {
+    public static < V > FunctionalSupplier< V > functionally( Supplier< V > supplier ) {
+        return ( Void v ) -> supplier.get();
+    }
+    //endregion
+
+    public static < K > FunctionalPredicate< K > logically( Function< K, Boolean > predicate ) {
         return predicate::apply;
     }
 
-    public static < K > Predicate< K > logicallyNot( Function< K, Boolean > predicate ) {
-        return Predicate.not( logically( predicate ) );
+    public static < K > FunctionalPredicate< K > logicallyNot( Function< K, Boolean > predicate ) {
+        return Predicate.not( logically( predicate ) )::test;
     }
-
 
     //region monorepo
     private Adverbs( ) {}

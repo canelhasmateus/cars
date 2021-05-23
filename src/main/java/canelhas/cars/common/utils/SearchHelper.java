@@ -2,6 +2,7 @@ package canelhas.cars.common.utils;
 
 import canelhas.cars.common.exception.ConflictException;
 import canelhas.cars.common.exception.NotFoundException;
+import canelhas.cars.common.languaj.Verbs;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,11 +10,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import static canelhas.cars.api.util.ExceptionMessages.*;
-import static canelhas.cars.common.languaj.Adjectives.narrowingly;
-import static canelhas.cars.common.languaj.Adjectives.partially;
-import static canelhas.cars.common.languaj.Adverbs.conditionally;
-import static canelhas.cars.common.languaj.Adverbs.lazily;
-import static canelhas.cars.common.languaj.Verbs.raise;
+import static canelhas.cars.common.languaj.Adjectives.*;
 import static java.lang.String.format;
 
 public class SearchHelper {
@@ -33,14 +30,17 @@ public class SearchHelper {
         final var exactMatches = narrowingly( equalsSearch ).apply( nearMatches );
 
         //region early returns
-        conditionally( raise( notFound( search ) ) )
-                .on( nearMatches.isEmpty() );
+        conditionally( notFound( search ) )
+                .when( nearMatches.isEmpty() )
+                .map( Verbs::raise );
 
-        conditionally( raise( ambiguous( search, nearMatches ) ) )
-                .on( exactMatches.isEmpty() );
+        conditionally( ambiguous( search, nearMatches ) )
+                .when( exactMatches.isEmpty() )
+                .map( Verbs::raise );
 
-        conditionally( raise( ambiguous( search, exactMatches ) ) )
-                .on( exactMatches.size() > 1 );
+        conditionally( ambiguous( search, exactMatches ) )
+                .when( exactMatches.size() > 1 )
+                .map( Verbs::raise );
         //endregion
 
         return new ArrayList<>( exactMatches ).get( 0 );
@@ -53,6 +53,7 @@ public class SearchHelper {
 
     public static Supplier< ConflictException > ambiguous( String search, Collection< String > candidates ) {
 
+        //region definitions
         final var possibilities = String.join( ", ", candidates );
 
         final var many = lazily( ConflictException::new,
@@ -60,9 +61,12 @@ public class SearchHelper {
 
         final var single = lazily( ConflictException::new,
                                    format( INEXACT_SEARCH, search, possibilities ) );
+        //endregion
 
-        return ( ) -> conditionally( single, many )
-                              .on( candidates.size() == 1 );
+        return conditionally( single )
+                       .when( candidates.size() == 1 )
+                       .orElse( many );
+
     }
 
     //region help

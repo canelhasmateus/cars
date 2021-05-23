@@ -31,7 +31,6 @@ public class Validation {
         }
     }
 
-
     public void verify( ) {
 
         if ( errors != null && !errors.isEmpty() ) {

@@ -1,11 +1,10 @@
 package canelhas.cars.common.languaj.noun;
 
-import java.util.function.Function;
+import java.util.Optional;
 
-@FunctionalInterface
-public interface Conditional< K, V > extends Function< K, V > {
-    default V on( K t ) {
-        return apply( t );
+public interface Conditional< K > extends Functional< Boolean, Optional< K > > {
+
+    default Optional< K > when( Boolean b ) {
+        return apply( b );
     }
-
 }

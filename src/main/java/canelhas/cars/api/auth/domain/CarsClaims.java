@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 import static canelhas.cars.api.util.ExceptionMessages.NOT_ENOUGH_PRIVILEGES;
 import static canelhas.cars.api.util.ExceptionMessages.NO_CURRENT_SESSION;
-import static canelhas.cars.common.languaj.Adverbs.lazily;
+import static canelhas.cars.common.languaj.Adjectives.lazily;
 import static canelhas.cars.common.utils.TypingHelper.optionalOf;
 
 public class CarsClaims extends HashMap< String, Object > {

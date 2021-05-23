@@ -20,13 +20,13 @@ import static canelhas.cars.common.languaj.Adjectives.partially;
 
 @RestController
 @RequiredArgsConstructor
+@Authorization( USER )
 public class VehicleController {
 
     private final VehicleService vehicleService;
 
     @PostMapping( "api/users/current/vehicles" )
     @ResponseStatus( HttpStatus.CREATED )
-    @Authorization( USER )
     public VehicleDto create( @RequestBody ModelDto request ) {
         //region definitions
         final var currentUserId = SessionService.getCurrentSession().getId();
@@ -41,7 +41,6 @@ public class VehicleController {
     }
 
     @GetMapping( "api/users/current/vehicles" )
-    @Authorization( USER )
     public List< ModelDto > list( ) {
         //region definitions
         Function< Vehicle, ModelDto > createDto = Chain.of( Vehicle::getModel )

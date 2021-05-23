@@ -1,6 +1,8 @@
 package canelhas.cars.common.type;
 
 import canelhas.cars.common.exception.DomainException;
+import canelhas.cars.common.languaj.Verbs;
+import canelhas.cars.common.languaj.noun.ValueType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.RequiredArgsConstructor;
@@ -10,9 +12,8 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import static canelhas.cars.api.util.ExceptionMessages.*;
-import static canelhas.cars.common.languaj.Adverbs.conditionally;
-import static canelhas.cars.common.languaj.Adverbs.lazily;
-import static canelhas.cars.common.languaj.Verbs.raise;
+import static canelhas.cars.common.languaj.Adjectives.conditionally;
+import static canelhas.cars.common.languaj.Adjectives.lazily;
 import static canelhas.cars.common.utils.DateHelper.findAge;
 import static java.lang.String.format;
 
@@ -29,12 +30,14 @@ public class AdultBirthday extends ValueType< Date > {
                 .orElseThrow( required() );
 
         final var age = findAge( new Date(), input );
-        conditionally( raise( benjaminButton( age ) ) )
-                .on( age <= 0 );
-        conditionally( raise( tooBaby( age ) ) )
-                .on( age <= 18 );
-        conditionally( raise( immortal( age ) ) )
-                .on( age >= 100 );
+
+        conditionally( tooBaby( age ) )
+                .when( age <= 18 )
+                .map( Verbs::raise );
+
+        conditionally( immortal( age ) )
+                .when( age >= 100 )
+                .map( Verbs::raise );
 
         return new AdultBirthday( input );
     }

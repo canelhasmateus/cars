@@ -1,14 +1,14 @@
 package canelhas.cars.api.vehicles.type;
 
 import canelhas.cars.common.exception.DomainException;
-import canelhas.cars.common.type.ValueType;
+import canelhas.cars.common.languaj.noun.ValueType;
 import canelhas.cars.common.utils.StringHelper;
 import lombok.RequiredArgsConstructor;
 
 import java.util.function.Supplier;
 
 import static canelhas.cars.api.util.ExceptionMessages.MODEL_REQUIRED;
-import static canelhas.cars.common.languaj.Adverbs.lazily;
+import static canelhas.cars.common.languaj.Adjectives.lazily;
 import static canelhas.cars.common.utils.StringHelper.toTitleCase;
 import static canelhas.cars.common.utils.TypingHelper.optionalOf;
 
