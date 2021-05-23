@@ -1,6 +1,6 @@
 package canelhas.cars.api.user.crs;
 
-import canelhas.cars.api.other.domain.Published;
+import canelhas.cars.api.queue.domain.Published;
 import canelhas.cars.api.user.model.User;
 import canelhas.cars.common.languaj.noun.Chain;
 import canelhas.cars.common.type.CPF;

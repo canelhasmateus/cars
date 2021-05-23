@@ -29,6 +29,7 @@ public class ExceptionAdvice {
         return new ResponseEntity<>( body, exception.getStatus() );
     }
 
+    //region for exceptions during request body creation
     @ExceptionHandler( ValueInstantiationException.class )
     public ResponseEntity< ? > handle( ValueInstantiationException exception ) {
         return handleConditionally( exception );
@@ -38,6 +39,7 @@ public class ExceptionAdvice {
     public ResponseEntity< ? > handle( JsonParseException exception ) {
         return handleConditionally( exception );
     }
+    //endregion
 
     //region help
     public ResponseEntity< ? > handleConditionally( Exception exception ) {
@@ -60,8 +62,6 @@ public class ExceptionAdvice {
         var body = Collections.singletonMap( MESSAGE, exception.getMessage() );
         return new ResponseEntity<>( body, HttpStatus.INTERNAL_SERVER_ERROR );
     }
-
-
     //endregion
 
 

@@ -12,10 +12,6 @@ import static canelhas.cars.common.languaj.Adverbs.logically;
 
 public class Adjectives {
 
-    //region monorepo
-    private Adjectives( ) {}
-    //endregion
-
     public static < K, V > Function< K, Optional< V > > hopefully( Function< K, V > action ) {
         return ( K k ) -> {
             try {
@@ -63,18 +59,9 @@ public class Adjectives {
     public static < K, U, V > Function< K, V > partially( U element, BiFunction< K, U, V > action ) {
         return ( K k ) -> action.apply( k, element );
     }
-
-    @SafeVarargs public static < K > Function< K, K > fluently( Function< K, ? >... sideEffects ) {
-        return ( K k ) -> {
-
-            for ( Function< K, ? > function : sideEffects ) {
-                function.apply( k );
-            }
-
-            return k;
-        };
-
-    }
     //endregion
 
+    //region monorepo
+    private Adjectives( ) {}
+    //endregion
 }

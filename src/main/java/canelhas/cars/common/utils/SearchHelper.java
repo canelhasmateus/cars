@@ -1,13 +1,11 @@
 package canelhas.cars.common.utils;
 
 import canelhas.cars.common.exception.ConflictException;
-import canelhas.cars.common.exception.DomainException;
 import canelhas.cars.common.exception.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static canelhas.cars.api.util.ExceptionMessages.*;
@@ -27,8 +25,8 @@ public class SearchHelper {
     public static String bestMatch( String search, List< String > names ) {
 
         //region definitions
-        Function< String, Boolean > containsSearch = partially( StringHelper::contained, search );
-        Function< String, Boolean > equalsSearch   = partially( StringHelper::areEqual, search );
+        final var containsSearch = partially( StringHelper::contained, search );
+        final var equalsSearch   = partially( StringHelper::areEqual, search );
         //endregion
 
         final var nearMatches  = narrowingly( containsSearch ).apply( names );
@@ -67,10 +65,6 @@ public class SearchHelper {
                               .on( candidates.size() == 1 );
     }
 
-    public static Supplier< DomainException > inexact( String bestMatch, String search ) {
-        return lazily( DomainException::new,
-                       format( INEXACT_SEARCH, search, bestMatch ) );
-    }
     //region help
 
     //region monorepo

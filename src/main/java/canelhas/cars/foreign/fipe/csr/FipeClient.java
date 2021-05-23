@@ -15,53 +15,53 @@ public class FipeClient {
 
     public static final String BASE = "https://parallelum.com.br/fipe/api/v1";
 
-
-    // TODO: 22/05/2021 Cache these three requests.
     public static FipeBrand find( RestTemplate template, FipeBrandRequest requestEntity ) {
 
         //region definitions
         Function< FipeBrandRequest, List< FipeBrand > > doRequest = successfully( req -> request( template, req ) );
         //endregion
 
-        final var search    = requestEntity.getBrand().value();
-        final var brandList = doRequest.apply( requestEntity );
+        //region implementation
+        final var search         = requestEntity.getBrand().value();
+        final var possibleBrands = doRequest.apply( requestEntity );
+
 
         final var bestIndex = collectively( FipeBrand::getName )
                                       .andThen( candidates -> bestIndex( search, candidates ) )
-                                      .apply( brandList );
+                                      .apply( possibleBrands );
+        //endregion
 
-        return brandList.get( bestIndex );
+        return possibleBrands.get( bestIndex );
     }
 
     public static FipeCar find( RestTemplate template, FipeModelRequest requestEntity ) {
 
-        //region response
+        //region definitions
         Function< FipeModelRequest, FipeModelResponse > doRequest = successfully( req -> request( template, req ) );
-        final var                                       bestBrand = requestEntity.getBrand();
 
         final var response  = doRequest.apply( requestEntity );
         final var model     = requestEntity.getName().value();
-        final var modelList = response.getModels();
+        final var possibleModels = response.getModels();
         final var year      = requestEntity.getYear().value();
-        final var yearList  = response.getYears();
+        final var possibleYears  = response.getYears();
         //endregion
 
         //region bestModel
         final var bestModelIndex = collectively( FipeModel::getName )
                                            .andThen( candidates -> bestIndex( model, candidates ) )
-                                           .apply( modelList );
-        final var bestModel = modelList.get( bestModelIndex );
+                                           .apply( possibleModels );
+        final var bestModel = possibleModels.get( bestModelIndex );
         //endregion
 
         //region bestYear
         final var bestYearIndex = collectively( FipeYear::getName )
                                           .andThen( candidates -> bestIndex( year, candidates ) )
-                                          .apply( yearList );
-        final var bestYear = yearList.get( bestYearIndex );
+                                          .apply( possibleYears );
+        final var bestYear = possibleYears.get( bestYearIndex );
         //endregion
 
         return FipeCar.builder()
-                      .brand( bestBrand )
+                      .brand( requestEntity.getBrand() )
                       .model( bestModel )
                       .year( bestYear )
                       .build();
@@ -76,7 +76,6 @@ public class FipeClient {
         final var response = doRequest.apply( requestEntity );
         return FipeCar.of( response );
     }
-
 
     //region monorepo
     private FipeClient( ) {}

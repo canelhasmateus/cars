@@ -27,12 +27,7 @@ public class AuthorizationAdvice {
     @Pointcut( "@annotation( canelhas.cars.api.auth.domain.Authorization )" )
     public void authRequired( ) { }
 
-
-    @Pointcut( "execution( * canelhas.cars.api..*.*(..) )" )
-    public void insideApi( ) { }
-
-
-    @Before( "insideApi() && authRequired()" )
+    @Before( "authRequired()" )
     public void assertAuthorization( JoinPoint joinPoint ) {
 
         //region definitions

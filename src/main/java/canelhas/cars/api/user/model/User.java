@@ -99,7 +99,5 @@ public class User {
                    .id( userId.value() )
                    .build();
     }
-
-
     //endregion
 }

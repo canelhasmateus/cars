@@ -15,9 +15,7 @@ public class CarsApplication {
 
         SpringApplication.run( CarsApplication.class, args );
 
-        // TODO: 16/05/2021 friendly exception messages for unique constraints
         // TODO: 16/05/2021 Swagger Documentation.
-        // TODO: 18/05/2021 some caching at fipe api calls?
 
     }
 

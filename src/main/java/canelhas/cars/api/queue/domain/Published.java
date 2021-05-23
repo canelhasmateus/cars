@@ -1,4 +1,4 @@
-package canelhas.cars.api.other.domain;
+package canelhas.cars.api.queue.domain;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

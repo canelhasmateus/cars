@@ -6,7 +6,6 @@ import canelhas.cars.common.languaj.noun.Chain;
 
 import java.util.*;
 
-import static canelhas.cars.common.languaj.Adjectives.partially;
 import static java.util.Calendar.*;
 
 public class RotationHelper {
@@ -14,6 +13,7 @@ public class RotationHelper {
     private static final Map< Integer, Integer > rotationDay = new HashMap<>();
 
     static {
+//does this count as control flow? anyway, its possible to convert this to modular arithmetic
         rotationDay.put( 0, MONDAY );
         rotationDay.put( 1, MONDAY );
         rotationDay.put( 2, TUESDAY );
@@ -27,9 +27,7 @@ public class RotationHelper {
     }
 
     public static Boolean rotatedOut( int currentWeekday, ModelYear year ) {
-
         var lastDigit = ModelYear.asInteger( year ) % 10;
-
         return currentWeekday == rotationDay.getOrDefault( lastDigit, -1 );
     }
 
@@ -40,8 +38,8 @@ public class RotationHelper {
         instance.setTime( new Date() );
         final var currentWeekDay = instance.get( Calendar.DAY_OF_WEEK );
 
-        final var isRotatedToday = partially( RotationHelper::rotatedOut, currentWeekDay );
-        final var checkRotation  = Chain.of( ModelYear::of ).andThen( isRotatedToday );
+        final var checkRotation = Chain.of( ModelYear::of )
+                                       .andThen( year -> rotatedOut( currentWeekDay, year ) );
         //endregion
 
         return Optional.ofNullable( vehicleModel.getYear() )

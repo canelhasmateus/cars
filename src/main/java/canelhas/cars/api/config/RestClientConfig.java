@@ -27,7 +27,7 @@ public class RestClientConfig {
 
             @Override
             public void handleError( ClientHttpResponse clientHttpResponse ) {
-                //refused bequest. wathever
+                //refused bequest. whatever. Shamelessly copied from the internet
             }
         } ).setConnectTimeout( Duration.ofSeconds( 3 ) ).setReadTimeout( Duration.ofSeconds( 10 ) ).build();
 

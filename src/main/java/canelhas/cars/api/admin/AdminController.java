@@ -16,10 +16,6 @@ import static canelhas.cars.api.auth.domain.Authorization.Roles.ADMIN;
 @RequiredArgsConstructor
 public class AdminController {
 
-
-    private final AdminRepository repository;
-
-
     @PostMapping( "api/admin/database" )
     @Authorization( ADMIN )
     public ResponseEntity< Map< String, String > > resetDatabase( ) {

@@ -17,6 +17,8 @@ import javax.persistence.*;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import static canelhas.cars.api.util.ExceptionMessages.MODEL_NOT_FOUND_WITH_ATTRIBUTES;
+import static canelhas.cars.api.util.ExceptionMessages.MODEL_NOT_FOUND_WITH_ID;
 import static canelhas.cars.common.languaj.Adverbs.lazily;
 import static canelhas.cars.schema.DatabaseColumns.*;
 import static java.lang.String.format;
@@ -48,12 +50,12 @@ public class VehicleModel {
     //region exceptions
     public static Supplier< NotFoundException > notFound( TypedId< VehicleModel > modelId ) {
         return lazily( NotFoundException::new,
-                       format( "Não foram encontrados registros de modelo para o id %s", modelId ) );
+                       format( MODEL_NOT_FOUND_WITH_ID, modelId ) );
     }
 
     public static Supplier< NotFoundException > notFound( ModelBrand brand, ModelName name, ModelYear year ) {
         return lazily( NotFoundException::new,
-                       format( "Não foram encontrados registros de modelo para a marca %s , com o nome %s e do ano %s", brand, name, year ) );
+                       format( MODEL_NOT_FOUND_WITH_ATTRIBUTES, brand, name, year ) );
     }
     //endregion
 
@@ -74,12 +76,10 @@ public class VehicleModel {
         return ModelYear.of( getYear() );
     }
 
-
     public static TypedId< VehicleModel > castId( Integer id ) {
         return TypedId.of( id );
     }
     //endregion
-
 
     @Transient
     private FipeCar car;

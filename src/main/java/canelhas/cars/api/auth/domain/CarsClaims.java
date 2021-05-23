@@ -25,8 +25,6 @@ public class CarsClaims extends HashMap< String, Object > {
     private static final String VERSION = "version";
     private static final String ROLES   = "roles";
     private static final String ID      = "id";
-
-
     //endregion
 
     //region getters

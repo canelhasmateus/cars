@@ -16,13 +16,10 @@ public class PublishingAdvice {
     private final ApplicationEventPublisher publisher;
 
 
-    @Pointcut( "@annotation( canelhas.cars.api.other.domain.Published)" )
+    @Pointcut( "@annotation( canelhas.cars.api.queue.domain.Published)" )
     public void published( ) {}
 
-    @Pointcut( "execution( * canelhas.cars.api..*.*(..) ))" )
-    public void insideApi( ) {}
-
-    @AfterReturning( value = " insideApi() && published()", returning = "value" )
+    @AfterReturning( value = "published()", returning = "value" )
     public void publish( JoinPoint jp, Object value ) {
         publisher.publishEvent( value );
     }
