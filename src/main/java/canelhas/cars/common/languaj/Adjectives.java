@@ -2,14 +2,13 @@ package canelhas.cars.common.languaj;
 
 import canelhas.cars.common.languaj.noun.Conditional;
 import canelhas.cars.common.languaj.noun.Functional;
+import canelhas.cars.common.languaj.noun.FunctionalPredicate;
 import canelhas.cars.common.languaj.noun.FunctionalSupplier;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -40,11 +39,6 @@ public class Adjectives {
             }
         };
     }
-
-//    public static < K, V > Functional< Optional< K >, Optional< V > > possibly( Function< K, V > action ) {
-//        return ( Optional< K > k ) -> k.map( action );
-//    }
-
     //endregion
 
     //region functions
@@ -76,9 +70,9 @@ public class Adjectives {
 
     }
 
-    public static < K > Functional< Collection< K >, Collection< K > > narrowingly( Function< K, Boolean > chooser ) {
+    public static < K > Functional< Collection< K >, Collection< K > > narrowingly( FunctionalPredicate< K > chooser ) {
         return ( Collection< K > collection ) -> collection.stream()
-                                                           .filter( logically( chooser ) )
+                                                           .filter( chooser )
                                                            .collect( Collectors.toList() );
     }
 
@@ -88,30 +82,6 @@ public class Adjectives {
                                                      .map( action )
                                                      .collect( Collectors.toList() );
 
-    }
-
-    public static < K, V > Functional< List< K >, List< V > > concurrently( ExecutorService executor, Function< K, V > action ) {
-        return ( List< K > collection ) -> {
-
-            //region  initialize
-            final var taskList = new ArrayList< Future< V > >( collection.size() );
-            final var dones    = new ArrayList< V >( collection.size() );
-            for ( K k : collection ) {
-                final var task = executor.submit( ( ) -> action.apply( k ) );
-                taskList.add( task );
-            }
-            //endregion
-
-            for ( Future< V > future : taskList ) {
-                try {
-                    dones.add( future.get() );
-                }
-                catch ( Exception e ) {
-                    throw new RuntimeException( e );
-                }
-            }
-            return dones;
-        };
     }
     //endregion
 

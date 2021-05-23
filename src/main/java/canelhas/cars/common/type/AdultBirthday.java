@@ -31,6 +31,10 @@ public class AdultBirthday extends ValueType< Date > {
 
         final var age = findAge( new Date(), input );
 
+        conditionally( benjaminButton( age ) )
+                .when( age <= 0 )
+                .map( Verbs::raise );
+
         conditionally( tooBaby( age ) )
                 .when( age <= 18 )
                 .map( Verbs::raise );
