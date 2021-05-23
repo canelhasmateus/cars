@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static canelhas.cars.common.languaj.Adverbs.logically;
@@ -70,9 +71,9 @@ public class Adjectives {
 
     }
 
-    public static < K > Functional< Collection< K >, Collection< K > > narrowingly( FunctionalPredicate< K > chooser ) {
+    public static < K > Functional< Collection< K >, Collection< K > > narrowingly( Function< K , Boolean > chooser ) {
         return ( Collection< K > collection ) -> collection.stream()
-                                                           .filter( chooser )
+                                                           .filter( logically( chooser ) )
                                                            .collect( Collectors.toList() );
     }
 
